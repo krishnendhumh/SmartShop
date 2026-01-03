@@ -78,6 +78,7 @@
         <td>{{i.subcategory.category.category_name }}</td>
         <td>{{i.subcategory.subcategory_name}}</td>
         <td>{{i.brand.brand_name}}</td>
+        
         <td align="center"><img src="{{i.product_photo.url}}" alt="" width="150"></td>
         <td align="center"><a href="{% url 'Shop:Gallery' i.id  %}">Add Gallery</a>
             <a href="{% url 'Shop:Stock' i.id  %}">Add Stock</a>
