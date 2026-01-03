@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table border="2">
+        <tr>
+            <td>Sl No</td>
+            <td>User Details</td>
+            <td>Feedback</td>
+            <td>Date</td>
+        </tr>
+        {% for i in feedback %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.user.user_name }}<br>{{i.user.user_email}}</td>
+            <td>{{i.feed_content}}</td>
+            <td>{{i.feed_date}}</td>
+        </tr>
+        {% empty %}
+    <tr>
+        <td colspan="7" align="center">No Feedback </td>
+    </tr>
+    {% endfor %}
+    </table>
+</body>
+</html>

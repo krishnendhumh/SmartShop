@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product View</title>
+</head>
+
+<body>
+
+    <table border="2" align="center" width="80%" cellpadding="10">
+
+        <tr>
+            <td width="40%" align="center">
+                <img src="{{ product.product_photo.url }}" width="300" alt="Product Image">
+            </td>
+
+            <td width="60%">
+                <table width="100%" cellpadding="8">
+
+                    <tr>
+                        <th align="left">Product Name</th>
+                        <td>{{ product.product_name }}</td>
+                    </tr>
+
+                    <tr>
+                        <th align="left">Description</th>
+                        <td>{{ product.product_details }}</td>
+                    </tr>
+
+                    <tr>
+                        <th align="left">Price</th>
+                        <td>{{ product.product_price }}</td>
+                    </tr>
+
+                    <tr>
+                        <th align="left">Category</th>
+                        <td>{{ product.subcategory.category.category_name }}</td>
+                    </tr>
+
+                    <tr>
+                        <th align="left">Subcategory</th>
+                        <td>{{ product.subcategory.subcategory_name }}</td>
+                    </tr>
+
+                    <tr>
+                        <th align="left">Brand</th>
+                        <td>{{ product.brand.brand_name }}</td>
+                    </tr>
+
+                    <tr>
+                        <th align="left">Shop</th>
+                        <td>{{ product.shop.shop_name }}</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" align="center">
+                            <a href="{% url 'User:Addcart' product.id %}">Add To Cart</a>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+
+    </table>
+
+    <br>
+
+    <table border="2" align="center" width="80%" cellpadding="10">
+        <tr>
+            <th align="center">More Images</th>
+        </tr>
+        <tr>
+            <td align="center">
+                {% for i in gallery %}
+                    <img src="{{ i.gallery_file.url }}" width="120" alt="Gallery Image">
+                {% empty %}
+                    No additional images available
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

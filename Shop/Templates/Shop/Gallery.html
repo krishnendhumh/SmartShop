@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Gallery</title>
+</head>
+<body>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table border="2">
+            <tr><td>Product Image</td>
+                <td><input type="file" name="file_photo" id="file_photo"></td>
+            </tr>
+            <tr><td colspan="2" align="center"><input type="submit" value="submit"></td></tr>
+        </table>
+    </form><br>
+         <table border="2">
+            <tr>
+            <td>Sl No</td>
+            <td>Photo</td>
+            <td>Action</td>
+           
+        </tr>
+        {% for i in gallery %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td align="center"><img src="{{i.gallery_file.url}}" alt="" width="150"></td>
+            <td align="center"><a href="{% url 'Shop:delgallery' i.id  %}">Delete</a></td>
+        </tr>
+        {% endfor %}
+            </table>
+</body>
+</html>
+{% if msg %}
+<script>
+    alert("{{msg}}")
+    window.location="{% url 'Shop:Product' %}"
+</script>
+{% endif %}

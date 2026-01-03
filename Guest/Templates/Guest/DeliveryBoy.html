@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Boy Registration</title>
+</head>
+<body>
+    <form action="" method="post" enctype="multipart/form-data">
+         {% csrf_token %}
+        <table border="2"><tr>
+            <td>Name</td>
+            <td><input type="text" name="txt_name" id="txt_name"></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><input type="text" name="txt_email" id="txt_email"></td>
+        </tr>
+        <tr>
+            <td>Contact</td>
+            <td><input type="text" name="txt_contact" id="txt_contact"></td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td><textarea name="txt_address" id="txt_address"></textarea></td>
+        </tr>
+        <tr>
+            <td>Photo</td>
+            <td><input type="file" name="file_photo" id="file_photo"></td>
+        </tr>
+        <tr>
+            <td>Proof</td>
+            <td><input type="file" name="file_proof" id="file_proof"></td>
+        </tr>
+        <tr>
+            <td>District</td>
+             <td><select name="sel_district" id="sel_district">
+                    <option value="">--select--</option>
+                    {% for i in districtdata %}
+                    <option value="{{i.id}}">
+                        {{i.district_name}}</option>
+                    {% endfor %}
+                </select>
+
+            </td>
+        </tr>
+        <tr>
+            <td>Place</td>
+            <td><select name="sel_place" id="sel_place">
+                        <option value="">--select--</option>
+                        
+                    </select></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="password" name="txt_password" id="txt_password"></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center"><input type="submit" value="Submit"></td>
+            
+        </tr></table>
+    </form>
+</body>
+</html>
+{% if msg %}
+<script>
+    alert("{{msg}}")
+    window.location = "{% url 'Guest:DeliveryBoy' %}"
+</script>
+{% endif %}
+
+<!-- jQuery & AJAX -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $("#sel_district").change(function () {
+        var districtId = $(this).val();
+        var ur = "{% url 'Guest:Ajaxplace' %}";
+        $.ajax({
+            url: ur,
+            data: { districtId: districtId },
+            success: function (data) {
+                $("#sel_place").html(data);
+            },
+        });
+    });
+</script>

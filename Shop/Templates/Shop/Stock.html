@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Stock</title>
+</head>
+<body>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table border="2">
+            <tr><td>Stock Quantity</td>
+                <td><input type="number" name="num_stock" id="num_stock"></td>
+            </tr>
+            <tr><td colspan="2" align="center"><input type="submit" value="submit" ></td></tr>
+        </table>
+        </form>
+ 
+        <table border="2"><tr>
+            <td>Sl No</td>
+            <td>Stock Count</td>
+            <td>Stock Date</td>
+            <td>Action</td>
+        </tr>
+        {% for i in stock %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.stock_quantity}}</td>
+            <td>{{i.stock_date}}</td>
+            <td align="center"><a href="{% url 'Shop:delstock' i.id  %}">Delete</a></td>
+        </tr>
+        {% endfor %}
+            </table>
+</body>
+</html>
+
+{% if msg %}
+<script>
+    alert("{{msg}}")
+    window.location="{% url 'Shop:Product' %}"
+</script>
+{% endif %}

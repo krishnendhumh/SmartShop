@@ -1,0 +1,58 @@
+{% load mathfilters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings</title>
+</head>
+<body>
+
+{% for i in bookingdata %}
+    <h4>Booking Id: #{{i.id}}</h4>
+    <h3>Booking Date: {{ i.booking_date }}</h3>
+    <h4>Total Amount: ₹{{ i.booking_amount }}</h4>
+
+    <table border="1" width="100%" cellspacing="0" cellpadding="8">
+        <tr>
+            <th>Sl No</th>
+            <th>Product Name</th>
+            <th>Photo</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Total</th>
+            <th>Status</th>
+        </tr>
+
+        {% for j in i.tbl_cart_set.all %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ j.product.product_name }}</td>
+            <td>
+                <img src="{{ j.product.product_photo.url }}" width="100">
+            </td>
+            <td>₹{{ j.product.product_price }}</td>
+            <td>{{ j.cart_qty }}</td>
+            <td>
+                ₹{{ j.cart_qty|mul:j.product.product_price }}
+            </td>
+            <td>
+                {% if j.cart_status == 2 %}Packed
+                
+        {% elif j.cart_status == 3 %}Shipped
+        {% elif j.cart_status == 4 %}Out Of Delivery
+        {% elif j.cart_status == 5 %}Delivery
+         {% elif j.cart_status == 6 %}
+         Delivered
+         
+        {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <hr>
+{% endfor %}
+
+</body>
+</html>

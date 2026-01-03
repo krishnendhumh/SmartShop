@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Largest</title>
+</head>
+<body>
+    <form action="" method="post">
+             {% csrf_token %}
+        <table border="2">
+            <tr>
+                <td>Number1</td>
+                <td><input type="text" name="txt_Number1" id="txt_Number1"></td>
+            </tr>
+            <tr>
+                <td>Number2</td>
+                <td><input type="text" name="txt_Number2" id="txt_Number2"></td>
+            </tr>
+            <tr>
+                <td>Number3</td>
+                <td><input type="text" name="txt_Number3" id="txt_Number3"></td>
+            </tr>
+            <tr>
+                
+                <td colspan="2"align="center"><input type="submit" value="submit"></td>
+            </tr>
+            <tr>
+                <td>Largest</td>
+                <td>{{largest}}</td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Verification</title>
+</head>
+<body>
+    <h3>Pending</h3>
+    <table border="2"><tr>
+        
+        
+    </tr>
+    <tr>
+        <td>Sl No</td>
+        <td>Name</td>
+        <td>Email</td>
+        <td>Contact</td>
+        <td>Address</td>
+        <td>District</td>
+        <td>Place</td>
+        <td>Photo</td>
+        <td>Proof</td>
+        <td>Action</td>
+        
+    </tr>
+   {% for i in pending %}
+        <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{i.shop_name}}</td>
+        <td>{{i.shop_email}}</td>
+        <td>{{i.shop_contact}}</td>
+        <td>{{i.shop_address}}</td>
+        <td>{{ i.place.district.district_name }}</td>
+        <td>{{i.place.place_name}}</td>
+        <td colspan="2" align="center"><img src="{{i.shop_photo.url}}" alt=""></td>
+        <td colspan="2" align="center"><img src="{{i.shop_proof.url}}" alt=""></td>
+         <td><a href="{% url 'Admin:accept' i.id %}">Accept</a>
+                <a href="{% url 'Admin:reject' i.id %}">Reject</a></td>
+    </tr>
+  {% endfor %}
+  </table>
+  <br><h3>Accepted</h3>
+  <br>
+  <table border="2">
+  <tr>
+        <td>Sl No</td>
+        <td>Name</td>
+        <td>Email</td>
+        <td>Contact</td>
+        <td>Address</td>
+        <td>District</td>
+        <td>Place</td>
+        <td>Photo</td>
+        <td>Proof</td>
+      
+        
+    </tr>
+   {% for i in accepted %}
+        <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{i.shop_name}}</td>
+        <td>{{i.shop_email}}</td>
+        <td>{{i.shop_contact}}</td>
+        <td>{{i.shop_address}}</td>
+        <td>{{ i.place.district.district_name }}</td>
+        <td>{{i.place.place_name}}</td>
+        <td align="center"><img src="{{i.shop_photo.url}}" alt="" width="150"></td>
+        <td  align="center"><img src="{{i.shop_proof.url}}" alt="" width="150"></td>
+         
+    </tr>
+  {% endfor %}
+  </table>
+   <br><h3>Rejected</h3>
+  <br>
+  <table border="2">
+    
+  <tr>
+        <td>Sl No</td>
+        <td>Name</td>
+        <td>Email</td>
+        <td>Contact</td>
+        <td>Address</td>
+        <td>District</td>
+        <td>Place</td>
+        <td>Photo</td>
+        <td>Proof</td>
+      
+        
+    </tr>
+   {% for i in rejected %}
+        <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{i.shop_name}}</td>
+        <td>{{i.shop_email}}</td>
+        <td>{{i.shop_contact}}</td>
+        <td>{{i.shop_address}}</td>
+        <td>{{ i.place.district.district_name }}</td>
+        <td>{{i.place.place_name}}</td>
+        <td colspan="2" align="center"><img src="{{i.shop_photo.url}}" alt="" width="50"></td>
+        <td colspan="2" align="center"><img src="{{i.shop_proof.url}}" alt=""></td>
+         
+    </tr>
+  {% endfor %}
+  </table>
+</body>
+</html>
+{% if msg %}
+<script>
+    alert("{{msg}}")
+    window.location = "{% url 'Admin:ShopVerification' %}"
+</script>
+{% endif %}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>view product</title>
+</head>
+
+<body>
+    <table border="2">
+        <tr>
+
+            <td>Name : <input type="text" name="txt_name" id="txt_name"></td>
+            <td>Category :
+                <select name="sel_category" id="sel_category" onchange="AjaxSearch()">
+                    <option value="">--select--</option>
+                    {% for i in categorydata %}
+                    <option value="{{i.id}}">
+                        {{i.category_name}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>Subcategory : <select name="sel_subcategory" id="sel_subcategory" onchange="AjaxSearch()">
+                    <option value="">--select--</option>
+                </select></td>
+            <td>Brand :<select name="sel_brand" id="sel_brand" onchange="AjaxSearch()">
+                    <option value="">--select--</option>
+                    {% for i in branddata %}
+                    <option value="{{i.id}}">
+                        {{i.brand_name}}</option>
+                    {% endfor %}
+                </select></td>
+
+        </tr>
+    </table>
+    <h2>Products</h2><br>
+    <table border="2" id="result">
+
+        <tr>
+            <td>Sl No</td>
+            <td>Name</td>
+            <td>Details</td>
+            <td>Price</td>
+            <td>Photo</td>
+            <td>Action</td>
+        </tr>
+        {% for i in product %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.product_name}}</td>
+            <td>{{i.product_details}}</td>
+            <td>{{i.product_price}}</td>
+            <td align="center"><img src="{{i.product_photo.url}}" alt="" width="150"></td>
+            <td align="center"><a href="{% url 'User:Viewmore' i.id  %}">View More</a>
+                <br><a href="{% url 'User:Wishlist' i.id  %}">Add To WishList</a>
+                <br><a href="{% url 'User:Addcart' i.id  %}">Add To Cart</a></td>
+
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
+{% if msg %}
+<script>
+    alert("{{msg}}")
+    window.location = "{% url 'User:Viewproduct' %}"
+</script>
+{% endif %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $("#sel_category").change(function () {
+        var categoryId = $(this).val();
+        var ur = "{% url 'Shop:Ajaxsubcategory' %}";
+        $.ajax({
+            url: ur,
+            data: { categoryId: categoryId },
+            success: function (data) {
+                $("#sel_subcategory").html(data);
+            },
+        });
+    });
+
+    function AjaxSearch() {
+        var name = document.getElementById("txt_name").value
+        var categoryId = document.getElementById("sel_category").value
+        var subcategoryId = document.getElementById("sel_subcategory").value
+        var brandId = document.getElementById("sel_brand").value
+        var ur = "{% url 'User:AjaxSearch' %}";
+        $.ajax({
+            url: ur,
+            data: { categoryId: categoryId, subcategoryId: subcategoryId, brandId: brandId, name: name },
+            success: function (data) {
+                $("#result").html(data);
+            },
+        });
+    }
+</script>

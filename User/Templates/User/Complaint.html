@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint</title>
+</head>
+<body>
+
+<h2>Submit Complaint</h2>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <table border="1">
+        <tr>
+            <td>Title</td>
+            <td><input type="text" name="txt_title" required></td>
+        </tr>
+        <tr>
+            <td>Content</td>
+            <td><textarea name="txt_content" required></textarea></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <input type="submit" value="Submit">
+            </td>
+        </tr>
+    </table>
+</form>
+
+<br><br>
+
+<h2>Complaint List</h2>
+
+<table border="1">
+    <tr>
+        <th>Sl No</th>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Date</th>
+        <th>Reply</th>
+        <th>Action</th>
+    </tr>
+
+    {% for i in complaints %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ i.com_title }}</td>
+        <td>{{ i.com_content }}</td>
+        <td>{{ i.com_date }}</td>
+        <td>{{ i.com_reply}}</td>
+        <td>
+            <a href="{% url 'User:delcomplaint' i.id %}">Delete</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="6" align="center">No complaints found</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

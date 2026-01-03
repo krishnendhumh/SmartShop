@@ -1,0 +1,89 @@
+{% load mathfilters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings</title>
+</head>
+<body bgcolor="#f4f4f4">
+
+{% for i in bookingdata %}
+
+<table width="90%" align="center" border="1" cellspacing="0" cellpadding="10" bgcolor="#ffffff">
+    
+    <!-- Booking Header -->
+    <tr bgcolor="#dddddd">
+        <td colspan="7">
+            <font size="4">
+                <b>Booking ID:</b> #{{ i.id }} <br>
+                <b>Date:</b> {{ i.booking_date }} <br>
+                <b>Total Amount:</b> ₹{{ i.booking_amount }}
+            </font>
+        </td>
+    </tr>
+
+    <!-- User Details -->
+    <tr>
+        <td colspan="7">
+            <font size="3">
+                <b>User Details</b><br>
+                Name: {{ i.user.user_name }}<br>
+                Email: {{ i.user.user_email }}<br>
+                Contact: {{ i.user.user_contact }}<br>
+                Address: {{ i.user.user_address }}
+            </font>
+        </td>
+    </tr>
+
+    <!-- Table Header -->
+    <tr bgcolor="#eeeeee" align="center">
+        <th>Sl No</th>
+        <th>Product Name</th>
+        <th>Photo</th>
+        <th>Price</th>
+        <th>Qty</th>
+        <th>Total</th>
+        <th>Action</th>
+    </tr>
+
+    <!-- Products -->
+    {% for j in i.tbl_cart_set.all %}
+    <tr align="center">
+        <td>{{ forloop.counter }}</td>
+        <td>{{ j.product.product_name }}</td>
+        <td>
+            <img src="{{ j.product.product_photo.url }}" width="80" border="1">
+        </td>
+        <td>₹{{ j.product.product_price }}</td>
+        <td>{{ j.cart_qty }}</td>
+        <td>₹{{ j.cart_qty|mul:j.product.product_price }}</td>
+        <td>
+        {% if j.cart_status == 2 %}
+        <a href="{% url 'Shop:BookingAction' j.id 3 %}">Packed</a>
+        {% elif j.cart_status == 3 %}
+        <a href="{% url 'Shop:BookingAction' j.id 4 %}">Shipped</a>
+        {% elif j.cart_status == 4 %}
+        <a href="{% url 'Shop:BookingAction' j.id 5 %}">Out Of Delivery</a>
+        {% elif j.cart_status == 5 %}
+        <a href="{% url 'Shop:BookingAction' j.id 6 %}">Delivery</a>
+         {% elif j.cart_status == 6 %}
+         Delivered
+        {% endif %}
+    
+</td>
+</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+<br><br>
+
+{% endfor %}
+
+</body>
+</html>
+
+    
+

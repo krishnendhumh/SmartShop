@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myprofile</title>
+</head>
+<body>
+    <table border="2"><tr>
+        
+        <td colspan="2" align="center"><img src="{{dboy.delboy_photo.url}}" alt=""></td>
+    </tr>
+    <tr>
+        <td>Name</td>
+        <td>{{dboy.delboy_name}}</td>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td>{{dboy.delboy_email}}</td>
+    </tr>
+    <tr>
+        <td>Contact</td>
+        <td>{{dboy.delboy_contact}}</td>
+    </tr>
+    <tr>
+        <td>Address</td>
+        <td>{{dboy.delboy_address}}</td>
+    </tr>
+    
+     
+    <tr>
+        <td>District</td>
+        <td>{{ dboy.place.district.district_name }}</td>
+    </tr>
+    <tr>
+        <td>Place</td>
+        <td>{{dboy.place.place_name}}</td>
+    </tr>
+    <tr>
+        
+        <td colspan="2" align="center"><a href="{% url 'DeliveryBoy:Editprofile' %}" >Edit Profile </a>|<a href="{% url 'DeliveryBoy:ChangePass' %}">Change Password</a></td>
+    </tr></table>
+</body>
+</html>

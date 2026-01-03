@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wishlist</title>
+</head>
+
+<body>
+    <h2>Products</h2><br>
+    <table border="2" id="result">
+
+        <tr>
+            <td>Sl No</td>
+            <td>Name</td>
+            <td>Details</td>
+            <td>Price</td>
+            <td>Photo</td>
+            <td>Action</td>
+        </tr>
+        {% for i in wishlist %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.product.product_name}}</td>
+            <td>{{i.product.product_details}}</td>
+            <td>{{i.product.product_price}}</td>
+            <td align="center"><img src="{{i.product.product_photo.url}}" alt="" width="150"></td>
+            <td align="center"><a href="{% url 'User:Viewmore' i.product.id  %}">View More</a>
+
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
+{% if msg %}
+<script>
+    alert("{{msg}}")
+    window.location = "{% url 'User:Viewproduct' %}"
+</script>
+{% endif %}
