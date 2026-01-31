@@ -30,11 +30,22 @@
             <td>{{i.place.place_name}}</td>
             <td>
     {% if i.user_status == 1 %}
-        <a href="{% url 'Admin:blockuser' i.id %}">Block</a>
+        <a href="{% url 'Admin:blockuser' i.id %}"
+           onclick="return confirm('Are you sure you want to block this user?');">
+            🚫 Block
+        </a>
     {% else %}
-        Blocked
+        <span style="color:red; font-weight:bold;">
+            Blocked
+        </span>
+        |
+        <a href="{% url 'Admin:unblockuser' i.id %}"
+           onclick="return confirm('Unblock this user?');">
+            ✅ Unblock
+        </a>
     {% endif %}
 </td>
+
 
         </tr>
         {% endfor %}

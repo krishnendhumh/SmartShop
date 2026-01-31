@@ -31,41 +31,82 @@ def Ajaxplace(request):
 
 def Login(request):
     if request.method == "POST":
-    
-        email=request.POST.get("txt_email")
-        password=request.POST.get("txt_password")
 
-        usercount = tbl_user.objects.filter(user_email=email,user_password=password,user_status=1).count()
-        admincount = tbl_admin.objects.filter(admin_email=email,admin_password=password).count()
-        shopcount = tbl_shop.objects.filter(shop_email=email,shop_password=password).count()
-        dboycount = tbl_deliveryboy.objects.filter(delboy_email=email,delboy_password=password).count()
+        email = request.POST.get("txt_email")
+        password = request.POST.get("txt_password")
+
+        usercount = tbl_user.objects.filter(
+            user_email=email,
+            user_password=password,
+            user_status=1
+        ).count()
+
+        admincount = tbl_admin.objects.filter(
+            admin_email=email,
+            admin_password=password
+        ).count()
+
+        shopcount = tbl_shop.objects.filter(
+            shop_email=email,
+            shop_password=password
+        ).count()
+
+        dboycount = tbl_deliveryboy.objects.filter(
+            delboy_email=email,
+            delboy_password=password
+        ).count()
+
+        
         if usercount > 0:
-            user = tbl_user.objects.get(user_email=email,user_password=password)
+            user = tbl_user.objects.get(
+                user_email=email,
+                user_password=password
+            )
             request.session['uid'] = user.id
             return redirect("User:Homepage")
+
         
         elif admincount > 0:
-            admin = tbl_admin.objects.get(admin_email=email,admin_password=password)
+            admin = tbl_admin.objects.get(
+                admin_email=email,
+                admin_password=password
+            )
             request.session['aid'] = admin.id
             return redirect("Admin:Homepage")
+
         
         elif shopcount > 0:
-            shop= tbl_shop.objects.get(shop_email=email,shop_password=password)
-            if shop.shop_status > 0:
-                request.session['sid'] = shop.id
-                return render(request,"Guest/Login.html",{"msg":"Verification Pending"})
+            shop = tbl_shop.objects.get(
+                shop_email=email,
+                shop_password=password
+            )
+
+            if shop.shop_status == 0:
+                return render(request, "Guest/Login.html", {
+                    "msg": "Verification Pending"
+                })
             else:
                 request.session['sid'] = shop.id
                 return redirect("Shop:Homepage")
-        
+
+      
         elif dboycount > 0:
-            dboy= tbl_deliveryboy.objects.get(delboy_email=email,delboy_password=password)
+            dboy = tbl_deliveryboy.objects.get(
+                delboy_email=email,
+                delboy_password=password
+            )
             request.session['did'] = dboy.id
             return redirect("DeliveryBoy:Homepage")
+
+        # INVALID LOGIN
         else:
-            return render(request, "Guest/Login.html", {"msg": "Invalid login or account blocked"})
+            return render(request, "Guest/Login.html", {
+                "msg": "Invalid login or account blocked"
+            })
+
     else:
-        return render(request,"Guest/Login.html")
+        return render(request, "Guest/Login.html")
+
     
 def ShopReg(request):
     districtdata =  tbl_district.objects.all()

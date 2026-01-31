@@ -4,65 +4,171 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop Registration</title>
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #43cea2, #185a9d);
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            width: 420px;
+        }
+
+        table {
+            width: 100%;
+            border: none;
+        }
+
+        td {
+            border: none;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            outline: none;
+        }
+
+        textarea {
+            resize: none;
+            height: 70px;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #43cea2;
+        }
+
+        input[type="file"] {
+            font-size: 13px;
+        }
+
+        input[type="submit"] {
+            background: #43cea2;
+            color: #fff;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        input[type="submit"]:hover {
+            background: #36b39c;
+        }
+
+        option {
+            padding: 8px;
+        }
+
+        @media (max-width: 480px) {
+            form {
+                width: 90%;
+            }
+        }
+    </style>
 </head>
+
 <body>
     <form action="" method="post" enctype="multipart/form-data">
          {% csrf_token %}
-        <table border="2"><tr>
+        <table border="2">
+        <tr>
             <td>Name</td>
-            <td><input type="text" name="txt_name" id="txt_name"required placeholder="Enter Your Name" title="Name Allows Only Alphabets,Spaces and First Letter Must Be Capital Letter" pattern="^[A-Z]+[a-zA-Z ]*$" minlength="3"></td>
+            <td><input type="text" name="txt_name" id="txt_name" required placeholder="Enter Your Name"
+                title="Name Allows Only Alphabets,Spaces and First Letter Must Be Capital Letter"
+                pattern="^[A-Z]+[a-zA-Z ]*$" minlength="3"></td>
         </tr>
+
         <tr>
             <td>Email</td>
             <td><input type="text" name="txt_email" id="txt_email" required minlength="5"></td>
         </tr>
+
         <tr>
             <td>Contact</td>
-            <td><input type="text" name="txt_contact" id="txt_contact" pattern="[6-9]{1}[0-9]{9}" 
-                title="Phone number with 6-9 and remaing 9 digit with 0-9" minlength="7" maxlength="10"></td>
+            <td><input type="text" name="txt_contact" id="txt_contact"
+                pattern="[6-9]{1}[0-9]{9}"
+                title="Phone number with 6-9 and remaing 9 digit with 0-9"
+                minlength="7" maxlength="10"></td>
         </tr>
+
         <tr>
             <td>Address</td>
             <td><textarea name="txt_address" id="txt_address" required minlength="3"></textarea></td>
         </tr>
+
         <tr>
             <td>Photo</td>
             <td><input type="file" name="file_photo" id="file_photo" required accept="images/*"></td>
         </tr>
+
         <tr>
             <td>Proof</td>
             <td><input type="file" name="file_proof" id="file_proof" required accept="images/*"></td>
         </tr>
+
         <tr>
             <td>District</td>
-             <td><select required ="sel_district" id="sel_district">
+            <td>
+                <select required ="sel_district" id="sel_district">
                     <option value="">--select--</option>
                     {% for i in districtdata %}
                     <option value="{{i.id}}">
-                        {{i.district_name}}</option>
+                        {{i.district_name}}
+                    </option>
                     {% endfor %}
                 </select>
-
             </td>
         </tr>
+
         <tr>
             <td>Place</td>
-            <td><select name="sel_place" id="sel_place" required>
-                        <option value="">--select--</option>
-                        
-                    </select></td>
+            <td>
+                <select name="sel_place" id="sel_place" required>
+                    <option value="">--select--</option>
+                </select>
+            </td>
         </tr>
+
         <tr>
             <td>Password</td>
-            <td><input type="password" name="txt_password" id="txt_password"pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"></td>
+            <td>
+                <input type="password" name="txt_password" id="txt_password"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters">
+            </td>
         </tr>
+
         <tr>
-            <td colspan="2" align="center"><input type="submit" value="Submit"></td>
-            
-        </tr></table>
+            <td colspan="2" align="center">
+                <input type="submit" value="Submit">
+            </td>
+        </tr>
+        </table>
     </form>
 </body>
 </html>
+
 {% if msg %}
 <script>
     alert("{{msg}}")

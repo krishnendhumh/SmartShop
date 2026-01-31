@@ -4,28 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Homepage</title>
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #141e30, #243b55);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 40px 50px;
+            border-radius: 14px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 420px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #222;
+        }
+
+        .menu a {
+            display: block;
+            margin: 10px 0;
+            padding: 12px;
+            text-decoration: none;
+            font-size: 15px;
+            color: #ffffff;
+            background: #243b55;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .menu a:hover {
+            background: #141e30;
+            transform: translateY(-2px);
+        }
+
+        .menu a.admin {
+            background: #e74c3c;
+        }
+
+        .menu a.admin:hover {
+            background: #c0392b;
+        }
+    </style>
 </head>
+
 <body>
-    Welcome Admin<br>
-    <b><a href="{% url 'Admin:ShopVerification' %}">Verification</a></b><br> 
-    <b><a href="{% url 'Admin:Viewcomplaint' %}">User Complaints</a></b><br>
-    <b><a href="{% url 'Admin:Viewfeedback' %}">User Feedback</a></b>
-    <br><b>
-    <a href="{% url 'Admin:District' %}">Add Districts</a></b>
-    <br><b>
-    <a href="{% url 'Admin:Place' %}">Add  Place</a></b>
-    <br><b>
-    <a href="{% url 'Admin:Category' %}">Add Category</a></b>
-    <br><b>
-    <a href="{% url 'Admin:SubCategory' %}">Add SubCategory</a></b>
-    <br><b>
-    <a href="{% url 'Admin:SalesReport' %}">View Sales Report</a></b>
-    <br><b>
-    <a href="{% url 'Admin:UserList' %}">Users List</a></b>
-    <br><b>
-    <a href="{% url 'Admin:Brand' %}"> Add Brand</a></b>
+    <div class="container">
+        <h2>Welcome Admin</h2>
 
-
-
+        <div class="menu">
+            <a href="{% url 'Admin:ShopVerification' %}">Shop Verification</a>
+            <a href="{% url 'Admin:Viewcomplaint' %}">User Complaints</a>
+            <a href="{% url 'Admin:Viewfeedback' %}">User Feedback</a>
+            <a href="{% url 'Admin:District' %}">Add Districts</a>
+            <a href="{% url 'Admin:Place' %}">Add Place</a>
+            <a href="{% url 'Admin:Category' %}">Add Category</a>
+            <a href="{% url 'Admin:SubCategory' %}">Add SubCategory</a>
+            <a href="{% url 'Admin:Brand' %}">Add Brand</a>
+            <a href="{% url 'Admin:UserList' %}">Users List</a>
+            <a href="{% url 'Admin:SalesReport' %}" class="admin">View Sales Report</a>
+        </div>
+    </div>
 </body>
 </html>

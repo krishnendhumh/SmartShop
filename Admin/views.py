@@ -3,6 +3,8 @@ from Admin.models import*
 from Guest.models import*
 from User.models import*
 from Shop.models import*
+from django.core.mail import send_mail
+from django.conf import settings
 
 # Create your views here.
 def District(request):
@@ -174,23 +176,72 @@ def editsub(request,eid):
 def Homepage(request):
     return render(request,"Admin/Homepage.html")
     
-def ShopVerification(request):
-     pending = tbl_shop.objects.filter(shop_status=0)
-     accepted= tbl_shop.objects.filter(shop_status=1)
-     rejected = tbl_shop.objects.filter(shop_status=2)
-     return render(request,"Admin/ShopVerification.html" ,{'pending':pending,'accepted':accepted,'rejected':rejected})
+from django.core.mail import send_mail
+from django.conf import settings
 
-def accept(request,aid):
-    accept= tbl_shop.objects.get(id=aid)
-    accept.shop_status=1
-    accept.save()
-    return render(request,"Admin/ShopVerification.html",{'msg':'Accepted'})
- 
-def reject(request,rid):
-    reject= tbl_shop.objects.get(id=rid)
-    reject.shop_status=2
-    reject.save()
-    return render(request,"Admin/ShopVerification.html",{'msg':' Rejected'})
+def ShopVerification(request):
+    pending = tbl_shop.objects.filter(shop_status=0)
+    accepted = tbl_shop.objects.filter(shop_status=1)
+    rejected = tbl_shop.objects.filter(shop_status=2)
+    return render(
+        request,
+        "Admin/ShopVerification.html",
+        {'pending': pending, 'accepted': accepted, 'rejected': rejected}
+    )
+
+
+def accept(request, aid):
+    shop = tbl_shop.objects.get(id=aid)
+    shop.shop_status = 1
+    shop.save()
+
+    subject = "Shop Verification Approved 🎉"
+    message = f"""
+Hello {shop.shop_name},
+
+Congratulations! 🎉
+
+Your shop has been successfully verified and approved by our admin team.
+You can now log in and start managing your products and orders.
+
+Welcome aboard!
+"""
+
+    send_mail(
+        subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        [shop.shop_email],
+    )
+
+    return redirect("Admin:ShopVerification")
+
+
+def reject(request, rid):
+    shop = tbl_shop.objects.get(id=rid)
+    shop.shop_status = 2
+    shop.save()
+
+    subject = "Shop Verification Rejected ❌"
+    message = f"""
+Hello {shop.shop_name},
+
+We regret to inform you that your shop verification request has been rejected.
+
+This may be due to incomplete or incorrect information.
+Please review your details and contact support for further assistance.
+
+Thank you for your interest.
+"""
+
+    send_mail(
+        subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        [shop.shop_email],
+    )
+
+    return redirect("Admin:ShopVerification")
 
 def Brand(request):
     if "aid" not in request.session:    
@@ -267,11 +318,62 @@ def UserList(request):
     userdata=tbl_user.objects.all()
     return render(request, "Admin/UserList.html", {"userdata": userdata})
 
+
+
 def blockuser(request, id):
-    userdata = tbl_user.objects.get(id=id)
-    userdata.user_status = 0
-    userdata.save()
+    user = tbl_user.objects.get(id=id)
+    user.user_status = 0
+    user.save()
+
+    subject = "Account Blocked Notification ⚠️"
+    message = f"""
+Hello {user.user_name},
+
+Your account has been temporarily blocked by the admin.
+
+Possible reasons may include:
+- Violation of platform policies
+- Suspicious activities
+- Multiple failed verification attempts
+
+If you believe this is a mistake, please contact our support team.
+
+Thank you,
+Admin Team
+"""
+
+    send_mail(
+        subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        [user.user_email],
+    )
+
     return redirect("Admin:UserList")
+
+def unblockuser(request, id):
+    user = tbl_user.objects.get(id=id)
+    user.user_status = 1
+    user.save()
+
+    send_mail(
+        "Account Reactivated ✅",
+        f"""
+Hello {user.user_name},
+
+Good news! 🎉
+Your account has been reactivated. You can now log in and continue using our services.
+
+Welcome back!
+""",
+        settings.EMAIL_HOST_USER,
+        [user.user_email],
+    )
+
+    return redirect("Admin:UserList")
+
+
+
 
 
 

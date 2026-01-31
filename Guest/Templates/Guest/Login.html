@@ -4,7 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            border: none;
+            width: 100%;
+        }
+
+        td {
+            border: none;
+            padding: 10px;
+            font-size: 15px;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #667eea;
+        }
+
+        input[type="submit"] {
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        input[type="submit"]:hover {
+            background: #5a67d8;
+        }
+    </style>
 </head>
+
 <body>
     <form action="" method="post">
         {% csrf_token %}
@@ -18,13 +77,15 @@
                 <td><input type="password" name="txt_password" id="txt_password" ></td>
             </tr>
             <tr>
-                
-                <td colspan="2" align="center"><input type="submit" value="submit"></td>
+                <td colspan="2" align="center">
+                    <input type="submit" value="submit">
+                </td>
             </tr>
         </table>
     </form>
 </body>
 </html>
+
 {% if msg %}
 <script>
     alert("{{msg}}")

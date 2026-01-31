@@ -27,6 +27,7 @@ urlpatterns = [
     path('ajaxstar/',views.ajaxstar,name="ajaxstar"),
     path('starrating/',views.starrating,name="starrating"),
      path('Viewrating/<int:mid>',views.Viewrating,name="Viewrating"),
+     path('Bill/',views.Bill, name='Bill'),  
 
 
 ]

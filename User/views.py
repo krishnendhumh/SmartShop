@@ -334,18 +334,27 @@ def CartQty(request):
    cartdata.save()
    return redirect("User:MyCart")  
 
-def payment(request): 
-    bookingdata=tbl_booking.objects.get(id=request.session["bookingid"])
-    if request.method=="POST":
-        bookingdata.booking_status=2
+def payment(request):
+    bookingdata = tbl_booking.objects.get(id=request.session["bookingid"])
+
+    if request.method == "POST":
+        
+        bookingdata.booking_status = 2
         bookingdata.save()
+
+        
         cartdata = tbl_cart.objects.filter(booking=bookingdata)
         for i in cartdata:
             i.cart_status = 2
             i.save()
-        return render(request,"User/payment.html",{'msg':'Payment in process '})
-    else:
-        return render(request,"User/payment.html",{'bookingdata':bookingdata})
+
+        
+        return redirect("User:Bill")
+
+    return render(request, "User/payment.html", {
+        'bookingdata': bookingdata
+    })
+
     
 def MyBooking(request):
     bookingdata=tbl_booking.objects.filter(user=request.session['uid'])
@@ -423,6 +432,13 @@ def Viewrating(request,mid):
         return render(request,"User/Viewrating.html",{'mid':mid,'data':stardata,'ar':parray,'avg':avg,'count':counts})
     else:
          return render(request,"User/Viewrating.html",{'mid':mid})
+    
+def Bill(request):
+    bookingdata = tbl_booking.objects.get(
+        id=request.session["bookingid"]
+    )
+    return render(request, "User/Bill.html", {'booking': bookingdata})
+
 
 
 

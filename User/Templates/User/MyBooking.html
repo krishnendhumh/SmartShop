@@ -51,10 +51,12 @@
                 {% endif %}
             <td>
                 {% if j.cart_status == 6 %}
-                <a href="{% url 'User:rating' j.product.id %}">Give Review & Rating</a>
+                <a href="{% url 'User:rating' j.product.id %}">Give Review & Rating</a><br>
+
                 {% else %}
                 N/A
                 {% endif %}
+                <br> <a href="{% url 'User:Bill' %}">Bill</a>
             </td>
         </tr>
         {% empty %}

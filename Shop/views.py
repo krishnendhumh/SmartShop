@@ -4,6 +4,8 @@ from Shop.models import*
 from User.models import*
 from datetime import date
 from django.db.models import Sum
+from django.core.mail import send_mail
+from django.conf import settings
 
 # Create your views here.
 def Homepage(request):
@@ -132,20 +134,80 @@ def ViewBooking(request):
     bookingdata=tbl_booking.objects.all()
     return render(request,"Shop/ViewBooking.html",{'bookingdata':bookingdata})
 
-def BookingAction(request,cid,status):
+
+def BookingAction(request, cid, status):
     cart = tbl_cart.objects.get(id=cid)
-    cart.cart_status = status
+    booking = tbl_booking.objects.get(id=cart.booking.id)
+    user = tbl_user.objects.get(id=booking.user.id)
+    email = user.user_email
+
+    subject = "Order Status Update"
+
     if status == 3:
-        cart.pack_date= date.today()
+        cart.cart_status = 3
+        cart.pack_date = date.today()
+
+        message = f"""
+Hello {user.user_name},
+
+We regret to inform you that your order request has been rejected.
+
+If you believe this is a mistake, please contact our support team.
+
+Thank you.
+"""
+
     elif status == 4:
+        cart.cart_status = 4
         cart.ship_date = date.today()
+
+        message = f"""
+Hello {user.user_name},
+
+Good news! 🎉  
+Your order has been shipped successfully.
+
+It will reach you soon.
+
+Thank you for shopping with us.
+"""
+
     elif status == 5:
+        cart.cart_status = 5
         cart.outdel_date = date.today()
+
+        message = f"""
+Hello {user.user_name},
+
+Your order is now out for delivery 🚚.
+
+Please keep your phone available.
+
+Thank you for choosing us.
+"""
+
     elif status == 6:
+        cart.cart_status = 6
         cart.del_date = date.today()
-    
-        
-    cart.save()        
+
+        message = f"""
+Hello {user.user_name},
+
+🎉 Your order has been delivered successfully!
+
+We hope you enjoy your purchase.
+Thank you for shopping with us.
+"""
+
+    cart.save()
+
+    send_mail(
+        subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        [email],
+    )
+
     return redirect("Shop:ViewBooking")
 
 def SalesReport(request):
