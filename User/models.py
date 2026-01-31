@@ -36,5 +36,10 @@ class tbl_cart(models.Model):
     outdel_date = models.DateField(null=True)
     del_date = models.DateField(null=True)
 
-
+class tbl_rating(models.Model):
+    rating_data=models.IntegerField()
+    user=models.ForeignKey(tbl_user,on_delete=models.CASCADE)
+    user_review=models.CharField(max_length=500)
+    product=models.ForeignKey(tbl_product,on_delete=models.CASCADE)
+    datetime=models.DateTimeField(auto_now_add=True)
 

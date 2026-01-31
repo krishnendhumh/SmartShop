@@ -11,23 +11,23 @@
         <table border="2">
         <tr>
             <td>Name</td>
-            <td><input type="text" name="txt_name" id="txt_name"></td>
+            <td><input type="text" name="txt_name" id="txt_name" required></td>
         </tr>
         <tr>
             <td>Details</td>
-            <td><textarea name="txt_details" id="txt_details"></textarea></td>
+            <td><textarea name="txt_details" id="txt_details" required></textarea></td>
         </tr>
         <tr>
             <td>Photo</td>
-            <td><input type="file" name="file_photo" id="file_photo"></td>
+            <td><input type="file" name="file_photo" id="file_photo" required accept="images/*"></td>
         </tr>
         <tr>
             <td>Price</td>
-            <td><input type="text" name="txt_price" id="txt_price"></td>
+            <td><input type="text" name="txt_price" id="txt_price" required></td>
         </tr>
         <tr>
             <td>Category</td>
-            <td><select name="sel_category" id="sel_category">
+            <td><select name="sel_category" id="sel_category" required>
                   <option value="">--select--</option>
                   {% for i in categorydata %}
                     <option value="{{i.id}}">
@@ -37,13 +37,13 @@
         </tr>
         <tr>
             <td>SubCategory</td>
-            <td><select name="sel_subcategory" id="sel_subcategory">
+            <td><select name="sel_subcategory" id="sel_subcategory" required>
                   <option value="">--select--</option>
             </select></td>
         </tr>
         <tr>
             <td>Brand</td>
-            <td><select name="sel_brand" id="sel_brand">
+            <td><select name="sel_brand" id="sel_brand" required>
                   <option value="">--select--</option>
                   {% for i in branddata %}
                     <option value="{{i.id}}">
@@ -66,7 +66,8 @@
         <td>SubCategory</td>
         <td>Brand</td>
         <td>Photo</td>
-        <td>Action</td>
+        <td colspan="2">Action</td>
+        
           
     </tr>
    {% for i in product %}
@@ -81,7 +82,27 @@
         
         <td align="center"><img src="{{i.product_photo.url}}" alt="" width="150"></td>
         <td align="center"><a href="{% url 'Shop:Gallery' i.id  %}">Add Gallery</a>
-            <a href="{% url 'Shop:Stock' i.id  %}">Add Stock</a>
+            <td align="center">
+    {% if i.total_stock == 0 %}
+        <span style="color:red; font-weight:bold;">
+            Out Of Stock
+        </span>
+        <br>
+        <a href="{% url 'Shop:Stock' i.id %}">
+            Add Stock
+        </a>
+    {% else %}
+        <span style="color:green;">
+            Stock: {{ i.total_stock }}
+        </span>
+        <br>
+        <a href="{% url 'Shop:Stock' i.id %}">
+            Add Stock
+        </a>
+    {% endif %}
+</td>
+
+            
             
         
          

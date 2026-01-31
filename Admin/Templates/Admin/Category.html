@@ -13,7 +13,8 @@
         <table border="2">
             <tr>
                 <td>Category</td>
-                <td><input type="text" name="txt_category" id="txt_category" value="{{editdata.category_name}}"></td>
+                <td><input type="text" name="txt_category" id="txt_category" value="{{editdata.category_name}}"  required placeholder="Enter category Name" title="Name Allows Only Alphabets,Spaces and First Letter Must Be Capital Letter" pattern="^[A-Z]+[a-zA-Z ]*$" minlength="3"></td>
+          
             </tr>
             <tr>
                 <td colspan="2" align="center">

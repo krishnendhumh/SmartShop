@@ -51,12 +51,33 @@
                         <th align="left">Shop</th>
                         <td>{{ product.shop.shop_name }}</td>
                     </tr>
+                     <p>
+                <strong>Availability:</strong>
+                {% if available <= 0 %}
+                    <font color="red"><b>Out Of Stock</b></font>
+                {% else %}
+                    <font color="green"><b>{{ available }} in stock</b></font>
+                {% endif %}
+            </p>
 
-                    <tr>
-                        <td colspan="2" align="center">
-                            <a href="{% url 'User:Addcart' product.id %}">Add To Cart</a>
-                        </td>
-                    </tr>
+            <p>
+                <strong>Rating:</strong>
+                {% for i in ar %}
+                    {% if i <= avg %}
+                        <i class="fa-solid fa-star" style="color:orange;"></i>
+                    {% else %}
+                        <i class="fa-solid fa-star"></i>
+                    {% endif %}
+                {% endfor %}
+                ({{ ratecount }} reviews)
+            </p>
+
+            <p>
+                <a href="{% url 'User:Addcart' product.id %}">Add To Cart</a> |
+                <a href="{% url 'User:Viewrating' product.id %}">View Rating</a>
+            </p>
+
+                    
 
                 </table>
             </td>

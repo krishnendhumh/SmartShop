@@ -1,14 +1,16 @@
 {% load mathfilters %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Bookings</title>
 </head>
+
 <body>
 
-{% for i in bookingdata %}
+    {% for i in bookingdata %}
     <h4>Booking Id: #{{i.id}}</h4>
     <h3>Booking Date: {{ i.booking_date }}</h3>
     <h4>Total Amount: ₹{{ i.booking_amount }}</h4>
@@ -22,6 +24,7 @@
             <th>Qty</th>
             <th>Total</th>
             <th>Status</th>
+            <th>Rating</th>
         </tr>
 
         {% for j in i.tbl_cart_set.all %}
@@ -38,21 +41,37 @@
             </td>
             <td>
                 {% if j.cart_status == 2 %}Packed
-                
-        {% elif j.cart_status == 3 %}Shipped
-        {% elif j.cart_status == 4 %}Out Of Delivery
-        {% elif j.cart_status == 5 %}Delivery
-         {% elif j.cart_status == 6 %}
-         Delivered
-         
-        {% endif %}
+
+                {% elif j.cart_status == 3 %}Shipped
+                {% elif j.cart_status == 4 %}Out Of Delivery
+                {% elif j.cart_status == 5 %}Delivery
+                {% elif j.cart_status == 6 %}
+                Delivered
+
+                {% endif %}
+            <td>
+                {% if j.cart_status == 6 %}
+                <a href="{% url 'User:rating' j.product.id %}">Give Review & Rating</a>
+                {% else %}
+                N/A
+                {% endif %}
             </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No items found</td>
+        </tr>
+        {% endfor %}
+
+        {% empty %}
+        <tr>
+            <td colspan="6">No bookings found</td>
         </tr>
         {% endfor %}
     </table>
 
-    <hr>
-{% endfor %}
+
 
 </body>
+
 </html>

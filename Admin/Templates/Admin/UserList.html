@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table border="2">
+        <tr>
+            <td>Sl No</td>
+            <td>User Name</td>
+            <td>Email</td>
+            <td>Contact</td>
+            <td>Addess</td>
+            <td>Photo</td>
+            <td>District</td>
+            <td>Place</td>
+            <td>Action</td>
+        </tr>
+        {% for i in userdata %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{i.user_name}}</td>
+            <td>{{i.user_email}}</td>
+            <td>{{i.user_contact}}</td>
+            <td>{{i.user_address}}</td>
+            <td align="center"><img src="{{i.user_photo.url}}" alt="" width="100" height="150"></td>
+            <td>{{ i.place.district.district_name }}</td>
+            <td>{{i.place.place_name}}</td>
+            <td>
+    {% if i.user_status == 1 %}
+        <a href="{% url 'Admin:blockuser' i.id %}">Block</a>
+    {% else %}
+        Blocked
+    {% endif %}
+</td>
+
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -29,6 +29,10 @@ urlpatterns = [
     path("Viewcomplaint/", views.Viewcomplaint, name="Viewcomplaint"),
     path("replycomplaint/<int:id>/", views.replycomplaint, name="replycomplaint"),
     path("Viewfeedback/", views.Viewfeedback, name="Viewfeedback"),
+    path('SalesReport/',views.SalesReport,name="SalesReport"),
+    path("blockuser/<int:id>/", views.blockuser, name="blockuser"),
+    path('Userlist/',views.UserList,name="UserList"),
+
     
 
     

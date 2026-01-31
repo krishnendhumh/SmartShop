@@ -62,3 +62,9 @@
 
 </body>
 </html>
+{% if msg %}
+<script>
+    alert("{{msg}}")
+    window.location="{% url 'User:Complaint' %}"
+</script>
+{% endif %}

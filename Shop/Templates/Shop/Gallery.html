@@ -10,7 +10,7 @@
         {% csrf_token %}
         <table border="2">
             <tr><td>Product Image</td>
-                <td><input type="file" name="file_photo" id="file_photo"></td>
+                <td><input type="file" name="file_photo" id="file_photo" required accept="images/*"></td>
             </tr>
             <tr><td colspan="2" align="center"><input type="submit" value="submit"></td></tr>
         </table>

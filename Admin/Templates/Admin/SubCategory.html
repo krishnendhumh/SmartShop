@@ -20,7 +20,8 @@
                         {% endfor %}
                     </select></tr>
                 <tr><td>SubCategory</td>
-                <td><input type="text" name="txt_subcategory" id="txt_subcategory" value="{{editdata.subcategory_name}}"></td>
+                <td><input type="text" name="txt_subcategory" id="txt_subcategory" value="{{editdata.subcategory_name}}"  required placeholder="Enter SubCategory Name" title="Name Allows Only Alphabets,Spaces and First Letter Must Be Capital Letter" pattern="^[A-Z]+[a-zA-Z ]*$" minlength="3"></td>
+            </tr>
             </tr>
             <tr>
                 <td colspan="2" align="center">

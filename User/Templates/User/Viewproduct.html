@@ -5,7 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>view product</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
+<style>
+    .text-warning {
+        color: orange;
+    }
+</style>
 
 <body>
     <table border="2">
@@ -35,7 +43,7 @@
         </tr>
     </table>
     <h2>Products</h2><br>
-    <table border="2" id="result">
+    <table border="2" id="result" cellpadding="10">
 
         <tr>
             <td>Sl No</td>
@@ -43,18 +51,37 @@
             <td>Details</td>
             <td>Price</td>
             <td>Photo</td>
+            <td>Rating</td>
             <td>Action</td>
         </tr>
-        {% for i in product %}
+        {% for i,j in product %}
         <tr>
             <td>{{forloop.counter}}</td>
             <td>{{i.product_name}}</td>
             <td>{{i.product_details}}</td>
             <td>{{i.product_price}}</td>
+
             <td align="center"><img src="{{i.product_photo.url}}" alt="" width="150"></td>
-            <td align="center"><a href="{% url 'User:Viewmore' i.id  %}">View More</a>
+            <td>
+                {% for k in ar %}
+                {% if k <= j %} <i class="fa-solid fa-star text-warning"></i>
+                    {% else %}
+                    <i class="fa-solid fa-star star-light"></i>
+                    {% endif %}
+                    {% endfor %}
+            </td>
+
+            <td align="center">
+                {% if i.total_stock == 0 %}
+                <span style="color: red;">Out Of Stock</span>
+                {% else %}
+                <br><a href="{% url 'User:Addcart' i.id  %}">Add To Cart</a>
+                {% endif %}
+                <a href="{% url 'User:Viewmore' i.id  %}">View More</a>
                 <br><a href="{% url 'User:Wishlist' i.id  %}">Add To WishList</a>
-                <br><a href="{% url 'User:Addcart' i.id  %}">Add To Cart</a></td>
+
+
+            </td>
 
         </tr>
         {% endfor %}

@@ -17,6 +17,7 @@ urlpatterns = [
     path('delgallery/<int:did>',views.delgallery,name="delgallery"),
     path('ViewBooking/',views.ViewBooking,name="ViewBooking"),
     path('BookingAction/<int:cid>/<int:status>',views.BookingAction,name="BookingAction"),
+    path('SalesReport/',views.SalesReport,name="SalesReport"),
 
 
 ]

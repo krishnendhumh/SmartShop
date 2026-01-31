@@ -9,7 +9,7 @@ urlpatterns = [
     path('EditProfile/',views.EditProfile,name="EditProfile"),
     path('ChangePass/',views.ChangePass,name="ChangePass"),
     path('Viewproduct/',views.Viewproduct,name="Viewproduct"),
-    path('Viewmore/<int:id>',views.Viewmore,name="Viewmore"),
+    path('Viewmore/<int:pid>',views.Viewmore,name="Viewmore"),
     path('Addcart/<int:id>',views.Addcart,name="Addcart"),
     path('AjaxSearch/',views.AjaxSearch,name="AjaxSearch"),
     path('Wishlist/<int:id>',views.Wishlist,name="Wishlist"),
@@ -23,6 +23,10 @@ urlpatterns = [
     path("CartQty/", views.CartQty,name="cartqty"),
     path("payment/", views.payment,name="payment"),
     path("MyBooking/", views.MyBooking,name="MyBooking"),
+    path('rating/<int:mid>',views.rating,name="rating"),  
+    path('ajaxstar/',views.ajaxstar,name="ajaxstar"),
+    path('starrating/',views.starrating,name="starrating"),
+     path('Viewrating/<int:mid>',views.Viewrating,name="Viewrating"),
 
 
 ]

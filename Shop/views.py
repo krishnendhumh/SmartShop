@@ -3,6 +3,7 @@ from Guest.models import*
 from Shop.models import*
 from User.models import*
 from datetime import date
+from django.db.models import Sum
 
 # Create your views here.
 def Homepage(request):
@@ -66,6 +67,18 @@ def Product(request):
     categorydata =  tbl_category.objects.all()
     branddata=tbl_brand.objects.all()
     productdata=tbl_product.objects.filter(shop=shopdata)
+   
+    for product in productdata:
+        total_stock = tbl_stock.objects.filter(
+            product=product
+        ).aggregate(total=Sum('stock_quantity'))['total'] or 0
+
+        total_cart = tbl_cart.objects.filter(
+            product=product,
+            cart_status=1
+        ).aggregate(total=Sum('cart_qty'))['total'] or 0
+
+        product.total_stock = max(total_stock - total_cart, 0)
     if request.method == "POST":
         name=request.POST.get("txt_name")
         details=request.POST.get("txt_details")
@@ -74,6 +87,8 @@ def Product(request):
         subcategory= tbl_subcategory.objects.get(id=request.POST.get("sel_subcategory"))
         brand= tbl_brand.objects.get(id=request.POST.get("sel_brand"))
         tbl_product.objects.create(product_name=name, product_details=details,product_photo=photo,product_price=price,shop=shopdata,brand=brand,subcategory=subcategory)
+        
+        
         return render(request,"Shop/Product.html",{'msg':"Data inserted.."})
     else:
         return render(request,"Shop/Product.html",{'categorydata':categorydata,'branddata':branddata,'product':productdata})
@@ -114,7 +129,7 @@ def delgallery(request,did):
     return render(request,"Shop/Gallery.html",{'msg':"Data Deleted.."})
 
 def ViewBooking(request):
-    bookingdata=tbl_booking.objects.filter(user=request.session['uid'])
+    bookingdata=tbl_booking.objects.all()
     return render(request,"Shop/ViewBooking.html",{'bookingdata':bookingdata})
 
 def BookingAction(request,cid,status):
@@ -133,5 +148,16 @@ def BookingAction(request,cid,status):
     cart.save()        
     return redirect("Shop:ViewBooking")
 
+def SalesReport(request):
+    bookingdata = None
+    if request.method == "POST":
+        from_date = request.POST.get("from_date")
+        to_date = request.POST.get("to_date")
 
+        bookingdata = tbl_booking.objects.filter(
+            booking_date__range=[from_date, to_date]
+        )
 
+    return render(request, "Shop/SalesReport.html", {
+        'bookingdata': bookingdata
+    })

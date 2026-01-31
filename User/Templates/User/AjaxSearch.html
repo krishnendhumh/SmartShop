@@ -8,14 +8,25 @@
         <td>Photo</td>
         <td>Action</td>
     </tr>
-    {% for i in productdata %}
+    {% for i,j in productdata %}
     <tr>
         <td>{{forloop.counter}}</td>
         <td>{{i.product_name}}</td>
         <td>{{i.product_details}}</td>
         <td>{{i.product_price}}</td>
         <td align="center"><img src="{{i.product_photo.url}}" alt="" width="150"></td>
-        <td align="center"><a href="{% url 'User:Viewmore' i.id  %}">View More</a></td>
+        <td>
+                {% for k in ar %}
+                {% if k <= j %} <i class="fa-solid fa-star text-warning"></i>
+                    {% else %}
+                    <i class="fa-solid fa-star star-light"></i>
+                    {% endif %}
+                    {% endfor %}
+            </td>
+
+            <td align="center">
+               
+                <a href="{% url 'User:Viewmore' i.id  %}">View More</a>
     </tr>
     {% endfor %}
 </table>

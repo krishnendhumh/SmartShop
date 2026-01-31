@@ -2,17 +2,25 @@ from django.shortcuts import render,redirect
 from Admin.models import*
 from Guest.models import*
 from User.models import*
+from Shop.models import*
 
 # Create your views here.
 def District(request):
-    districtdata = tbl_district.objects.all()
-    if request.method == "POST":
-        name = (request.POST.get("txt_district"))
-        tbl_district.objects.create(district_name=name)
-        # return redirect("Admin:District")
-        return render(request,"Admin/District.html",{'msg':"Data Inserted.."})
+    if "aid" not in request.session:    
+        return redirect("Guest:Login")
     else:
-        return render(request,"Admin/District.html",{'districtdata':districtdata})
+        districtdata = tbl_district.objects.all()
+        if request.method == "POST":
+            name = (request.POST.get("txt_district"))
+            districtcount=tbl_district.objects.filter(district_name=name).count()
+            if districtcount > 0:
+                return render(request,"Admin/District.html",{'msg':"Already Inserted.."})
+            else:
+                tbl_district.objects.create(district_name=name)
+            
+            return render(request,"Admin/District.html",{'msg':"Data Inserted.."})
+        else:
+            return render(request,"Admin/District.html",{'districtdata':districtdata})
 
 def deldistrict(request,did):
     tbl_district.objects.get(id=did).delete()
@@ -60,14 +68,22 @@ def editadmindata(request,eid):
         return render(request,"Admin/AdminRegistration.html",{'editdata':editdata,'admindata':admindata})
    
 def Category(request):
-    categorydata = tbl_category.objects.all()
-    if request.method == "POST":
-        name = (request.POST.get("txt_category"))
-        tbl_category.objects.create(category_name=name)
-       
-        return render(request,"Admin/Category.html",{'msg':"Data Inserted.."})
+    if "aid" not in request.session:    
+        return redirect("Guest:Login")
     else:
-        return render(request,"Admin/Category.html",{'categorydata':categorydata})
+        categorydata = tbl_category.objects.all()
+        
+        if request.method == "POST":
+            name = (request.POST.get("txt_category"))
+            catcount=tbl_category.objects.filter(category_name=name).count()
+            if catcount > 0:
+                return render(request,"Admin/Category.html",{'msg':"Already Inserted.."})
+            else:
+                tbl_category.objects.create(category_name=name)
+
+            return render(request,"Admin/Category.html",{'msg':"Data Inserted.."})
+        else:
+            return render(request,"Admin/Category.html",{'categorydata':categorydata})
 
 def delcategory(request,did):
     tbl_category.objects.get(id=did).delete()
@@ -91,7 +107,11 @@ def Place(request):
     if request.method == "POST":
         place= request.POST.get("txt_place")
         district = tbl_district.objects.get(id=request.POST.get("sel_district"))
-        tbl_place.objects.create(place_name = place,district=district)
+        placecount=tbl_place.objects.filter(place_name=name).count()
+        if placecount > 0:
+            return render(request,"Admin/Place.html",{'msg':"Already Inserted.."})
+        else:
+            tbl_place.objects.create(place_name = place,district=district)
         return render(request,"Admin/Place.html",{'msg':"Data Inserted.."})
     else:
         return render(request,"Admin/Place.html",{'placedata':placedata, 'districtdata':districtdata})
@@ -116,15 +136,22 @@ def editplace(request,eid):
    
     
 def SubCategory(request):
-    categorydata=  tbl_category.objects.all()
-    subdata = tbl_subcategory.objects.all()
-    if request.method == "POST":
-        subcategory= request.POST.get("txt_subcategory")
-        category = tbl_category.objects.get(id=request.POST.get("sel_category"))
-        tbl_subcategory.objects.create(subcategory_name = subcategory,category=category)
-        return render(request,"Admin/SubCategory.html",{'msg':"Data Inserted.."})
+    if "aid" not in request.session:    
+        return redirect("Guest:Login")
     else:
-        return render(request,"Admin/SubCategory.html",{'subdata':subdata, 'categorydata':categorydata})
+        categorydata=  tbl_category.objects.all()
+        subdata = tbl_subcategory.objects.all()
+        if request.method == "POST":
+            subcategory= request.POST.get("txt_subcategory")
+            category = tbl_category.objects.get(id=request.POST.get("sel_category"))
+            subcatcount=tbl_subcategory.objects.filter(subcategory_name=name).count()
+            if subcatcount > 0:
+                return render(request,"Admin/SubCategory.html",{'msg':"Already Inserted.."})
+            else:
+                tbl_subcategory.objects.create(subcategory_name = subcategory,category=category)
+            return render(request,"Admin/SubCategory.html",{'msg':"Data Inserted.."})
+        else:
+            return render(request,"Admin/SubCategory.html",{'subdata':subdata, 'categorydata':categorydata})
 
 def delsub(request,did):
     tbl_subcategory.objects.get(id=did).delete()
@@ -166,18 +193,25 @@ def reject(request,rid):
     return render(request,"Admin/ShopVerification.html",{'msg':' Rejected'})
 
 def Brand(request):
-    branddata = tbl_brand.objects.all()
-    if request.method == "POST":
-        name = (request.POST.get("txt_brand"))
-        tbl_brand.objects.create(brand_name=name)
-       
-        return render(request,"Admin/Brand.html",{'msg':"Data Inserted.."})
+    if "aid" not in request.session:    
+        return redirect("Guest:Login")
     else:
-        return render(request,"Admin/Brand.html",{'branddata':branddata})
+        branddata = tbl_brand.objects.all()
+        if request.method == "POST":
+            name = (request.POST.get("txt_brand"))
+            brandcount=tbl_brand.objects.filter(brand_name=name).count()
+            if brandcount > 0:
+                return render(request,"Admin/Brand.html",{'msg':"Already Inserted.."})
+            else:
+                tbl_brand.objects.create(brand_name=name)
+        
+            return render(request,"Admin/Brand.html",{'msg':"Data Inserted.."})
+        else:
+            return render(request,"Admin/Brand.html",{'branddata':branddata})
 
 def delbrand(request,did):
-    tbl_brand.objects.get(id=did).delete()
-    return render(request,"Admin/Brand.html",{'msg':"Data Deleted.."})
+        tbl_brand.objects.get(id=did).delete()
+        return render(request,"Admin/Brand.html",{'msg':"Data Deleted.."})
 
 def editbrand(request,eid):
     editdata = tbl_brand.objects.get(id=eid)
@@ -214,5 +248,32 @@ def replycomplaint(request, id):
 def Viewfeedback(request):
     feedback = tbl_feedback.objects.all().order_by("-feed_date")
     return render(request, "Admin/Viewfeedback.html", {"feedback": feedback})
+
+def SalesReport(request):
+    bookingdata = None
+    if request.method == "POST":
+        from_date = request.POST.get("from_date")
+        to_date = request.POST.get("to_date")
+
+        bookingdata = tbl_booking.objects.filter(
+            booking_date__range=[from_date, to_date]
+        )
+
+    return render(request, "Admin/SalesReport.html", {
+        'bookingdata': bookingdata
+    })
+
+def UserList(request):
+    userdata=tbl_user.objects.all()
+    return render(request, "Admin/UserList.html", {"userdata": userdata})
+
+def blockuser(request, id):
+    userdata = tbl_user.objects.get(id=id)
+    userdata.user_status = 0
+    userdata.save()
+    return redirect("Admin:UserList")
+
+
+
    
 

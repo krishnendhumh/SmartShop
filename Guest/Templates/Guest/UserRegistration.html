@@ -13,22 +13,23 @@
         <table border="2">
             <tr>
                 <td>Name</td>
-                <td><input type="text" name="txt_name" id="txt_name"></td>
+                <td><input type="text" name="txt_name" id="txt_name" required placeholder="Enter Your Name" title="Name Allows Only Alphabets,Spaces and First Letter Must Be Capital Letter" pattern="^[A-Z]+[a-zA-Z ]*$" minlength="3"></td>
             </tr>
             <tr>
                 <td>Email</td>
-                <td><input type="email" name="txt_email" id="txt_email"></td>
+                <td><input type="email"  required name="txt_email"  id="txt_email"></td>
             </tr>
             <tr>
                 <td>Contact</td>
-                <td><input type="text" name="txt_contact" id="txt_contact"></td>
+                <td><input type="text" name="txt_contact" id="txt_contact" pattern="[6-9]{1}[0-9]{9}" 
+                title="Phone number with 6-9 and remaing 9 digit with 0-9" minlength="7" maxlength="10"></td>
             </tr>
             <tr>
                 <td>Address</td>
-                <td><textarea name="txt_address" id="txt_address"> </textarea></td>
+                <td><textarea required name="txt_address" id="txt_address" required> </textarea></td>
             </tr>
             <td>District</td>
-            <td><select name="sel_district" id="sel_district">
+            <td><select required name="sel_district" id="sel_district">
                     <option value="">--select--</option>
                     {% for i in districtdata %}
                     <option value="{{i.id}}">
@@ -40,18 +41,18 @@
 
             <tr>
                 <td>Place</td>
-                <td><select name="sel_place" id="sel_place">
+                <td><select required name="sel_place" id="sel_place">
                         <option value="">--select--</option>
                         
                     </select></td>
             </tr>
             <tr>
                 <td>Photo</td>
-                <td><input type="file" name="file_photo" id="file_photo"></td>
+                <td><input type="file" name="file_photo" id="file_photo" required accept="images/*"></td>
             </tr>
             <tr>
                 <td>Password</td>
-                <td><input type="password" name="txt_password" id="txt_password"></td>
+                <td><input type="password" name="txt_password" id="txt_password"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"></td>
             </tr>
             <tr>
 
