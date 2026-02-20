@@ -4,6 +4,7 @@ app_name ="User"
 
 
 urlpatterns = [
+    path('logout/',views.logout,name="logout"),
     path('Homepage/',views.Homepage,name="Homepage"),
     path('MyProfile/',views.MyProfile,name="MyProfile"),
     path('EditProfile/',views.EditProfile,name="EditProfile"),
@@ -26,8 +27,9 @@ urlpatterns = [
     path('rating/<int:mid>',views.rating,name="rating"),  
     path('ajaxstar/',views.ajaxstar,name="ajaxstar"),
     path('starrating/',views.starrating,name="starrating"),
-     path('Viewrating/<int:mid>',views.Viewrating,name="Viewrating"),
-     path('Bill/',views.Bill, name='Bill'),  
-
-
+    path('Viewrating/<int:mid>',views.Viewrating,name="Viewrating"),
+    path('Bill/',views.PBill, name='Bill'),
+    path('Bill/<int:id>',views.Bill, name='Bill'),
+    path("cancel/<int:cid>/", views.CancelProduct, name="CancelProduct"),
+    path("return/<int:cid>/", views.ReturnProduct, name="ReturnProduct"),
 ]

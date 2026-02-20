@@ -4,6 +4,7 @@ app_name ="Admin"
 
 
 urlpatterns = [
+    path('logout/',views.logout,name="logout"),
     path('District/',views.District,name="District"),
     path("deldistrict/<int:did>/",views.deldistrict, name="deldistrict"),
     path("editdistrict/<int:eid>/",views.editdistrict, name="editdistrict"),

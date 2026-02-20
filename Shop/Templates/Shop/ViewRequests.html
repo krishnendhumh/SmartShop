@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Requests</title>
+</head>
+<body>
+
+<h2>Cancel Requests</h2>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Order ID</th>
+        <th>Product</th>
+        <th>User</th>
+        <th>Reason</th>
+        <th>Action</th>
+    </tr>
+
+    {% for c in cancel_requests %}
+    <tr>
+        <td>{{ c.booking.id }}</td>
+        <td>{{ c.product.product_name }}</td>
+        <td>{{ c.booking.user.user_name }}</td>
+        <td>{{ c.cancel_reason }}</td>
+        <td>
+    <a href="{% url 'Shop:ApproveCancel' c.id %}">Approve</a> |
+    <a href="{% url 'Shop:RejectRequest' c.id %}">Reject</a>
+</td>
+
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No cancel requests</td></tr>
+    {% endfor %}
+</table>
+
+<br><hr><br>
+
+<h2>Return Requests</h2>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Order ID</th>
+        <th>Product</th>
+        <th>User</th>
+        <th>Reason</th>
+        <th>Action</th>
+    </tr>
+
+    {% for r in return_requests %}
+    <tr>
+        <td>{{ r.booking.id }}</td>
+        <td>{{ r.product.product_name }}</td>
+        <td>{{ r.booking.user.user_name }}</td>
+        <td>{{ r.return_reason }}</td>
+        <td>
+    <a href="{% url 'Shop:ApproveReturn' r.id %}">Approve</a> |
+    <a href="{% url 'Shop:RejectRequest' r.id %}">Reject</a>
+</td>
+
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No return requests</td></tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

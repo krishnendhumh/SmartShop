@@ -3,80 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>User Dashboard</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         body {
             margin: 0;
             min-height: 100vh;
-            background: linear-gradient(135deg, #56ccf2, #2f80ed);
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(-45deg, #56ccf2, #2f80ed, #6a11cb, #2575fc);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .container {
-            background: #ffffff;
-            padding: 40px 50px;
-            border-radius: 14px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            background: rgba(255,255,255,0.96);
+            padding: 45px;
+            border-radius: 18px;
             width: 420px;
             text-align: center;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+            animation: slideUp 0.8s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h2 {
-            margin-top: 0;
-            margin-bottom: 25px;
+            margin: 0 0 10px;
             color: #222;
         }
 
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
         .menu a {
-            display: block;
-            margin: 10px 0;
-            padding: 12px;
+            padding: 15px;
             text-decoration: none;
-            font-size: 15px;
-            color: #ffffff;
-            background: #2f80ed;
-            border-radius: 8px;
-            transition: 0.3s;
+            font-size: 14px;
+            color: #fff;
+            background: linear-gradient(135deg, #2f80ed, #1c5ed6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
         .menu a:hover {
-            background: #256fd3;
-            transform: translateY(-2px);
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 18px 30px rgba(0,0,0,0.35);
         }
 
         .menu a.cart {
-            background: #27ae60;
+            background: linear-gradient(135deg, #27ae60, #1e8f4d);
         }
 
-        .menu a.cart:hover {
-            background: #219150;
+        .menu a.complaint {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+        }
+
+        .menu a.feedback {
+            background: linear-gradient(135deg, #8e44ad, #6c3483);
+        }
+
+        .menu a.booking {
+            background: linear-gradient(135deg, #16a085, #138d75);
         }
 
         @media (max-width: 480px) {
             .container {
                 width: 90%;
             }
+            .menu {
+                grid-template-columns: 1fr;
+            }
         }
+        .logout {
+    background: linear-gradient(135deg, #000000, #434343);
+}
+
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h2>Welcome User</h2>
 
-        <div class="menu">
-            <a href="{% url 'User:MyProfile' %}">View Profile</a>
-            <a href="{% url 'User:Viewproduct' %}">View Products</a>
-            <a href="{% url 'User:Wishlists' %}">View Wishlist</a>
-            <a href="{% url 'User:Complaint' %}">Add Complaint</a>
-            <a href="{% url 'User:Feedback' %}">Give Feedback</a>
-            <a href="{% url 'User:MyCart' %}" class="cart">My Cart Items</a>
-            <a href="{% url 'User:MyBooking' %}">My Booking</a>
-        </div>
+<div class="container">
+    <h2>Welcome User 👋</h2>
+    <div class="subtitle">Manage your account & activities</div>
+
+    <div class="menu">
+        <a href="{% url 'User:MyProfile' %}">
+            <i class="fa-solid fa-user"></i> Profile
+        </a>
+
+        <a href="{% url 'User:Viewproduct' %}">
+            <i class="fa-solid fa-store"></i> Products
+        </a>
+
+        <a href="{% url 'User:Wishlists' %}">
+            <i class="fa-solid fa-heart"></i> Wishlist
+        </a>
+
+        <a href="{% url 'User:Complaint' %}" class="complaint">
+            <i class="fa-solid fa-triangle-exclamation"></i> Complaint
+        </a>
+
+        <a href="{% url 'User:Feedback' %}" class="feedback">
+            <i class="fa-solid fa-comment"></i> Feedback
+        </a>
+
+        <a href="{% url 'User:MyCart' %}" class="cart">
+            <i class="fa-solid fa-cart-shopping"></i> Cart
+        </a>
+
+        <a href="{% url 'User:MyBooking' %}" class="booking">
+            <i class="fa-solid fa-calendar-check"></i> Booking
+            
+        </a>
+         <a href="{% url 'Admin:logout' %}" class="logout">
+    <i class="fa-solid fa-right-from-bracket"></i> Logout</a>
     </div>
+</div>
+
 </body>
 </html>

@@ -68,13 +68,12 @@
                 {% elif j.cart_status == 4 %}
                 <a href="{% url 'Shop:BookingAction' j.id 5 %}">Out Of Delivery</a>
                 {% elif j.cart_status == 5 %}
-                <a href="{% url 'Shop:BookingAction' j.id 6 %}">Delivery</a>
+                <a href="{% url 'Shop:BookingAction' j.id 6 %}">Delivered</a>
                 {% elif j.cart_status == 6 %}
                 Delivered
                 {% endif %}
+            </td>
 
-            </td>
-            </td>
         </tr>
         {% endfor %}
 

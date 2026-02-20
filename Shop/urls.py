@@ -4,6 +4,7 @@ app_name ="Shop"
 
 
 urlpatterns = [
+    path('logout/',views.logout,name="logout"),
     path('Homepage/',views.Homepage,name="Homepage"),
     path('MyProfile/',views.MyProfile,name="MyProfile"),
     path('EditProfile/',views.EditProfile,name="EditProfile"),
@@ -18,6 +19,11 @@ urlpatterns = [
     path('ViewBooking/',views.ViewBooking,name="ViewBooking"),
     path('BookingAction/<int:cid>/<int:status>',views.BookingAction,name="BookingAction"),
     path('SalesReport/',views.SalesReport,name="SalesReport"),
+    path('view-requests/', views.ViewRequests, name="ViewRequests"),
+    path("requests/", views.ViewRequests, name="ViewRequests"),
+    path("approve-cancel/<int:cid>/", views.ApproveCancel, name="ApproveCancel"),
+    path("approve-return/<int:cid>/", views.ApproveReturn, name="ApproveReturn"),
+    path("reject/<int:cid>/", views.RejectRequest, name="RejectRequest"),
 
 
 ]

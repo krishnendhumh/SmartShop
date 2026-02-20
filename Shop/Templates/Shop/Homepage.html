@@ -47,6 +47,10 @@
             background: #5a67d8;
             transform: translateY(-2px);
         }
+        .logout {
+    background: linear-gradient(135deg, #000000, #434343);
+}
+
     </style>
 </head>
 
@@ -59,6 +63,9 @@
             <a href="{% url 'Shop:Product' %}">Add Product</a>
             <a href="{% url 'Shop:ViewBooking' %}">View Bookings</a>
             <a href="{% url 'Shop:SalesReport' %}">Sales Report</a>
+            <a href="{% url 'Shop:ViewRequests' %}">View Request</a>
+             <a href="{% url 'Admin:logout' %}" class="logout">
+    <i class="fa-solid fa-right-from-bracket"></i> Logout
         </div>
     </div>
 </body>

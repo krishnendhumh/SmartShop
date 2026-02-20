@@ -5,7 +5,16 @@ from User.models import*
 from django.db.models import Sum
 from django.http import JsonResponse
 from datetime import datetime
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import tbl_cart
+from datetime import date
+
 # Create your views here.
+def logout(request):
+    del request.session['aid']
+    return redirect("Guest:Login")
+
 def Homepage(request):
     return render(request,"User/Homepage.html")
 
@@ -433,11 +442,90 @@ def Viewrating(request,mid):
     else:
          return render(request,"User/Viewrating.html",{'mid':mid})
     
-def Bill(request):
+def PBill(request):
     bookingdata = tbl_booking.objects.get(
         id=request.session["bookingid"]
     )
     return render(request, "User/Bill.html", {'booking': bookingdata})
+
+def Bill(request, id):
+    bookingdata = tbl_booking.objects.get(id=id)
+    return render(request, "User/Bill.html", {'booking': bookingdata})
+
+
+
+
+
+def CancelProduct(request, cid):
+    cart = tbl_cart.objects.get(id=cid)
+    user = cart.booking.user
+
+    if cart.cart_status >= 4:
+        return redirect("User:MyBooking")
+
+    if request.method == "POST":
+        reasons = request.POST.getlist("reason[]")
+        other = request.POST.get("other_reason")
+
+        reason_text = ", ".join(reasons)
+
+        if other:
+            reason_text += f", Other: {other}"
+
+        cart.cart_status = 7  # Cancel Requested
+        cart.cancel_reason = reason_text
+        cart.cancel_date = date.today()
+        cart.save()
+
+        send_mail(
+            "Order Cancel Request Received",
+            f"Hello {user.user_name},\n\nYour cancellation request has been received.\nRefund will be processed within 2 days.",
+            settings.EMAIL_HOST_USER,
+            [user.user_email],
+        )
+
+        return redirect("User:MyBooking")
+
+    return render(request, "User/Returnreason.html")
+
+
+from datetime import timedelta
+
+def ReturnProduct(request, cid):
+    cart = tbl_cart.objects.get(id=cid)
+    user = cart.booking.user
+
+    if cart.cart_status != 6:
+        return redirect("User:MyBooking")
+
+    if date.today() > cart.del_date + timedelta(days=7):
+        return redirect("User:MyBooking")
+
+    if request.method == "POST":
+        reasons = request.POST.getlist("reason[]")
+        other = request.POST.get("other_reason")
+
+        reason_text = ", ".join(reasons)
+
+        if other:
+            reason_text += f", Other: {other}"
+
+        cart.cart_status = 9  # Return Requested
+        cart.return_reason = reason_text
+        cart.return_date = date.today()
+        cart.save()
+
+        send_mail(
+            "Return Request Submitted",
+            f"Hello {user.user_name},\n\nYour return request has been submitted.\nRefund after approval.",
+            settings.EMAIL_HOST_USER,
+            [user.user_email],
+        )
+
+        return redirect("User:MyBooking")
+
+    return render(request, "User/Returnreason.html")
+
 
 
 

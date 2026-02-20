@@ -4,60 +4,104 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Bookings</title>
+    <title>My Booking</title>
 </head>
 
 <body>
 
-    {% for i in bookingdata %}
-    <h4>Booking Id: #{{i.id}}</h4>
-    <h3>Booking Date: {{ i.booking_date }}</h3>
-    <h4>Total Amount: ₹{{ i.booking_amount }}</h4>
+    <table border="1" cellpadding="10" width="100%">
+        {% for i in bookingdata %}
 
-    <table border="1" width="100%" cellspacing="0" cellpadding="8">
-        <tr>
-            <th>Sl No</th>
-            <th>Product Name</th>
-            <th>Photo</th>
-            <th>Price</th>
-            <th>Qty</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Rating</th>
+        <!-- Booking Header -->
+        <tr style="background:#f2f2f2">
+            <td colspan="7">
+                <strong>Order Number :</strong> #{{ i.id }} <br>
+                <strong>Date :</strong> {{ i.booking_date }} <br>
+                <strong>Total Amount :</strong> ₹{{ i.booking_amount }} <br>
+
+                <strong>Status :</strong>
+                {% if i.booking_status == 1 %}
+                💳 Payment Pending
+                {% elif i.booking_status == 2 %}
+                ✅ Payment Completed
+                {% elif i.booking_status == 3 %}
+                <span style="color:green;font-weight:bold;">
+                    🎉 Booking Completed
+                </span>
+                {% endif %}
+            </td>
         </tr>
 
+        <!-- Table Head -->
+        <tr>
+            <th>SNO</th>
+            <th>Photo</th>
+            <th>Product Details</th>
+            <th>Qty</th>
+            <th>Amount</th>
+            <th>Tracking Status</th>
+            <th>Action</th>
+        </tr>
+
+        <!-- Products -->
         {% for j in i.tbl_cart_set.all %}
         <tr>
             <td>{{ forloop.counter }}</td>
-            <td>{{ j.product.product_name }}</td>
             <td>
-                <img src="{{ j.product.product_photo.url }}" width="100">
+                <img src="{{ j.product.product_photo.url }}" width="120">
             </td>
-            <td>₹{{ j.product.product_price }}</td>
+            <td>
+                <strong>{{ j.product.product_name }}</strong><br>
+                {{ j.product.product_description }}<br>
+                ₹{{ j.product.product_price }}
+            </td>
             <td>{{ j.cart_qty }}</td>
-            <td>
-                ₹{{ j.cart_qty|mul:j.product.product_price }}
-            </td>
-            <td>
-                {% if j.cart_status == 2 %}Packed
+            <td>₹{{ j.cart_qty|mul:j.product.product_price }}</td>
 
-                {% elif j.cart_status == 3 %}Shipped
-                {% elif j.cart_status == 4 %}Out Of Delivery
-                {% elif j.cart_status == 5 %}Delivery
-                {% elif j.cart_status == 6 %}
-                Delivered
-
-                {% endif %}
+            <!-- Product Status -->
             <td>
+                {% if j.cart_status == 0 %} 🛒 In Cart {% endif %}
+                {% if j.cart_status == 1 %} 💳 Payment Pending {% endif %}
+                {% if j.cart_status == 2 %} ✅ Payment Successful {% endif %}
+                {% if j.cart_status == 3 %} 📦 Packed {% endif %}
+
+                {% if j.cart_status == 4 %} 🚚 Shipped {% endif %}
+                {% if j.cart_status == 5 %} 📍 Out for Delivery {% endif %}
                 {% if j.cart_status == 6 %}
-                <a href="{% url 'User:rating' j.product.id %}">Give Review & Rating</a><br>
-
-                {% else %}
-                N/A
+                <span style="color:green;font-weight:bold;">
+                    🎉 Delivered
+                </span>
                 {% endif %}
-                <br> <a href="{% url 'User:Bill' %}">Bill</a>
             </td>
+           <td>
+    {% if j.cart_status == 6 %}
+        <a href="{% url 'User:rating' j.product.id %}">⭐ Review</a> |
+        <a href="{% url 'User:ReturnProduct' j.id %}">↩ Return</a> |
+        <a href="{% url 'User:Bill' i.id %}">🧾 Bill</a>
+
+    {% elif j.cart_status == 7 %}
+        ⏳ Cancel Requested
+
+    {% elif j.cart_status == 8 %}
+        ✅ Cancel Approved
+
+    {% elif j.cart_status == 9 %}
+        ⏳ Return Requested
+
+    {% elif j.cart_status == 10 %}
+        ✅ Return Approved
+
+    {% elif j.cart_status < 4 %}
+        <a href="{% url 'User:CancelProduct' j.id %}">❌ Cancel</a>
+
+    {% elif i.booking_status == 2 %}
+        <a href="{% url 'User:Bill' i.id %}">🧾 View Bill</a>
+
+    {% else %}
+        N/A
+    {% endif %}
+</td>
+
         </tr>
         {% empty %}
         <tr>
@@ -71,8 +115,6 @@
         </tr>
         {% endfor %}
     </table>
-
-
 
 </body>
 

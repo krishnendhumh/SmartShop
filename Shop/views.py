@@ -6,8 +6,14 @@ from datetime import date
 from django.db.models import Sum
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib import messages
 
 # Create your views here.
+
+def logout(request):
+    del request.session['aid']
+    return redirect("Guest:Login")
+
 def Homepage(request):
     return render(request,"Shop/Homepage.html")
 
@@ -134,15 +140,15 @@ def ViewBooking(request):
     bookingdata=tbl_booking.objects.all()
     return render(request,"Shop/ViewBooking.html",{'bookingdata':bookingdata})
 
-
 def BookingAction(request, cid, status):
     cart = tbl_cart.objects.get(id=cid)
-    booking = tbl_booking.objects.get(id=cart.booking.id)
-    user = tbl_user.objects.get(id=booking.user.id)
+    booking = cart.booking
+    user = booking.user
     email = user.user_email
 
     subject = "Order Status Update"
 
+    # PACKED
     if status == 3:
         cart.cart_status = 3
         cart.pack_date = date.today()
@@ -150,28 +156,29 @@ def BookingAction(request, cid, status):
         message = f"""
 Hello {user.user_name},
 
-We regret to inform you that your order request has been rejected.
+📦 Your order has been packed successfully.
 
-If you believe this is a mistake, please contact our support team.
+It will be shipped shortly.
 
-Thank you.
+Thank you for shopping with us.
 """
 
+    # SHIPPED
     elif status == 4:
         cart.cart_status = 4
         cart.ship_date = date.today()
 
         message = f"""
 Hello {user.user_name},
-
-Good news! 🎉  
-Your order has been shipped successfully.
+🚚 Good news!
+Your order has been shipped.
 
 It will reach you soon.
 
 Thank you for shopping with us.
 """
 
+    # OUT FOR DELIVERY
     elif status == 5:
         cart.cart_status = 5
         cart.outdel_date = date.today()
@@ -179,13 +186,14 @@ Thank you for shopping with us.
         message = f"""
 Hello {user.user_name},
 
-Your order is now out for delivery 🚚.
+🚚 Your order is out for delivery today.
 
 Please keep your phone available.
 
 Thank you for choosing us.
 """
 
+    # DELIVERED
     elif status == 6:
         cart.cart_status = 6
         cart.del_date = date.today()
@@ -199,13 +207,16 @@ We hope you enjoy your purchase.
 Thank you for shopping with us.
 """
 
+    # SAVE CART
     cart.save()
 
+    # SEND MAIL
     send_mail(
         subject,
         message,
         settings.EMAIL_HOST_USER,
         [email],
+        fail_silently=True
     )
 
     return redirect("Shop:ViewBooking")
@@ -223,3 +234,73 @@ def SalesReport(request):
     return render(request, "Shop/SalesReport.html", {
         'bookingdata': bookingdata
     })
+from datetime import date
+def ViewRequests(request):
+    cancel_requests = tbl_cart.objects.filter(cart_status=7)
+    return_requests = tbl_cart.objects.filter(cart_status=9)
+
+    return render(request, "Shop/ViewRequests.html", {
+        "cancel_requests": cancel_requests,
+        "return_requests": return_requests
+    })
+
+
+def ApproveCancel(request, cid):
+    cart = tbl_cart.objects.get(id=cid)
+    user = cart.booking.user
+
+    cart.cart_status = 8  # Cancel Approved
+    cart.save()
+    messages.success(request, "✅ Cancel request approved successfully.")
+
+    send_mail(
+        "Cancel Approved",
+        f"Hello {user.user_name},\n\nYour cancellation request has been approved.",
+        settings.EMAIL_HOST_USER,
+        [user.user_email],
+    )
+
+    return redirect("Shop:ViewRequests")
+
+def ApproveReturn(request, cid):
+    cart = tbl_cart.objects.get(id=cid)
+    user = cart.booking.user
+
+    cart.cart_status = 10  # Return Approved
+    cart.save()
+    
+
+    send_mail(
+        "Return Approved",
+        f"Hello {user.user_name},\n\nYour return request has been approved.",
+        settings.EMAIL_HOST_USER,
+        [user.user_email],
+    )
+    messages.success(request, "✅ Return request approved successfully.")
+
+    return redirect("Shop:ViewRequests")
+
+    return redirect("Shop:RefundList")
+def RejectRequest(request, cid):
+    cart = tbl_cart.objects.get(id=cid)
+    user = cart.booking.user
+
+    cart.cart_status = 11  # Rejected
+    cart.reject_reason = "Rejected by shop"
+    cart.save()
+
+    send_mail(
+        "Request Rejected",
+        f"Hello {user.user_name},\n\nYour request has been rejected by the shop.",
+        settings.EMAIL_HOST_USER,
+        [user.user_email],
+    )
+    messages.error(request, "❌ Request rejected.")
+    return redirect("Shop:ViewRequests")
+
+
+
+
+
+
+

@@ -25,6 +25,8 @@ class tbl_booking(models.Model):
     booking_amount = models.FloatField(null=True)
     booking_date = models.DateField(auto_now_add=True)
     user = models.ForeignKey(tbl_user,on_delete=models.CASCADE)
+    
+    
 
 class tbl_cart(models.Model):
     cart_qty = models.IntegerField(default=1)
@@ -35,6 +37,10 @@ class tbl_cart(models.Model):
     ship_date = models.DateField(null=True)
     outdel_date = models.DateField(null=True)
     del_date = models.DateField(null=True)
+    cancel_reason = models.TextField(null=True, blank=True)
+    return_reason = models.TextField(null=True, blank=True)
+    cancel_date = models.DateField(null=True, blank=True)
+    return_date = models.DateField(null=True, blank=True)
 
 class tbl_rating(models.Model):
     rating_data=models.IntegerField()

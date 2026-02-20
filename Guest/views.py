@@ -3,6 +3,10 @@ from Guest.models import*
 from Admin.models import*
 from Shop.models import*
 # Create your views here.
+def logout(request):
+    del request.session['aid']
+    return redirect("Guest:Login")
+
 def UserRegistration(request):
     districtdata =  tbl_district.objects.all()
     if request.method == "POST":

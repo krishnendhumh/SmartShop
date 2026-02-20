@@ -9,6 +9,7 @@ urlpatterns = [
     path('Ajaxplace/',views.Ajaxplace,name="Ajaxplace"),
     path('ShopReg/',views.ShopReg,name="ShopReg"),
     path('DeliveryBoy/',views.DeliveryBoy,name="DeliveryBoy"),
+    path('logout/',views.logout,name="logout"),
    
      
 

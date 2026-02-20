@@ -7,6 +7,11 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 # Create your views here.
+
+def logout(request):
+    del request.session['aid']
+    return redirect("Guest:Login")
+
 def District(request):
     if "aid" not in request.session:    
         return redirect("Guest:Login")
@@ -109,7 +114,7 @@ def Place(request):
     if request.method == "POST":
         place= request.POST.get("txt_place")
         district = tbl_district.objects.get(id=request.POST.get("sel_district"))
-        placecount=tbl_place.objects.filter(place_name=name).count()
+        placecount=tbl_place.objects.filter(place_name=place).count()
         if placecount > 0:
             return render(request,"Admin/Place.html",{'msg':"Already Inserted.."})
         else:
@@ -146,7 +151,7 @@ def SubCategory(request):
         if request.method == "POST":
             subcategory= request.POST.get("txt_subcategory")
             category = tbl_category.objects.get(id=request.POST.get("sel_category"))
-            subcatcount=tbl_subcategory.objects.filter(subcategory_name=name).count()
+            subcatcount=tbl_subcategory.objects.filter(subcategory_name=subcategory).count()
             if subcatcount > 0:
                 return render(request,"Admin/SubCategory.html",{'msg':"Already Inserted.."})
             else:
@@ -371,6 +376,45 @@ Welcome back!
     )
 
     return redirect("Admin:UserList")
+
+from datetime import date
+
+def ApproveCancel(request, cid):
+    cart = tbl_cart.objects.get(id=cid)
+    cart.cart_status = 8  
+    cart.approve_date = date.today()
+    cart.save()
+    return redirect("Admin:ViewRequests")
+
+
+def ApproveReturn(request, cid):
+    cart = tbl_cart.objects.get(id=cid)
+    cart.cart_status = 10  
+    cart.approve_date = date.today()
+    cart.save()
+    return redirect("Admin:ViewRequests")
+
+from datetime import timedelta
+
+def ProcessRefund(request, cid):
+    cart = tbl_cart.objects.get(id=cid)
+    user = cart.booking.user
+
+    if cart.cart_status in [8, 10]:
+        if date.today() >= cart.approve_date + timedelta(days=2):
+            cart.cart_status = 12  # Refunded
+            cart.save()
+
+            send_mail(
+                "Refund Processed",
+                f"Hello {user.user_name},\n\nYour refund has been processed successfully.",
+                settings.EMAIL_HOST_USER,
+                [user.user_email],
+            )
+
+    return redirect("Admin:RefundList")
+
+
 
 
 
