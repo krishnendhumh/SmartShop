@@ -2,10 +2,11 @@ from django.shortcuts import render,redirect
 from Guest.models import*
 from Admin.models import*
 from Shop.models import*
+from django.core.mail import send_mail
+from django.conf import settings
 # Create your views here.
-def logout(request):
-    del request.session['aid']
-    return redirect("Guest:Login")
+def index(request):
+    return render(request,"Guest/index.html")
 
 def UserRegistration(request):
     districtdata =  tbl_district.objects.all()
@@ -153,5 +154,24 @@ def DeliveryBoy(request):
     else:
         return render(request,"Guest/DeliveryBoy.html",{ 'districtdata':districtdata})
 
-   
-   
+
+def ForgotPassword(request):
+    if request.method == "POST":
+        email = request.POST.get("txt_email")
+
+        usercount = tbl_user.objects.filter(user_email=email).count()
+
+        if usercount > 0:
+            user = tbl_user.objects.get(user_email=email)
+            send_mail(
+                'Reset Password',
+                f'Click this link to reset password: http://127.0.0.1:8000/resetpassword/{user.id}/',
+                settings.EMAIL_HOST_USER,
+                [email],
+            )
+            return render(request,'Guest/ForgotPassword.html',{'msg':"Reset link sent to email"})
+        else:
+            return render(request,'Guest/ForgotPassword.html',{'msg':"Email not found"})
+
+    else:
+        return render(request,'Guest/ForgotPassword.html')

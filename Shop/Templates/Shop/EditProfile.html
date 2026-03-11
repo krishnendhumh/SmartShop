@@ -1,43 +1,218 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EditProfile
-    </title>
-</head>
+{% extends 'Shop/Head.html' %}
+{% block content %}
 
-<body>
-    <form action="" method="post">
-         {% csrf_token %}
-    <table border="2"><tr>
-       
-        <td>Name</td>
-        <td><input type="text" name="txt_name" id="txt_name"value="{{shop.shop_name}}" required placeholder="Enter Your Name" title="Name Allows Only Alphabets,Spaces and First Letter Must Be Capital Letter" pattern="^[A-Z]+[a-zA-Z ]*$" minlength="3"></td>
-    </tr>
-    <tr>
-        <td>Email</td>
-        <td><input type="text" name="txt_email" id="txt_email" value="{{shop.shop_email}}" required></td>
-    </tr>
-    <tr>
-        <td>Contact</td>
-        <td><input type="text" name="txt_contact" id="txt_contact" value="{{shop.shop_contact}}"pattern="[6-9]{1}[0-9]{9}" 
-                title="Phone number with 6-9 and remaing 9 digit with 0-9" minlength="7" maxlength="10"></td>
-    </tr>
-    <tr>
-        <td>Address</td>
-        <td><input type="text"name="txt_address" id="txt_address" value="{{shop.shop_address}}" required></textarea></td>
-    </tr>
-    <tr>
-    
-        <td colspan="2" align="center"><input type="submit" value="Update"></td>
-    </tr></table>
-    </form>
-</body>
-</html>
+<style>
+
+/* Page Background */
+.ep-wrapper{
+    min-height:70vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#84fab0,#8fd3f4);
+    padding:40px;
+}
+
+/* Card */
+.ep-card{
+    width:450px;
+    background:rgba(255,255,255,0.9);
+    backdrop-filter:blur(12px);
+    border-radius:18px;
+    padding:40px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.15);
+    animation:epFade 0.7s ease;
+}
+
+/* Title */
+.ep-title{
+    text-align:center;
+    font-size:22px;
+    font-weight:700;
+    margin-bottom:30px;
+}
+
+/* Input group */
+.ep-group{
+    position:relative;
+    margin-bottom:20px;
+}
+
+/* Input field */
+.ep-input{
+    width:100%;
+    padding:12px 12px 12px 45px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    transition:.3s;
+}
+
+/* Focus effect */
+.ep-input:focus{
+    border-color:#4a90e2;
+    box-shadow:0 0 8px rgba(74,144,226,0.3);
+    outline:none;
+}
+
+/* Icons */
+.ep-icon{
+    position:absolute;
+    left:15px;
+    top:13px;
+    color:#888;
+}
+
+/* Floating labels */
+.ep-label{
+    position:absolute;
+    left:45px;
+    top:13px;
+    font-size:13px;
+    color:#888;
+    transition:.3s;
+    pointer-events:none;
+}
+
+.ep-input:focus + .ep-label,
+.ep-input:not(:placeholder-shown) + .ep-label{
+    top:-8px;
+    left:38px;
+    background:white;
+    padding:0 5px;
+    font-size:11px;
+    color:#4a90e2;
+}
+
+/* Button area */
+.ep-btn-area{
+    text-align:center;
+    margin-top:25px;
+}
+
+/* Button */
+.ep-btn{
+    padding:10px 25px;
+    border:none;
+    border-radius:8px;
+    font-weight:600;
+    background:#4a90e2;
+    color:white;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.ep-btn:hover{
+    background:#2d6fd1;
+    transform:translateY(-2px);
+}
+
+/* Animation */
+@keyframes epFade{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+</style>
+
+
+<div class="ep-wrapper">
+
+<form action="" method="post">
+{% csrf_token %}
+
+<div class="ep-card">
+
+<div class="ep-title">
+<i class="fa-solid fa-user-pen"></i> Edit Profile
+</div>
+
+<!-- Name -->
+<div class="ep-group">
+<i class="fa-solid fa-user ep-icon"></i>
+
+<input
+type="text"
+name="txt_name"
+class="ep-input"
+value="{{shop.shop_name}}"
+placeholder=" "
+pattern="^[A-Z]+[a-zA-Z ]*$"
+required>
+
+<label class="ep-label">Name</label>
+</div>
+
+<!-- Email -->
+<div class="ep-group">
+<i class="fa-solid fa-envelope ep-icon"></i>
+
+<input
+type="email"
+name="txt_email"
+class="ep-input"
+value="{{shop.shop_email}}"
+placeholder=" "
+required>
+
+<label class="ep-label">Email</label>
+</div>
+
+<!-- Contact -->
+<div class="ep-group">
+<i class="fa-solid fa-phone ep-icon"></i>
+
+<input
+type="text"
+name="txt_contact"
+class="ep-input"
+value="{{shop.shop_contact}}"
+placeholder=" "
+pattern="[6-9]{1}[0-9]{9}"
+maxlength="10"
+required>
+
+<label class="ep-label">Contact</label>
+</div>
+
+<!-- Address -->
+<div class="ep-group">
+<i class="fa-solid fa-location-dot ep-icon"></i>
+
+<input
+type="text"
+name="txt_address"
+class="ep-input"
+value="{{shop.shop_address}}"
+placeholder=" "
+required>
+
+<label class="ep-label">Address</label>
+</div>
+
+<div class="ep-btn-area">
+<button type="submit" class="ep-btn">
+<i class="fa-solid fa-floppy-disk"></i> Update Profile
+</button>
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+
 {% if msg %}
 <script>
-    alert("{{msg}}")
-    window.location = "{% url 'Shop:MyProfile' %}"
+alert("{{msg}}")
+window.location = "{% url 'Shop:MyProfile' %}"
 </script>
 {% endif %}
+
+{% endblock %}

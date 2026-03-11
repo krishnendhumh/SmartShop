@@ -1,3 +1,5 @@
+{% extends 'Guest/Head.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,16 +8,7 @@
     <title>User Registration</title>
 
     <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #8360c3, #2ebf91);
-            font-family: Arial, sans-serif;
-        }
-
+        
         form {
             background: #ffffff;
             padding: 30px 40px;
@@ -200,3 +193,4 @@
         });
     });
 </script>
+{% endblock %}
