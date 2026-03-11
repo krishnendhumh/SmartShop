@@ -1,49 +1,165 @@
+{% extends 'Admin/Header.html' %}
+
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>View Complaints</title>
+
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", sans-serif;
+            background-color: #f6f8fc;
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 14px;
+            text-align: center;
+        }
+
+        td {
+            padding: 14px;
+            font-size: 14px;
+            color: #475569;
+            text-align: center;
+            vertical-align: middle;
+            word-wrap: break-word;
+            line-height: 1.5;
+        }
+
+        tr {
+            border-bottom: 1px solid #e5e7eb;
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Column width control */
+        .user-col {
+            max-width: 180px;
+        }
+
+        .content-col {
+            max-width: 260px;
+            text-align: left;
+        }
+
+        .reply-col {
+            max-width: 260px;
+            text-align: left;
+        }
+
+        /* Status */
+        .pending {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        /* Reply Button */
+        .btn-reply {
+            background: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            display: inline-block;
+        }
+
+        .btn-reply:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .content-col,
+            .reply-col {
+                max-width: 180px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>All Complaints</h2>
+<h2>User Complaints</h2>
 
-<table border="1">
-    <tr>
-        <th>Sl No</th>
-        <th>User</th>
-        <th>Title</th>
-        <th>Content</th>
-        <th>Date</th>
-        <th>Reply</th>
-        <th>Action</th>
-    </tr>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Sl No</th>
+                <th>User</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Date</th>
+                <th>Reply</th>
+                <th>Action</th>
+            </tr>
+        </thead>
 
-    {% for i in complaints %}
-    <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ i.user.user_name }}<br>{{i.user.user_email}}</td>
-        <td>{{ i.com_title }}</td>
-        <td>{{ i.com_content }}</td>
-        <td>{{ i.com_date }}</td>
-        <td>
-            {% if i.com_reply %}
-                {{ i.com_reply }}
-            {% else %}
-                <span style="color:red;">Pending</span>
-            {% endif %}
-        </td>
-        <td>
-            <a href="{% url 'Admin:replycomplaint' i.id %}">
-                Reply
-            </a>
-        </td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="7" align="center">No complaints</td>
-    </tr>
-    {% endfor %}
-</table>
+        <tbody>
+        {% for i in complaints %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td class="user-col">
+                    <strong>{{ i.user.user_name }}</strong><br>
+                    <small>{{ i.user.user_email }}</small>
+                </td>
+                <td>{{ i.com_title }}</td>
+                <td class="content-col">{{ i.com_content }}</td>
+                <td>{{ i.com_date }}</td>
+                <td class="reply-col">
+                    {% if i.com_reply %}
+                        {{ i.com_reply }}
+                    {% else %}
+                        <span class="pending">Pending</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'Admin:replycomplaint' i.id %}" class="btn-reply">
+                        ✉ Reply
+                    </a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7" align="center"><b>No complaints found</b></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
+{% endblock %}

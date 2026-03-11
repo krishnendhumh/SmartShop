@@ -1,49 +1,273 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Reply Complaint</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Reply to Complaint</title>
+    <style>
+    :root {
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --accent: #6366f1;
+        --soft-bg: #f4f6ff;
+        --card-bg: #ffffff;
+        --text-dark: #1f2937;
+        --text-muted: #6b7280;
+        --border: #e5e7eb;
+        --success: #22c55e;
+    }
+
+    body {
+        font-family: 'Poppins', 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #eef2ff, #f8faff);
+        margin: 0;
+        padding: 30px;
+        color: var(--text-dark);
+    }
+
+    .container {
+        max-width: 820px;
+        margin: auto;
+        background: var(--card-bg);
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+        margin: 0;
+        padding: 28px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 22px;
+        color: #fff;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        letter-spacing: 0.4px;
+    }
+
+    .complaint-info {
+        padding: 30px;
+        background: #fafbff;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .info-row {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 18px;
+        align-items: flex-start;
+    }
+
+    .info-label {
+        min-width: 130px;
+        font-weight: 600;
+        color: var(--text-muted);
+        font-size: 15px;
+    }
+
+    .info-content {
+        flex: 1;
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--text-dark);
+    }
+
+    .status-indicator {
+        display: inline-block;
+        margin-left: 10px;
+        padding: 5px 14px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 600;
+        background: #eef2ff;
+        color: var(--primary);
+        box-shadow: inset 0 0 0 1px rgba(79, 70, 229, 0.2);
+    }
+
+    .reply-section {
+        padding: 30px;
+        background: #ffffff;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 160px;
+        padding: 16px 18px;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 500;
+        border-radius: 12px;
+        border: 1.5px solid var(--border);
+        resize: vertical;
+        transition: all 0.3s ease;
+        background: #fdfdff;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.18);
+        background: #ffffff;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 18px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 12px 32px;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: #fff;
+        border: none;
+        box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(79, 70, 229, 0.45);
+    }
+
+    .btn-secondary {
+        background: #ffffff;
+        color: var(--text-dark);
+        border: 1.5px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+        background: #f3f4f6;
+        border-color: #c7d2fe;
+        color: var(--primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .info-row {
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .info-label {
+            min-width: auto;
+        }
+    }
+    body {
+        font-family: 'Inter', 'Poppins', 'Segoe UI', Roboto, sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0.2px;
+        color: #1f2937;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Page title */
+    h2 {
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    /* Labels */
+    .info-label {
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        color: #6b7280;
+    }
+
+    /* Content text */
+    .info-content {
+        font-size: 15.5px;
+        font-weight: 500;
+        line-height: 1.7;
+        color: #111827;
+    }
+
+    /* Status badge text */
+    .status-indicator {
+        font-size: 12.5px;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+    }
+
+    /* Textarea text */
+    textarea {
+        font-size: 15.5px;
+        font-weight: 500;
+        line-height: 1.7;
+        letter-spacing: 0.3px;
+    }
+
+    /* Buttons */
+    .btn {
+        font-size: 14.5px;
+        font-weight: 600;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+    }
+</style>
 </head>
 <body>
-
-<h2 align="center">Reply to Complaint</h2>
-
-<table border="1" align="center" cellpadding="8" cellspacing="0">
-    <tr>
-        <th align="left">Title</th>
-        <td>{{ complaint.com_title }}</td>
-    </tr>
-    <tr>
-        <th align="left">Content</th>
-        <td>{{ complaint.com_content }}</td>
-    </tr>
-    <tr>
-        <th align="left">Date</th>
-        <td>{{ complaint.com_date }}</td>
-    </tr>
-</table>
-
-<br><br>
-
-<form method="post">
-    {% csrf_token %}
-
-    <table border="1" align="center" cellpadding="8" cellspacing="0">
-        <tr>
-            <th align="left">Reply</th>
-            <td>
-                <textarea name="txt_reply" rows="5" cols="50" required>
-{{ complaint.com_reply }}</textarea>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <input type="submit" value="Submit">
-                <a href="{% url 'Admin:Viewcomplaint' %}">Cancel</a>
-            </td>
-        </tr>
-    </table>
-</form>
-
-
+    <div class="container">
+        <h2>Reply to Complaint</h2>
+        
+        <div class="complaint-info">
+            <div class="info-row">
+                <div class="info-label">Title</div>
+                <div class="info-content">{{ complaint.com_title }}</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-label">Content</div>
+                <div class="info-content">{{ complaint.com_content }}</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-label">Date</div>
+                <div class="info-content">
+                    {{ complaint.com_date }}
+                    <span class="status-indicator">Pending Response</span>
+                </div>
+            </div>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="reply-section">
+                <div class="info-row">
+                    <div class="info-label">Reply</div>
+                    <div class="info-content">
+                        <textarea name="txt_reply" required>{{ complaint.com_reply }}</textarea>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <input type="submit" class="btn btn-primary" value="Submit Reply">
+                    <a href="{% url 'Admin:Viewcomplaint' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

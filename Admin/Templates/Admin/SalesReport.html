@@ -1,10 +1,181 @@
+{% extends 'Admin/Header.html' %}
+
+{% block content %}
 {% load mathfilters %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <title>Booking Report</title>
+    <style>
+    /* ---------- Global ---------- */
+    body {
+        font-family: 'Inter', 'Poppins', 'Segoe UI', Roboto, sans-serif;
+        background: #f4f6fb;
+        padding: 30px;
+        color: #1f2937;
+    }
+
+    /* ---------- Form Card ---------- */
+    form table {
+        max-width: 420px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 14px;
+        border-collapse: collapse;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    form td {
+        padding: 14px 18px;
+        font-size: 15px;
+        font-weight: 500;
+        border: none;
+    }
+
+    form td:first-child {
+        font-weight: 600;
+        color: #374151;
+    }
+
+    input[type="date"] {
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1.5px solid #d1d5db;
+        font-size: 15px;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    input[type="date"]:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+    }
+
+    input[type="submit"] {
+        padding: 10px 26px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(135deg, #6366f1, #4338ca);
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        letter-spacing: 0.4px;
+        transition: 0.3s;
+    }
+
+    input[type="submit"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(67, 56, 202, 0.35);
+    }
+
+    /* ---------- User Info Card ---------- */
+    table:nth-of-type(2) {
+        max-width: 900px;
+        margin: 40px auto 15px;
+        background: #ffffff;
+        border-radius: 14px;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+        border-collapse: collapse;
+    }
+
+    table:nth-of-type(2) td {
+        padding: 18px 22px;
+        font-size: 15px;
+        line-height: 1.7;
+        border: none;
+    }
+
+    table:nth-of-type(2) b {
+        color: #4338ca;
+        font-weight: 600;
+    }
+
+    /* ---------- Product Table ---------- */
+    table:nth-of-type(3) {
+        width: 100%;
+        max-width: 1100px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        border-collapse: collapse;
+    }
+
+    th {
+        padding: 14px;
+        background: #eef2ff;
+        color: #1e3a8a;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        border: none;
+    }
+
+    td {
+        padding: 14px;
+        font-size: 14.5px;
+        font-weight: 500;
+        border: none;
+        vertical-align: middle;
+    }
+
+    tr:nth-child(even) {
+        background: #f9fbff;
+    }
+
+    tr:hover {
+        background: #f1f5ff;
+    }
+
+    img {
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    /* ---------- Status Styling ---------- */
+    td:last-child {
+        font-weight: 600;
+        color: #2563eb;
+    }
+
+    /* ---------- Empty / No Data ---------- */
+    p b {
+        display: block;
+        text-align: center;
+        font-size: 16px;
+        color: #b91c1c;
+        margin-top: 40px;
+    }
+
+    hr {
+        border: none;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #c7d2fe, transparent);
+        margin: 40px auto;
+        max-width: 1100px;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 768px) {
+        table {
+            width: 100%;
+        }
+
+        th, td {
+            font-size: 13px;
+        }
+    }
+</style>
 </head>
 
 <body>
@@ -112,3 +283,4 @@
 </body>
 
 </html>
+{% endblock %}

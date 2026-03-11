@@ -1,56 +1,172 @@
+
+{% extends 'Admin/Header.html' %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f4f7fb;
+        color: #2d3436;
+        font-size: 15px;
+    }
+
+    h2 {
+        text-align: center;
+        margin: 20px 0;
+        font-weight: 600;
+        color: #34495e;
+    }
+
+    /* Card-style container */
+    .card {
+        width: 85%;
+        margin: 20px auto;
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+
+    /* Tables */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        background-color: #eef2f7;
+        font-weight: 600;
+        padding: 12px;
+        border-bottom: 2px solid #dcdde1;
+    }
+
+    td {
+        padding: 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    tr:hover {
+        background-color: #f8faff;
+    }
+
+    /* Form inputs */
+    input[type="text"], select {
+        width: 95%;
+        padding: 8px;
+        border: 1px solid #dcdde1;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+
+    input[type="text"]:focus, select:focus {
+        outline: none;
+        border-color: #74b9ff;
+        box-shadow: 0 0 0 2px rgba(116,185,255,0.2);
+    }
+
+    /* Buttons */
+    input[type="submit"] {
+        padding: 8px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #0984e3;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0866c6;
+    }
+
+    /* Links */
+    a {
+        color: #0984e3;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .actions a {
+        margin: 0 6px;
+    }
+</style>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width, initial-scale=1.0">
     <title>Subcategory</title>
+    
+
 </head>
 
-<body>
+<body><h2>Subcategory Management</h2>
+
+<div class="card">
     <form action="" method="post">
         {% csrf_token %}
-        <table border="2">
+        <table>
             <tr>
                 <td>Category</td>
-                <td><select name="sel_category" id="sel_category">
-                        <option value="">--select--</option>
+                <td>
+                    <select name="sel_category">
+                        <option value="">-- Select --</option>
                         {% for i in categorydata %}
-                        <option {% if i.id == editdata.category_id %} selected {% endif %} value="{{i.id}}">{{i.category_name}}</option>
+                        <option {% if i.id == editdata.category_id %}selected{% endif %} value="{{i.id}}">
+                            {{i.category_name}}
+                        </option>
                         {% endfor %}
-                    </select></tr>
-                <tr><td>SubCategory</td>
-                <td><input type="text" name="txt_subcategory" id="txt_subcategory" value="{{editdata.subcategory_name}}"  required placeholder="Enter SubCategory Name" title="Name Allows Only Alphabets,Spaces and First Letter Must Be Capital Letter" pattern="^[A-Z]+[a-zA-Z ]*$" minlength="3"></td>
+                    </select>
+                </td>
             </tr>
+            <tr>
+                <td>Subcategory</td>
+                <td>
+                    <input type="text" name="txt_subcategory"
+                           value="{{editdata.subcategory_name}}"
+                           placeholder="Enter Subcategory Name"
+                           required>
+                </td>
             </tr>
             <tr>
                 <td colspan="2" align="center">
-                    <input type="submit" value="submit">
-                    <input type="submit" value="clear">
+                    <input type="submit" value="Save">
                 </td>
-
             </tr>
         </table>
     </form>
-    <br>
-    <table border="2">
+</div>
+
+<div class="card">
+    <table>
         <tr>
-            <td>Sl No</td>
-            <td>Subcategory Name</td>
-            <td>Category Name</td>
-            <td>Action</td>
+            <th>Sl No</th>
+            <th>Subcategory</th>
+            <th>Category</th>
+            <th>Action</th>
         </tr>
         {% for i in subdata %}
         <tr>
             <td>{{forloop.counter}}</td>
             <td>{{i.subcategory_name}}</td>
             <td>{{i.category.category_name}}</td>
-            <td><a href="{% url 'Admin:delsub' i.id %}">Delete</a>
-            <a href="{% url 'Admin:editsub' i.id %}">Edit</a></td>
-
+            <td class="actions">
+                <a href="{% url 'Admin:editsub' i.id %}">Edit</a>
+                <a href="{% url 'Admin:delsub' i.id %}">Delete</a>
+            </td>
         </tr>
-       {% endfor %}
+        {% endfor %}
     </table>
+</div>
 </body>
 
 </html>
@@ -61,3 +177,4 @@
     window.location="{% url 'Admin:SubCategory' %}"
 </script>
 {% endif %}
+{% endblock %}
