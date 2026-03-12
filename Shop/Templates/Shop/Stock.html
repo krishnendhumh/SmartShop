@@ -1,53 +1,197 @@
 {% extends 'Shop/Head.html' %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Stock</title>
-</head>
+<style>
 
-<body>
-    <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <table border="2">
-            <tr>
-                <td>Stock Quantity</td>
-                <td><input type="number" name="num_stock" id="num_stock" pattern="[6-9]{1}[0-9]{9}"
-                        title="stock number with 1-9 and remaing 9 digit with 0-9" minlength="1" maxlength="10"></td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center"><input type="submit" value="submit"></td>
-            </tr>
-        </table>
-    </form>
+/* Wrapper */
+.st-wrapper{
+max-width:900px;
+margin:auto;
+animation:stFade .6s ease;
+}
 
-    <table border="2">
-        <tr>
-            <td>Sl No</td>
-            <td>Stock Count</td>
-            <td>Stock Date</td>
-            <td>Action</td>
-        </tr>
-        {% for i in stock %}
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{i.stock_quantity}}</td>
-            <td>{{i.stock_date}}</td>
-            <td align="center"><a href="{% url 'Shop:delstock' i.id  %}">Delete</a></td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
+/* Card */
+.st-card{
+background:white;
+padding:30px;
+border-radius:15px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+margin-bottom:30px;
+}
 
-</html>
+/* Title */
+.st-title{
+font-size:22px;
+font-weight:700;
+margin-bottom:20px;
+}
+
+/* Input */
+.st-input{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:1px solid #ddd;
+font-size:14px;
+}
+
+.st-input:focus{
+border-color:#ff7b7b;
+box-shadow:0 0 6px rgba(255,123,123,.4);
+outline:none;
+}
+
+/* Button */
+.st-btn{
+background:#ff7b7b;
+color:white;
+padding:10px 20px;
+border:none;
+border-radius:8px;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+}
+
+.st-btn:hover{
+background:#ff5252;
+transform:translateY(-2px);
+}
+
+/* Table */
+.st-table{
+width:100%;
+border-collapse:collapse;
+}
+
+.st-table th{
+background:#ff7b7b;
+color:white;
+padding:12px;
+font-size:14px;
+}
+
+.st-table td{
+padding:10px;
+border-bottom:1px solid #eee;
+text-align:center;
+font-size:14px;
+}
+
+.st-table tr:hover{
+background:#fafafa;
+}
+
+/* Delete button */
+.st-delete{
+color:white;
+background:#e00000;
+padding:5px 12px;
+border-radius:6px;
+text-decoration:none;
+font-size:13px;
+}
+
+.st-delete:hover{
+background:#b30000;
+}
+
+/* Animation */
+@keyframes stFade{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+</style>
+
+
+<div class="st-wrapper">
+
+<!-- Add Stock Form -->
+<div class="st-card">
+
+<div class="st-title">
+<i class="fa-solid fa-boxes-stacked"></i> Add Stock
+</div>
+
+<form action="" method="post">
+{% csrf_token %}
+
+<label>Stock Quantity</label>
+
+<input
+type="number"
+name="num_stock"
+class="st-input"
+min="1"
+required>
+
+<br><br>
+
+<button type="submit" class="st-btn">
+<i class="fa-solid fa-plus"></i> Add Stock
+</button>
+
+</form>
+
+</div>
+
+
+
+<!-- Stock Table -->
+<div class="st-card">
+
+<div class="st-title">
+<i class="fa-solid fa-list"></i> Stock History
+</div>
+
+<table class="st-table">
+
+<tr>
+<th>Sl No</th>
+<th>Stock Count</th>
+<th>Stock Date</th>
+<th>Action</th>
+</tr>
+
+{% for i in stock %}
+
+<tr>
+
+<td>{{forloop.counter}}</td>
+
+<td>{{i.stock_quantity}}</td>
+
+<td>{{i.stock_date}}</td>
+
+<td>
+<a href="{% url 'Shop:delstock' i.id %}" class="st-delete">
+<i class="fa-solid fa-trash"></i> Delete
+</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</div>
+
 
 {% if msg %}
 <script>
-    alert("{{msg}}")
-    window.location = "{% url 'Shop:Product' %}"
+alert("{{msg}}")
+window.location="{% url 'Shop:Product' %}"
 </script>
 {% endif %}
+
 {% endblock %}

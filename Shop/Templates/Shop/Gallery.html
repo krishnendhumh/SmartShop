@@ -1,43 +1,201 @@
 {% extends 'Shop/Head.html' %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Gallery</title>
-</head>
-<body>
-    <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <table border="2">
-            <tr><td>Product Image</td>
-                <td><input type="file" name="file_photo" id="file_photo" required accept="images/*"></td>
-            </tr>
-            <tr><td colspan="2" align="center"><input type="submit" value="submit"></td></tr>
-        </table>
-    </form><br>
-         <table border="2">
-            <tr>
-            <td>Sl No</td>
-            <td>Photo</td>
-            <td>Action</td>
-           
-        </tr>
-        {% for i in gallery %}
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td align="center"><img src="{{i.gallery_file.url}}" alt="" width="150"></td>
-            <td align="center"><a href="{% url 'Shop:delgallery' i.id  %}">Delete</a></td>
-        </tr>
-        {% endfor %}
-            </table>
-</body>
-</html>
+
+<style>
+
+/* Wrapper */
+.ag-wrapper{
+    max-width:900px;
+    margin:auto;
+    animation: agFade 0.6s ease-in-out;
+}
+
+/* Card */
+.ag-card{
+    background:#fff;
+    border-radius:15px;
+    padding:30px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
+    margin-bottom:30px;
+}
+
+/* Title */
+.ag-title{
+    font-size:22px;
+    font-weight:700;
+    margin-bottom:20px;
+    text-align:center;
+}
+
+/* Upload Box */
+.ag-upload-box{
+    border:2px dashed #ff7b7b;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    transition:.3s;
+}
+
+.ag-upload-box:hover{
+    background:#fff5f5;
+}
+
+/* File Input */
+.ag-file{
+    margin-top:10px;
+}
+
+/* Button */
+.ag-btn{
+    margin-top:15px;
+    padding:10px 25px;
+    border:none;
+    border-radius:8px;
+    background:#ff7b7b;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.ag-btn:hover{
+    background:#ff5252;
+    transform:scale(1.05);
+}
+
+/* Gallery Grid */
+.ag-gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:20px;
+}
+
+/* Image Card */
+.ag-img-card{
+    background:white;
+    border-radius:12px;
+    padding:10px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.1);
+    text-align:center;
+    transition:.3s;
+}
+
+.ag-img-card:hover{
+    transform:translateY(-6px);
+}
+
+/* Image */
+.ag-img{
+    width:100%;
+    height:140px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+/* Delete Button */
+.ag-delete{
+    display:inline-block;
+    margin-top:10px;
+    padding:6px 15px;
+    border-radius:6px;
+    background:#ff4d4d;
+    color:white;
+    font-size:13px;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.ag-delete:hover{
+    background:#e60000;
+}
+
+/* Animation */
+@keyframes agFade{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+</style>
+
+
+<div class="ag-wrapper">
+
+<!-- Upload Section -->
+<div class="ag-card">
+
+<div class="ag-title">
+<i class="fa-solid fa-image"></i> Add Product Gallery
+</div>
+
+<form action="" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+
+<div class="ag-upload-box">
+
+<i class="fa-solid fa-cloud-arrow-up" style="font-size:35px;color:#ff7b7b;"></i>
+
+<br>
+
+<input type="file"
+name="file_photo"
+class="ag-file"
+accept="image/*"
+required>
+
+<br>
+
+<button type="submit" class="ag-btn">
+<i class="fa-solid fa-upload"></i> Upload Image
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+
+<!-- Gallery List -->
+<div class="ag-card">
+
+<div class="ag-title">
+<i class="fa-solid fa-images"></i> Product Images
+</div>
+
+<div class="ag-gallery">
+
+{% for i in gallery %}
+
+<div class="ag-img-card">
+
+<img src="{{i.gallery_file.url}}" class="ag-img">
+
+<a href="{% url 'Shop:delgallery' i.id %}" class="ag-delete">
+<i class="fa-solid fa-trash"></i> Delete
+</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+</div>
+
+
 {% if msg %}
 <script>
-    alert("{{msg}}")
-    window.location="{% url 'Shop:Product' %}"
+alert("{{msg}}")
+window.location="{% url 'Shop:Product' %}"
 </script>
 {% endif %}
+
 {% endblock %}

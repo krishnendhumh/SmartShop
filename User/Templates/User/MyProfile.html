@@ -1,44 +1,165 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Myprofile</title>
-</head>
-<body>
-    <table border="2"><tr>
-        
-        <td colspan="2" align="center"><img src="{{user.user_photo.url}}" alt=""></td>
-    </tr>
-    <tr>
-        <td>Name</td>
-        <td>{{user.user_name}}</td>
-    </tr>
-    <tr>
-        <td>Email</td>
-        <td>{{user.user_email}}</td>
-    </tr>
-    <tr>
-        <td>Contact</td>
-        <td>{{user.user_contact}}</td>
-    </tr>
-    <tr>
-        <td>Address</td>
-        <td>{{user.user_address}}</td>
-    </tr>
-    
-     
-    <tr>
-        <td>District</td>
-        <td>{{ user.place.district.district_name }}</td>
-    </tr>
-    <tr>
-        <td>Place</td>
-        <td>{{user.place.place_name}}</td>
-    </tr>
-    <tr>
-        
-        <td colspan="2" align="center"><a href="{% url 'User:EditProfile' %}" >Edit Profile </a>|<a href="{% url 'User:ChangePass' %}">Change Password</a></td>
-    </tr></table>
-</body>
-</html>
+{% extends 'User/Head.html' %}
+{% block content %}
+
+<style>
+
+/* Wrapper */
+.mp-wrapper{
+max-width:520px;
+margin:auto;
+animation:mpFade .6s ease;
+}
+
+/* Profile Card */
+.mp-card{
+background:white;
+padding:35px;
+border-radius:15px;
+box-shadow:0 10px 35px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+/* Profile Image */
+.mp-photo{
+width:130px;
+height:130px;
+border-radius:50%;
+object-fit:cover;
+border:5px solid #ff7b7b;
+margin-bottom:15px;
+}
+
+/* Name */
+.mp-name{
+font-size:22px;
+font-weight:700;
+margin-bottom:20px;
+}
+
+/* Info */
+.mp-info{
+text-align:left;
+margin-top:10px;
+}
+
+.mp-row{
+display:flex;
+justify-content:space-between;
+padding:8px 0;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+.mp-label{
+font-weight:600;
+color:#555;
+}
+
+.mp-value{
+color:#333;
+}
+
+/* Buttons */
+.mp-btn-area{
+margin-top:25px;
+}
+
+.mp-btn{
+display:inline-block;
+background:#ff7b7b;
+color:white;
+padding:8px 16px;
+border-radius:8px;
+text-decoration:none;
+font-size:14px;
+font-weight:600;
+margin:5px;
+transition:.3s;
+}
+
+.mp-btn:hover{
+background:#ff5252;
+transform:translateY(-2px);
+}
+
+.mp-pass{
+background:#6c757d;
+}
+
+.mp-pass:hover{
+background:#555;
+}
+
+/* Animation */
+@keyframes mpFade{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+</style>
+
+
+<div class="mp-wrapper">
+
+<div class="mp-card">
+
+<!-- Profile Image -->
+<img src="{{user.user_photo.url}}" class="mp-photo">
+
+<div class="mp-name">
+{{user.user_name}}
+</div>
+
+<div class="mp-info">
+
+<div class="mp-row">
+<span class="mp-label"><i class="fas fa-envelope"></i> Email</span>
+<span class="mp-value">{{user.user_email}}</span>
+</div>
+
+<div class="mp-row">
+<span class="mp-label"><i class="fas fa-phone"></i> Contact</span>
+<span class="mp-value">{{user.user_contact}}</span>
+</div>
+
+<div class="mp-row">
+<span class="mp-label"><i class="fas fa-map-marker-alt"></i> Address</span>
+<span class="mp-value">{{user.user_address}}</span>
+</div>
+
+<div class="mp-row">
+<span class="mp-label"><i class="fas fa-map"></i> District</span>
+<span class="mp-value">{{ user.place.district.district_name }}</span>
+</div>
+
+<div class="mp-row">
+<span class="mp-label"><i class="fas fa-location-dot"></i> Place</span>
+<span class="mp-value">{{user.place.place_name}}</span>
+</div>
+
+</div>
+
+<!-- Buttons -->
+<div class="mp-btn-area">
+
+<a href="{% url 'User:EditProfile' %}" class="mp-btn">
+<i class="fas fa-user-edit"></i> Edit Profile
+</a>
+
+<a href="{% url 'User:ChangePass' %}" class="mp-btn mp-pass">
+<i class="fas fa-key"></i> Change Password
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

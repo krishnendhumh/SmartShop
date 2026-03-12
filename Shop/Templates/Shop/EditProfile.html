@@ -3,84 +3,84 @@
 
 <style>
 
-/* Page Background */
+/* Page wrapper */
 .ep-wrapper{
     min-height:70vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    background:linear-gradient(135deg,#84fab0,#8fd3f4);
     padding:40px;
 }
 
 /* Card */
 .ep-card{
-    width:450px;
-    background:rgba(255,255,255,0.9);
-    backdrop-filter:blur(12px);
-    border-radius:18px;
+    width:480px;
+    background:white;
+    border-radius:16px;
     padding:40px;
-    box-shadow:0 15px 40px rgba(0,0,0,0.15);
-    animation:epFade 0.7s ease;
+    box-shadow:0 15px 40px rgba(0,0,0,0.12);
+    animation:epFade 0.6s ease;
 }
 
 /* Title */
 .ep-title{
     text-align:center;
-    font-size:22px;
+    font-size:24px;
     font-weight:700;
     margin-bottom:30px;
 }
 
-/* Input group */
+/* Form group */
 .ep-group{
     position:relative;
     margin-bottom:20px;
 }
 
-/* Input field */
+/* Input */
 .ep-input{
     width:100%;
     padding:12px 12px 12px 45px;
-    border-radius:10px;
+    border-radius:8px;
     border:1px solid #ddd;
+    font-size:14px;
     transition:.3s;
 }
 
-/* Focus effect */
+/* Focus */
 .ep-input:focus{
-    border-color:#4a90e2;
-    box-shadow:0 0 8px rgba(74,144,226,0.3);
+    border-color:#ff7b7b;
+    box-shadow:0 0 8px rgba(255,123,123,0.3);
     outline:none;
 }
 
-/* Icons */
+/* Icon */
 .ep-icon{
     position:absolute;
     left:15px;
     top:13px;
-    color:#888;
+    color:#999;
 }
 
-/* Floating labels */
+/* Label */
 .ep-label{
     position:absolute;
     left:45px;
     top:13px;
     font-size:13px;
-    color:#888;
-    transition:.3s;
+    color:#999;
     pointer-events:none;
+    transition:.3s;
 }
 
+/* Floating label */
 .ep-input:focus + .ep-label,
 .ep-input:not(:placeholder-shown) + .ep-label{
     top:-8px;
     left:38px;
     background:white;
-    padding:0 5px;
+    padding:0 6px;
     font-size:11px;
-    color:#4a90e2;
+    color:#ff7b7b;
 }
 
 /* Button area */
@@ -91,18 +91,18 @@
 
 /* Button */
 .ep-btn{
+    background:#ff7b7b;
+    color:white;
     padding:10px 25px;
     border:none;
     border-radius:8px;
     font-weight:600;
-    background:#4a90e2;
-    color:white;
     cursor:pointer;
     transition:.3s;
 }
 
 .ep-btn:hover{
-    background:#2d6fd1;
+    background:#ff5252;
     transform:translateY(-2px);
 }
 
@@ -110,7 +110,7 @@
 @keyframes epFade{
     from{
         opacity:0;
-        transform:translateY(30px);
+        transform:translateY(25px);
     }
     to{
         opacity:1;
@@ -196,9 +196,11 @@ required>
 </div>
 
 <div class="ep-btn-area">
+
 <button type="submit" class="ep-btn">
 <i class="fa-solid fa-floppy-disk"></i> Update Profile
 </button>
+
 </div>
 
 </div>
@@ -211,7 +213,7 @@ required>
 {% if msg %}
 <script>
 alert("{{msg}}")
-window.location = "{% url 'Shop:MyProfile' %}"
+window.location="{% url 'Shop:MyProfile' %}"
 </script>
 {% endif %}
 

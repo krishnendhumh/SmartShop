@@ -1,91 +1,199 @@
 {% extends 'Shop/Head.html' %}
 {% block content %}
 {% load mathfilters %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Bookings</title>
-</head>
+<style>
 
-<body bgcolor="#f4f4f4">
+/* Wrapper */
+.vb-wrapper{
+max-width:1100px;
+margin:auto;
+animation:vbFade .6s ease;
+}
 
-    {% for i in bookingdata %}
+/* Booking Card */
+.vb-card{
+background:white;
+border-radius:15px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+margin-bottom:40px;
+overflow:hidden;
+}
 
-    <table width="90%" align="center" border="1" cellspacing="0" cellpadding="10" bgcolor="#ffffff">
+/* Header */
+.vb-header{
+background:#ff7b7b;
+color:white;
+padding:15px 25px;
+font-size:16px;
+font-weight:600;
+}
 
-        <!-- Booking Header -->
-        <tr bgcolor="#dddddd">
-            <td colspan="7">
-                <font size="4">
-                    <b>Booking ID:</b> #{{ i.id }} <br>
-                    <b>Date:</b> {{ i.booking_date }} <br>
-                    <b>Total Amount:</b> ₹{{ i.booking_amount }}
-                </font>
-            </td>
-        </tr>
+/* User Details */
+.vb-user{
+padding:15px 25px;
+background:#fafafa;
+font-size:14px;
+}
 
-        <!-- User Details -->
-        <tr>
-            <td colspan="7">
-                <font size="3">
-                    <b>User Details</b><br>
-                    Name: {{ i.user.user_name }}<br>
-                    Email: {{ i.user.user_email }}<br>
-                    Contact: {{ i.user.user_contact }}<br>
-                    Address: {{ i.user.user_address }}
-                </font>
-            </td>
-        </tr>
+/* Table */
+.vb-table{
+width:100%;
+border-collapse:collapse;
+}
 
-        <!-- Table Header -->
-        <tr bgcolor="#eeeeee" align="center">
-            <th>Sl No</th>
-            <th>Product Name</th>
-            <th>Photo</th>
-            <th>Price</th>
-            <th>Qty</th>
-            <th>Total</th>
-            <th>Action</th>
-        </tr>
+.vb-table th{
+background:#f1f1f1;
+padding:12px;
+font-size:14px;
+text-align:center;
+}
 
-        <!-- Products -->
-        {% for j in i.tbl_cart_set.all %}
-        <tr align="center">
-            <td>{{ forloop.counter }}</td>
-            <td>{{ j.product.product_name }}</td>
-            <td>
-                <img src="{{ j.product.product_photo.url }}" width="80" border="1">
-            </td>
-            <td>₹{{ j.product.product_price }}</td>
-            <td>{{ j.cart_qty }}</td>
-            <td>₹{{ j.cart_qty|mul:j.product.product_price }}</td>
-            <td>
-                {% if j.cart_status == 2 %}
-                <a href="{% url 'Shop:BookingAction' j.id 3 %}">Packed</a>
-                {% elif j.cart_status == 3 %}
-                <a href="{% url 'Shop:BookingAction' j.id 4 %}">Shipped</a>
-                {% elif j.cart_status == 4 %}
-                <a href="{% url 'Shop:BookingAction' j.id 5 %}">Out Of Delivery</a>
-                {% elif j.cart_status == 5 %}
-                <a href="{% url 'Shop:BookingAction' j.id 6 %}">Delivered</a>
-                {% elif j.cart_status == 6 %}
-                Delivered
-                {% endif %}
-            </td>
+.vb-table td{
+padding:10px;
+border-bottom:1px solid #eee;
+text-align:center;
+font-size:14px;
+}
 
-        </tr>
-        {% endfor %}
+.vb-table tr:hover{
+background:#fafafa;
+}
 
-    </table>
+/* Product Image */
+.vb-img{
+width:70px;
+border-radius:8px;
+}
 
-    <br><br>
+/* Action button */
+.vb-btn{
+background:#ff7b7b;
+color:white;
+padding:5px 12px;
+border-radius:6px;
+text-decoration:none;
+font-size:13px;
+font-weight:600;
+}
 
-    {% endfor %}
+.vb-btn:hover{
+background:#ff5252;
+}
 
-</body>
+/* Delivered badge */
+.vb-delivered{
+background:#d4f8e8;
+color:#009e60;
+padding:5px 12px;
+border-radius:20px;
+font-size:12px;
+font-weight:600;
+}
 
-</html>
+/* Animation */
+@keyframes vbFade{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+</style>
+
+
+<div class="vb-wrapper">
+
+{% for i in bookingdata %}
+
+<div class="vb-card">
+
+<!-- Booking Header -->
+<div class="vb-header">
+
+Booking ID : #{{ i.id }} |
+Date : {{ i.booking_date }} |
+Total : ₹{{ i.booking_amount }}
+
+</div>
+
+<!-- User Details -->
+<div class="vb-user">
+
+<b>User Details</b><br>
+
+Name : {{ i.user.user_name }} |
+Email : {{ i.user.user_email }} |
+Contact : {{ i.user.user_contact }} |
+Address : {{ i.user.user_address }}
+
+</div>
+
+
+<table class="vb-table">
+
+<tr>
+<th>Sl No</th>
+<th>Product</th>
+<th>Photo</th>
+<th>Price</th>
+<th>Qty</th>
+<th>Total</th>
+<th>Status</th>
+</tr>
+
+{% for j in i.tbl_cart_set.all %}
+
+<tr>
+
+<td>{{ forloop.counter }}</td>
+
+<td>{{ j.product.product_name }}</td>
+
+<td>
+<img src="{{ j.product.product_photo.url }}" class="vb-img">
+</td>
+
+<td>₹{{ j.product.product_price }}</td>
+
+<td>{{ j.cart_qty }}</td>
+
+<td>₹{{ j.cart_qty|mul:j.product.product_price }}</td>
+
+<td>
+
+{% if j.cart_status == 2 %}
+<a href="{% url 'Shop:BookingAction' j.id 3 %}" class="vb-btn">Packed</a>
+
+{% elif j.cart_status == 3 %}
+<a href="{% url 'Shop:BookingAction' j.id 4 %}" class="vb-btn">Shipped</a>
+
+{% elif j.cart_status == 4 %}
+<a href="{% url 'Shop:BookingAction' j.id 5 %}" class="vb-btn">Out for Delivery</a>
+
+{% elif j.cart_status == 5 %}
+<a href="{% url 'Shop:BookingAction' j.id 6 %}" class="vb-btn">Delivered</a>
+
+{% elif j.cart_status == 6 %}
+<span class="vb-delivered">Delivered</span>
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endfor %}
+
+</div>
+
 {% endblock %}

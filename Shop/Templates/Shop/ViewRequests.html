@@ -1,70 +1,213 @@
 {% extends 'Shop/Head.html' %}
 {% block content %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>View Requests</title>
-</head>
-<body>
 
-<h2>Cancel Requests</h2>
+<style>
 
-<table border="1" cellpadding="8">
-    <tr>
-        <th>Order ID</th>
-        <th>Product</th>
-        <th>User</th>
-        <th>Reason</th>
-        <th>Action</th>
-    </tr>
+/* Wrapper */
+.vr-wrapper{
+max-width:1000px;
+margin:auto;
+animation:vrFade .6s ease;
+}
 
-    {% for c in cancel_requests %}
-    <tr>
-        <td>{{ c.booking.id }}</td>
-        <td>{{ c.product.product_name }}</td>
-        <td>{{ c.booking.user.user_name }}</td>
-        <td>{{ c.cancel_reason }}</td>
-        <td>
-    <a href="{% url 'Shop:ApproveCancel' c.id %}">Approve</a> |
-    <a href="{% url 'Shop:RejectRequest' c.id %}">Reject</a>
+/* Card */
+.vr-card{
+background:white;
+border-radius:15px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+margin-bottom:40px;
+overflow:hidden;
+}
+
+/* Title */
+.vr-title{
+background:#ff7b7b;
+color:white;
+padding:15px 20px;
+font-size:18px;
+font-weight:600;
+}
+
+/* Table */
+.vr-table{
+width:100%;
+border-collapse:collapse;
+}
+
+.vr-table th{
+background:#f5f5f5;
+padding:12px;
+font-size:14px;
+}
+
+.vr-table td{
+padding:10px;
+border-bottom:1px solid #eee;
+text-align:center;
+font-size:14px;
+}
+
+.vr-table tr:hover{
+background:#fafafa;
+}
+
+/* Buttons */
+.vr-approve{
+background:#28a745;
+color:white;
+padding:5px 12px;
+border-radius:6px;
+text-decoration:none;
+font-size:13px;
+font-weight:600;
+}
+
+.vr-approve:hover{
+background:#1e7e34;
+}
+
+.vr-reject{
+background:#dc3545;
+color:white;
+padding:5px 12px;
+border-radius:6px;
+text-decoration:none;
+font-size:13px;
+font-weight:600;
+}
+
+.vr-reject:hover{
+background:#b02a37;
+}
+
+/* Animation */
+@keyframes vrFade{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+</style>
+
+
+<div class="vr-wrapper">
+
+<!-- Cancel Requests -->
+<div class="vr-card">
+
+<div class="vr-title">
+<i class="fa-solid fa-ban"></i> Cancel Requests
+</div>
+
+<table class="vr-table">
+
+<tr>
+<th>Order ID</th>
+<th>Product</th>
+<th>User</th>
+<th>Reason</th>
+<th>Action</th>
+</tr>
+
+{% for c in cancel_requests %}
+
+<tr>
+
+<td>#{{ c.booking.id }}</td>
+
+<td>{{ c.product.product_name }}</td>
+
+<td>{{ c.booking.user.user_name }}</td>
+
+<td>{{ c.cancel_reason }}</td>
+
+<td>
+
+<a href="{% url 'Shop:ApproveCancel' c.id %}" class="vr-approve">
+<i class="fa-solid fa-check"></i> Approve
+</a>
+
+<a href="{% url 'Shop:RejectRequest' c.id %}" class="vr-reject">
+<i class="fa-solid fa-xmark"></i> Reject
+</a>
+
 </td>
 
-    </tr>
-    {% empty %}
-    <tr><td colspan="5">No cancel requests</td></tr>
-    {% endfor %}
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="5">No cancel requests</td>
+</tr>
+
+{% endfor %}
+
 </table>
 
-<br><hr><br>
+</div>
 
-<h2>Return Requests</h2>
 
-<table border="1" cellpadding="8">
-    <tr>
-        <th>Order ID</th>
-        <th>Product</th>
-        <th>User</th>
-        <th>Reason</th>
-        <th>Action</th>
-    </tr>
+<!-- Return Requests -->
+<div class="vr-card">
 
-    {% for r in return_requests %}
-    <tr>
-        <td>{{ r.booking.id }}</td>
-        <td>{{ r.product.product_name }}</td>
-        <td>{{ r.booking.user.user_name }}</td>
-        <td>{{ r.return_reason }}</td>
-        <td>
-    <a href="{% url 'Shop:ApproveReturn' r.id %}">Approve</a> |
-    <a href="{% url 'Shop:RejectRequest' r.id %}">Reject</a>
+<div class="vr-title">
+<i class="fa-solid fa-rotate-left"></i> Return Requests
+</div>
+
+<table class="vr-table">
+
+<tr>
+<th>Order ID</th>
+<th>Product</th>
+<th>User</th>
+<th>Reason</th>
+<th>Action</th>
+</tr>
+
+{% for r in return_requests %}
+
+<tr>
+
+<td>#{{ r.booking.id }}</td>
+
+<td>{{ r.product.product_name }}</td>
+
+<td>{{ r.booking.user.user_name }}</td>
+
+<td>{{ r.return_reason }}</td>
+
+<td>
+
+<a href="{% url 'Shop:ApproveReturn' r.id %}" class="vr-approve">
+<i class="fa-solid fa-check"></i> Approve
+</a>
+
+<a href="{% url 'Shop:RejectRequest' r.id %}" class="vr-reject">
+<i class="fa-solid fa-xmark"></i> Reject
+</a>
+
 </td>
 
-    </tr>
-    {% empty %}
-    <tr><td colspan="5">No return requests</td></tr>
-    {% endfor %}
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="5">No return requests</td>
+</tr>
+
+{% endfor %}
+
 </table>
 
-</body>
-</html>
+</div>
+
+</div>
+
 {% endblock %}

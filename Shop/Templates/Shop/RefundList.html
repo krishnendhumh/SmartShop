@@ -1,38 +1,141 @@
 {% extends 'Shop/Head.html' %}
 {% block content %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Refund List</title>
-</head>
-<body>
 
-<h2>Refunded Orders</h2>
+<style>
 
-<table border="1" cellpadding="8">
-    <tr>
-        <th>Order ID</th>
-        <th>Product</th>
-        <th>User</th>
-        <th>Qty</th>
-        <th>Amount</th>
-        <th>Status</th>
-    </tr>
+/* Wrapper */
+.rf-wrapper{
+max-width:1000px;
+margin:auto;
+animation:rfFade .6s ease;
+}
 
-    {% for r in refunded %}
-    <tr>
-        <td>{{ r.booking.id }}</td>
-        <td>{{ r.product.product_name }}</td>
-        <td>{{ r.booking.user.user_name }}</td>
-        <td>{{ r.cart_qty }}</td>
-        <td>₹{{ r.cart_qty|mul:r.product.product_price }}</td>
-        <td>Refunded</td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="6">No refunds processed</td></tr>
-    {% endfor %}
+/* Card */
+.rf-card{
+background:white;
+padding:30px;
+border-radius:15px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* Title */
+.rf-title{
+font-size:24px;
+font-weight:700;
+margin-bottom:20px;
+}
+
+/* Table */
+.rf-table{
+width:100%;
+border-collapse:collapse;
+}
+
+.rf-table th{
+background:#ff7b7b;
+color:white;
+padding:12px;
+font-size:14px;
+}
+
+.rf-table td{
+padding:10px;
+border-bottom:1px solid #eee;
+font-size:14px;
+text-align:center;
+}
+
+.rf-table tr:hover{
+background:#fafafa;
+}
+
+/* Status badge */
+.rf-badge{
+background:#ffe0e0;
+color:#e00000;
+padding:5px 12px;
+border-radius:20px;
+font-size:12px;
+font-weight:600;
+}
+
+/* Empty row */
+.rf-empty{
+text-align:center;
+padding:20px;
+color:#777;
+}
+
+/* Animation */
+@keyframes rfFade{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+</style>
+
+
+<div class="rf-wrapper">
+
+<div class="rf-card">
+
+<div class="rf-title">
+<i class="fa-solid fa-rotate-left"></i> Refunded Orders
+</div>
+
+<table class="rf-table">
+
+<tr>
+<th>Order ID</th>
+<th>Product</th>
+<th>User</th>
+<th>Qty</th>
+<th>Amount</th>
+<th>Status</th>
+</tr>
+
+{% for r in refunded %}
+
+<tr>
+
+<td>#{{ r.booking.id }}</td>
+
+<td>{{ r.product.product_name }}</td>
+
+<td>{{ r.booking.user.user_name }}</td>
+
+<td>{{ r.cart_qty }}</td>
+
+<td>₹{{ r.cart_qty|mul:r.product.product_price }}</td>
+
+<td>
+<span class="rf-badge">
+Refunded
+</span>
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="6" class="rf-empty">
+No refunds processed
+</td>
+</tr>
+
+{% endfor %}
+
 </table>
 
-</body>
-</html>
+</div>
+
+</div>
+
 {% endblock %}

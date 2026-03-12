@@ -13,7 +13,7 @@
 		content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
 
 	<!-- title -->
-	<title>Fruitkha</title>
+	<title>ShopiX</title>
 
 	<!-- favicon -->
 	<link rel="shortcut icon" type="image/png" href="{% static 'Main/assets/img/favicon.png' %}">
@@ -152,78 +152,111 @@
     </div>
 
     
-	<!-- footer -->
-	<div class="footer-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box about-widget">
-						<h2 class="widget-title">About us</h2>
-						<p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium
-							doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box get-in-touch">
-						<h2 class="widget-title">Get in Touch</h2>
-						<ul>
-							<li>34/8, East Hukupara, Gifirtok, Sadan.</li>
-							<li>support@fruitkha.com</li>
-							<li>+00 111 222 3333</li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box pages">
-						<h2 class="widget-title">Pages</h2>
-						<ul>
-							<li><a href="{% static 'Main/index.html' %}">Home</a></li>
-							<li><a href="about.html">About</a></li>
-							<li><a href="services.html">Shop</a></li>
-							<li><a href="news.html">News</a></li>
-							<li><a href="contact.html">Contact</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box subscribe">
-						<h2 class="widget-title">Subscribe</h2>
-						<p>Subscribe to our mailing list to get the latest updates.</p>
-						<form action="{% static 'Main/index.html' %}">
-							<input type="email" placeholder="Email">
-							<button type="submit"><i class="fas fa-paper-plane"></i></button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end footer -->
+	<!-- Footer -->
+<div class="footer-area">
+<div class="container">
+<div class="row">
 
-	<!-- copyright -->
-	<div class="copyright">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6 col-md-12">
-					<p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>, All Rights
-						Reserved.<br>
-						Distributed By - <a href="https://themewagon.com/">Themewagon</a>
-					</p>
-				</div>
-				<div class="col-lg-6 text-right col-md-12">
-					<div class="social-icons">
-						<ul>
-							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+<!-- About -->
+<div class="col-lg-3 col-md-6">
+<div class="footer-box about-widget">
+<h2 class="widget-title">About ShopiX</h2>
+
+<p>
+ShopiX is a modern online marketplace where users can explore products,
+manage wishlists, place orders, and track deliveries easily.
+Our goal is to provide a smooth and secure shopping experience.
+</p>
+
+</div>
+</div>
+
+
+<!-- Quick Links -->
+<div class="col-lg-3 col-md-6">
+<div class="footer-box pages">
+<h2 class="widget-title">Quick Links</h2>
+
+<ul>
+<li><a href="{% url 'User:Homepage' %}">Home</a></li>
+<li><a href="{% url 'User:Viewproduct' %}">Shop</a></li>
+<li><a href="{% url 'User:Wishlists' %}">Wishlist</a></li>
+<li><a href="{% url 'User:MyCart' %}">My Cart</a></li>
+<li><a href="{% url 'User:MyBooking' %}">My Orders</a></li>
+</ul>
+
+</div>
+</div>
+
+
+<!-- Support -->
+<div class="col-lg-3 col-md-6">
+<div class="footer-box get-in-touch">
+<h2 class="widget-title">Customer Support</h2>
+
+<ul>
+<li><a href="{% url 'User:Complaint' %}">Submit Complaint</a></li>
+<li><a href="{% url 'User:Feedback' %}">Send Feedback</a></li>
+<li>Email: support@shopix.com</li>
+<li>Phone: +91 98765 43210</li>
+</ul>
+
+</div>
+</div>
+
+
+<!-- Newsletter -->
+<div class="col-lg-3 col-md-6">
+<div class="footer-box subscribe">
+<h2 class="widget-title">Newsletter</h2>
+
+<p>
+Subscribe to receive updates on new products and special offers.
+</p>
+
+<form action="#">
+<input type="email" placeholder="Enter Email">
+<button type="submit">
+<i class="fas fa-paper-plane"></i>
+</button>
+</form>
+
+</div>
+</div>
+
+</div>
+</div>
+</div>
+<!-- End Footer -->
+
+
+<!-- Copyright -->
+<div class="copyright">
+<div class="container">
+<div class="row">
+
+<div class="col-lg-6 col-md-12">
+<p>
+© 2026 <b>ShopiX</b>. All Rights Reserved.
+</p>
+</div>
+
+<div class="col-lg-6 text-right col-md-12">
+<div class="social-icons">
+
+<ul>
+<li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+<li><a href="#"><i class="fab fa-instagram"></i></a></li>
+<li><a href="#"><i class="fab fa-twitter"></i></a></li>
+<li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+</ul>
+
+</div>
+</div>
+
+</div>
+</div>
+</div>
 	<!-- end copyright -->
 
 	<!-- jquery -->

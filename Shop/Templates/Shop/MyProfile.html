@@ -1,47 +1,184 @@
 {% extends 'Shop/Head.html' %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Myprofile</title>
-</head>
-<body>
-    <table border="2"><tr>
-        
-        <td colspan="2" align="center"><img src="{{shop.shop_photo.url}}" alt=""></td>
-    </tr>
-    <tr>
-        <td>Name</td>
-        <td>{{shop.shop_name}}</td>
-    </tr>
-    <tr>
-        <td>Email</td>
-        <td>{{shop.shop_email}}</td>
-    </tr>
-    <tr>
-        <td>Contact</td>
-        <td>{{shop.shop_contact}}</td>
-    </tr>
-    <tr>
-        <td>Address</td>
-        <td>{{shop.shop_address}}</td>
-    </tr>
-    
-     
-    <tr>
-        <td>District</td>
-        <td>{{ shop.place.district.district_name }}</td>
-    </tr>
-    <tr>
-        <td>Place</td>
-        <td>{{shop.place.place_name}}</td>
-    </tr>
-    <tr>
-        
-        <td colspan="2" align="center"><a href="{% url 'Shop:EditProfile' %}" >Edit Profile </a>|<a href="{% url 'Shop:ChangePass' %}">Change Password</a></td>
-    </tr></table>
-</body>
-</html>
+
+<style>
+
+/* Wrapper */
+.mp-wrapper{
+    max-width:900px;
+    margin:auto;
+    animation: mpFade 0.6s ease-in-out;
+}
+
+/* Profile Card */
+.mp-card{
+    background:#fff;
+    border-radius:15px;
+    padding:35px;
+    box-shadow:0 12px 35px rgba(0,0,0,0.12);
+    display:flex;
+    gap:40px;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+/* Profile Image */
+.mp-img-box{
+    text-align:center;
+}
+
+.mp-img{
+    width:170px;
+    height:170px;
+    border-radius:50%;
+    object-fit:cover;
+    border:5px solid #ff7b7b;
+    transition:.3s;
+}
+
+.mp-img:hover{
+    transform:scale(1.05);
+}
+
+/* Details */
+.mp-details{
+    flex:1;
+}
+
+.mp-title{
+    font-size:22px;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+/* Info Row */
+.mp-row{
+    display:flex;
+    margin-bottom:10px;
+}
+
+.mp-label{
+    width:120px;
+    font-weight:600;
+    color:#555;
+}
+
+.mp-value{
+    color:#333;
+}
+
+/* Buttons */
+.mp-btns{
+    margin-top:25px;
+}
+
+.mp-btn{
+    padding:8px 18px;
+    border-radius:8px;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+    margin-right:10px;
+    transition:.3s;
+}
+
+/* Edit Button */
+.mp-edit{
+    background:#ff7b7b;
+    color:white;
+}
+
+.mp-edit:hover{
+    background:#ff5252;
+}
+
+/* Password Button */
+.mp-pass{
+    background:#444;
+    color:white;
+}
+
+.mp-pass:hover{
+    background:#222;
+}
+
+/* Animation */
+@keyframes mpFade{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+</style>
+
+
+<div class="mp-wrapper">
+
+<div class="mp-card">
+
+<!-- Profile Image -->
+<div class="mp-img-box">
+<img src="{{shop.shop_photo.url}}" class="mp-img">
+</div>
+
+<!-- Profile Details -->
+<div class="mp-details">
+
+<div class="mp-title">
+<i class="fa-solid fa-user"></i> My Profile
+</div>
+
+<div class="mp-row">
+<div class="mp-label">Name</div>
+<div class="mp-value">{{shop.shop_name}}</div>
+</div>
+
+<div class="mp-row">
+<div class="mp-label">Email</div>
+<div class="mp-value">{{shop.shop_email}}</div>
+</div>
+
+<div class="mp-row">
+<div class="mp-label">Contact</div>
+<div class="mp-value">{{shop.shop_contact}}</div>
+</div>
+
+<div class="mp-row">
+<div class="mp-label">Address</div>
+<div class="mp-value">{{shop.shop_address}}</div>
+</div>
+
+<div class="mp-row">
+<div class="mp-label">District</div>
+<div class="mp-value">{{ shop.place.district.district_name }}</div>
+</div>
+
+<div class="mp-row">
+<div class="mp-label">Place</div>
+<div class="mp-value">{{shop.place.place_name}}</div>
+</div>
+
+<div class="mp-btns">
+
+<a href="{% url 'Shop:EditProfile' %}" class="mp-btn mp-edit">
+<i class="fa-solid fa-user-pen"></i> Edit Profile
+</a>
+
+<a href="{% url 'Shop:ChangePass' %}" class="mp-btn mp-pass">
+<i class="fa-solid fa-key"></i> Change Password
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 {% endblock %}
