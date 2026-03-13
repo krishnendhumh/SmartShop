@@ -34,6 +34,7 @@ urlpatterns = [
     path("blockuser/<int:id>/", views.blockuser, name="blockuser"),
     path('unblockuser/<int:id>/', views.unblockuser, name='unblockuser'),
     path('Userlist/',views.UserList,name="UserList"),
+    path('HomePage/', views.AdminHome, name="HomePage"),
 
     
 

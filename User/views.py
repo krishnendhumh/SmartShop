@@ -11,9 +11,8 @@ from .models import tbl_cart
 from datetime import date
 
 # Create your views here.
-def logout(request):
-    del request.session['aid']
-    return redirect("Guest:Login")
+def index(request):
+    return render(request,"Guest/index.html")
 
 def Homepage(request):
     return render(request,"User/Homepage.html")

@@ -179,7 +179,19 @@ def editsub(request,eid):
         return render(request,"Admin/SubCategory.html",{'editdata':editdata,'subdata':subdata,'categorydata':categorydata})
 
 def Homepage(request):
-    return render(request,"Admin/Homepage.html")
+    user_count = tbl_user.objects.count()
+    shop_count = tbl_shop.objects.count()
+    product_count = tbl_product.objects.count()
+    booking_count = tbl_booking.objects.count()
+
+    context = {
+        "user_count": user_count,
+        "shop_count": shop_count,
+        "product_count": product_count,
+        "booking_count": booking_count
+    }
+
+    return render(request,"Admin/HomePage.html",context)
     
 from django.core.mail import send_mail
 from django.conf import settings
@@ -306,19 +318,36 @@ def Viewfeedback(request):
     return render(request, "Admin/Viewfeedback.html", {"feedback": feedback})
 
 def SalesReport(request):
-    bookingdata = None
+
+    bookingdata = tbl_booking.objects.all()
+
+    # date filter
     if request.method == "POST":
         from_date = request.POST.get("from_date")
         to_date = request.POST.get("to_date")
 
-        bookingdata = tbl_booking.objects.filter(
-            booking_date__range=[from_date, to_date]
-        )
+        if from_date and to_date:
+            bookingdata = tbl_booking.objects.filter(
+                booking_date__range=[from_date, to_date]
+            )
 
-    return render(request, "Admin/SalesReport.html", {
-        'bookingdata': bookingdata
-    })
+    # admin statistics
+    total_sales = tbl_cart.objects.filter(cart_status=6).count()
+    cancel_count = tbl_cart.objects.filter(cart_status=7).count()
+    return_count = tbl_cart.objects.filter(cart_status=9).count()
+    refund_count = tbl_cart.objects.filter(cart_status=10).count()
+    feedback_count = tbl_feedback.objects.count()
 
+    context = {
+        "bookingdata": bookingdata,
+        "total_sales": total_sales,
+        "cancel_count": cancel_count,
+        "return_count": return_count,
+        "refund_count": refund_count,
+        "feedback_count": feedback_count,
+    }
+
+    return render(request, "Admin/SalesReport.html", context)
 def UserList(request):
     userdata=tbl_user.objects.all()
     return render(request, "Admin/UserList.html", {"userdata": userdata})
@@ -413,6 +442,27 @@ def ProcessRefund(request, cid):
             )
 
     return redirect("Admin:RefundList")
+
+def AdminHome(request):
+
+    user_count = tbl_user.objects.count()
+    shop_count = tbl_shop.objects.count()
+    product_count = tbl_product.objects.count()
+    booking_count = tbl_booking.objects.count()
+
+    cancel_count = tbl_cart.objects.filter(cart_status=7).count()
+    return_count = tbl_cart.objects.filter(cart_status=9).count()
+
+    context = {
+        "user_count": user_count,
+        "shop_count": shop_count,
+        "product_count": product_count,
+        "booking_count": booking_count,
+        "cancel_count": cancel_count,
+        "return_count": return_count
+    }
+
+    return render(request,"Admin/HomePage.html",context)
 
 
 

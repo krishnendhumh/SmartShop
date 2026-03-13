@@ -1,138 +1,390 @@
+{% extends 'User/Head.html' %}
+{% block content %}
 {% load mathfilters %}
+
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Invoice</title>
+<meta charset="UTF-8">
+<title>Invoice</title>
 
-    <style>
-        body { font-family: Arial; background:#f5f5f5; }
-        .invoice-box {
-            width:80%;
-            margin:auto;
-            background:#fff;
-            padding:20px;
-            border:1px solid #000;
-        }
-        table { width:100%; border-collapse:collapse; }
-        td { padding:8px; }
-        .center{text-align:center;}
-        .right{text-align:right;}
-        .bold{font-weight:bold;}
-        .success{color:green;font-weight:bold;font-size:18px;text-align:center;}
-        .border td{border:1px solid #000;}
-        img{display:block;margin:auto;}
-        .invoice-header td{border:none;}
-        .btn{
-            padding:10px 15px;
-            background:#1a73e8;
-            color:white;
-            border:none;
-            cursor:pointer;
-            border-radius:4px;
-            font-size:14px;
-        }
-        .btn:hover{background:#1558b0;}
+<style>
 
-        @media print {
-            .no-print { display:none; }
-            body { background:#fff; }
-        }
-    </style>
+body{
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(120deg,#eef2f7,#f8fbff);
+margin:0;
+padding:40px;
+}
+
+/* MAIN BOX */
+
+.shopix-invoice-wrapper{
+max-width:900px;
+margin:auto;
+background:white;
+border-radius:14px;
+padding:35px;
+box-shadow:0 15px 40px rgba(0,0,0,0.15);
+animation:invoiceFade 0.8s ease;
+position:relative;
+overflow:hidden;
+}
+
+/* ANIMATION */
+
+@keyframes invoiceFade{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* HEADER */
+
+.shopix-invoice-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+padding-bottom:15px;
+border-bottom:2px dashed #e6e6e6;
+}
+
+.shopix-invoice-title{
+font-size:30px;
+font-weight:700;
+background:linear-gradient(90deg,#2874f0,#0dcaf0);
+-webkit-background-clip:text;
+color:transparent;
+}
+
+.shopix-invoice-meta{
+text-align:right;
+font-size:14px;
+color:#555;
+}
+
+/* SUCCESS */
+
+.shopix-invoice-success{
+background:linear-gradient(120deg,#e8fff2,#d4f7e6);
+border:1px solid #c8eed7;
+color:#198754;
+padding:14px;
+border-radius:8px;
+font-weight:600;
+text-align:center;
+margin-bottom:20px;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{box-shadow:0 0 0 0 rgba(25,135,84,0.4);}
+70%{box-shadow:0 0 0 10px rgba(25,135,84,0);}
+100%{box-shadow:0 0 0 0 rgba(25,135,84,0);}
+}
+
+/* ADDRESS */
+
+.shopix-invoice-address{
+display:flex;
+justify-content:space-between;
+margin-bottom:25px;
+background:#fafafa;
+padding:15px;
+border-radius:8px;
+}
+
+.shopix-invoice-address div{
+width:48%;
+font-size:14px;
+color:#444;
+}
+
+.shopix-invoice-address b{
+color:#111;
+font-size:15px;
+}
+
+/* TABLE */
+
+.shopix-invoice-table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+overflow:hidden;
+border-radius:8px;
+}
+
+.shopix-invoice-table th{
+background:linear-gradient(90deg,#051922,#0b2d3b);
+color:white;
+padding:12px;
+font-size:14px;
+text-align:center;
+}
+
+.shopix-invoice-table td{
+border-bottom:1px solid #eee;
+padding:12px;
+text-align:center;
+font-size:14px;
+transition:0.3s;
+}
+
+.shopix-invoice-table tr:hover{
+background:#f5f9ff;
+transform:scale(1.01);
+}
+
+/* IMAGE */
+
+.shopix-invoice-img{
+border-radius:8px;
+box-shadow:0 5px 12px rgba(0,0,0,0.2);
+transition:0.3s;
+}
+
+.shopix-invoice-img:hover{
+transform:scale(1.1);
+}
+
+/* TOTAL */
+
+.shopix-invoice-total{
+font-weight:700;
+font-size:17px;
+color:#0b2d3b;
+}
+
+/* FOOTER */
+
+.shopix-invoice-footer{
+text-align:center;
+margin-top:30px;
+font-weight:600;
+color:#555;
+border-top:1px dashed #ddd;
+padding-top:15px;
+}
+
+/* BUTTON */
+
+.shopix-invoice-btn{
+margin-top:25px;
+padding:12px 22px;
+background:linear-gradient(90deg,#2874f0,#0dcaf0);
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:15px;
+transition:0.3s;
+box-shadow:0 6px 14px rgba(0,0,0,0.2);
+}
+
+.shopix-invoice-btn:hover{
+transform:translateY(-3px);
+box-shadow:0 10px 20px rgba(0,0,0,0.25);
+}
+
+/* PRINT SETTINGS */
+
+@media print{
+
+body *{
+visibility:hidden;
+}
+
+#invoice, #invoice *{
+visibility:visible;
+}
+
+#invoice{
+position:absolute;
+left:0;
+top:0;
+width:100%;
+}
+
+.no-print{
+display:none;
+}
+
+body{
+background:white;
+}
+
+.shopix-invoice-wrapper{
+box-shadow:none;
+border:none;
+margin:0;
+}
+
+}
+
+</style>
+
 </head>
 
 <body>
 
-<div class="invoice-box" id="invoice">
+<div class="shopix-invoice-wrapper" id="invoice">
 
 <!-- HEADER -->
-<table class="invoice-header">
-    <tr>
-        <td class="bold" style="font-size:22px;">INVOICE</td>
-        <td class="right">
-            <b>Invoice No:</b> <span id="invoiceNo"></span><br>
-            <b>Date:</b> {{ booking.booking_date }}
-        </td>
-    </tr>
-</table>
 
-<hr>
+<div class="shopix-invoice-header">
 
-<table>
-    <tr>
-        <td class="success">✅ Payment Successful</td>
-    </tr>
-</table>
+<div class="shopix-invoice-title">
+Invoice
+</div>
 
-<br>
+<div class="shopix-invoice-meta">
 
-<table class="border">
-    <tr>
-        <td colspan="3">
-            <b>Shop Details</b><br>
-            {{ booking.tbl_cart_set.first.product.shop.shop_name }}<br>
-            {{ booking.tbl_cart_set.first.product.shop.shop_email }}<br>
-            {{ booking.tbl_cart_set.first.product.shop.shop_address }}
-        </td>
+<b>Invoice No:</b> <span id="invoiceNo"></span><br> <b>Date:</b> {{ booking.booking_date }}
 
-        <td colspan="3">
-            <b>Bill To</b><br>
-            {{ booking.user.user_name }}<br>
-            {{ booking.user.user_email }}<br>
-            {{ booking.user.user_address }}
-        </td>
-    </tr>
-
-    <tr class="center bold">
-        <td>Sl No</td>
-        <td>Product</td>
-        <td>Photo</td>
-        <td>Price</td>
-        <td>Qty</td>
-        <td>Total</td>
-    </tr>
-
-    {% for j in booking.tbl_cart_set.all %}
-    <tr class="center">
-        <td>{{ forloop.counter }}</td>
-        <td>{{ j.product.product_name }}</td>
-        <td><img src="{{ j.product.product_photo.url }}" width="70"></td>
-        <td>₹{{ j.product.product_price }}</td>
-        <td>{{ j.cart_qty }}</td>
-        <td>₹{{ j.cart_qty|mul:j.product.product_price }}</td>
-    </tr>
-    {% endfor %}
-
-    <tr>
-        <td colspan="5" class="right bold">Grand Total</td>
-        <td class="center bold">₹{{ booking.booking_amount }}</td>
-    </tr>
-</table>
-
-<br>
-
-<p class="center bold">
-    Thank you for your payment!<br>
-    This is a system-generated invoice.
-</p>
-
-<!-- DOWNLOAD BUTTON -->
-<div class="center no-print">
-    <button class="btn" onclick="downloadInvoice()">Download / Print Invoice</button>
 </div>
 
 </div>
 
-<!-- RANDOM INVOICE NUMBER + DOWNLOAD -->
+<!-- SUCCESS MESSAGE -->
+
+<div class="shopix-invoice-success">
+✅ Payment Successful
+</div>
+
+<!-- ADDRESS SECTION -->
+
+<div class="shopix-invoice-address">
+
+<div>
+
+<b>Shop Details</b><br>
+
+{{ booking.tbl_cart_set.first.product.shop.shop_name }}<br>
+{{ booking.tbl_cart_set.first.product.shop.shop_email }}<br>
+{{ booking.tbl_cart_set.first.product.shop.shop_address }}
+
+</div>
+
+<div>
+
+<b>Bill To</b><br>
+
+{{ booking.user.user_name }}<br>
+{{ booking.user.user_email }}<br>
+{{ booking.user.user_address }}
+
+</div>
+
+</div>
+
+<!-- PRODUCT TABLE -->
+
+<table class="shopix-invoice-table">
+
+<tr>
+<th>Sl No</th>
+<th>Product</th>
+<th>Photo</th>
+<th>Price</th>
+<th>Qty</th>
+<th>Total</th>
+</tr>
+
+{% for j in booking.tbl_cart_set.all %}
+
+<tr>
+
+<td>{{ forloop.counter }}</td>
+
+<td>{{ j.product.product_name }}</td>
+
+<td>
+<img src="{{ j.product.product_photo.url }}" width="70" class="shopix-invoice-img">
+</td>
+
+<td>₹{{ j.product.product_price }}</td>
+
+<td>{{ j.cart_qty }}</td>
+
+<td>
+₹{{ j.cart_qty|mul:j.product.product_price }}
+</td>
+
+</tr>
+
+{% endfor %}
+
+<tr>
+
+<td colspan="5" style="text-align:right;" class="shopix-invoice-total">
+Grand Total
+</td>
+
+<td class="shopix-invoice-total">
+₹{{ booking.booking_amount }}
+</td>
+
+</tr>
+
+</table>
+
+<!-- FOOTER -->
+
+<div class="shopix-invoice-footer">
+
+Thank you for your purchase! <br>
+This is a system-generated invoice.
+
+</div>
+
+<!-- PRINT BUTTON -->
+
+<div style="text-align:center;" class="no-print">
+
+<button class="shopix-invoice-btn" onclick="downloadInvoice()">
+
+<i class="fa fa-print"></i> Download / Print Invoice
+
+</button>
+
+</div>
+
+</div>
+
 <script>
-    // Random Invoice Number
-    document.getElementById("invoiceNo").innerText =
-        "INV-" + Math.floor(100000 + Math.random() * 900000);
 
-    function downloadInvoice(){
-        window.print();
-    }
+
+
+/* RANDOM INVOICE NUMBER */
+
+function generateInvoice(){
+const date = new Date();
+const random = Math.floor(1000 + Math.random()*9000);
+
+document.getElementById("invoiceNo").innerText =
+"INV-" + date.getFullYear() + random;
+}
+
+generateInvoice();
+
+/* PRINT ONLY BILL */
+
+function downloadInvoice(){
+window.print();
+}
+
 </script>
 
 </body>
+
 </html>
+{% endblock %}

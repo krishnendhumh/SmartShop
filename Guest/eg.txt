@@ -1,0 +1,62 @@
+class tbl_cart(models.Model):
+    cart_qty = models.IntegerField(default=1)
+    cart_status = models.IntegerField(default=0)
+    product = models.ForeignKey(tbl_product,on_delete=models.CASCADE)
+    booking = models.ForeignKey(tbl_booking,on_delete=models.CASCADE)
+    pack_date= models.DateField(null=True)
+    ship_date = models.DateField(null=True)
+    outdel_date = models.DateField(null=True)
+    del_date = models.DateField(null=True)
+    cancel_reason = models.TextField(null=True, blank=True)
+    return_reason = models.TextField(null=True, blank=True)
+    cancel_date = models.DateField(null=True, blank=True)
+    return_date = models.DateField(null=True, blank=True)
+
+class tbl_booking(models.Model):
+    booking_status= models.IntegerField(default=0)
+    booking_amount = models.FloatField(null=True)
+    booking_date = models.DateField(auto_now_add=True)
+    user = models.ForeignKey(tbl_user,on_delete=models.CASCADE)
+
+class tbl_product(models.Model):
+    product_name=models.CharField(max_length=50)
+    product_details=models.CharField(max_length=150)
+    product_photo=models.FileField(upload_to="Assets/ProdDocs/")
+    product_price=models.CharField(max_length=10)
+    subcategory = models.ForeignKey(tbl_subcategory,on_delete=models.CASCADE)
+    brand = models.ForeignKey(tbl_brand,on_delete=models.CASCADE)
+    shop = models.ForeignKey(tbl_shop,on_delete=models.CASCADE)
+
+class tbl_subcategory(models.Model):
+    subcategory_name=models.CharField(max_length=50)
+    category = models.ForeignKey(tbl_category,on_delete=models.CASCADE)
+
+class tbl_brand(models.Model):
+    brand_name= models.CharField(max_length=50)
+
+class tbl_shop(models.Model):
+    shop_name=models.CharField(max_length=50)
+    shop_email=models.CharField(max_length=50)
+    shop_contact=models.CharField(max_length=50)
+    shop_address=models.CharField(max_length=50)
+    shop_photo=models.FileField(upload_to="Assets/ShopDocs/")
+    shop_proof=models.FileField(upload_to="Assets/ShopDocs/")
+    shop_password=models.CharField(max_length=50)
+    shop_status=models.IntegerField(default=0)
+    place = models.ForeignKey(tbl_place,on_delete=models.CASCADE)
+
+use multiple machine learning algorithm to done sales forcasing
+add more inforamtion
+most buyed product
+most buyed category
+most buyed brand
+freequent purchased product
+income
+all rest of the part
+
+useful information
+app_name=Shop
+session id='sid'  for shop
+using return render request template html page
+url views html
+

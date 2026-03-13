@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Sales Dashboard</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --success-color: #1cc88a;
+            --info-color: #36b9cc;
+            --warning-color: #f6c23e;
+            --danger-color: #e74a3b;
+            --dark-color: #5a5c69;
+        }
+        
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        /* Cards */
+        .stat-card {
+            border-left: 4px solid;
+            border-radius: 0.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+        }
+        
+        .stat-card.primary { border-left-color: var(--primary-color); }
+        .stat-card.success { border-left-color: var(--success-color); }
+        .stat-card.info { border-left-color: var(--info-color); }
+        .stat-card.warning { border-left-color: var(--warning-color); }
+        .stat-card.danger { border-left-color: var(--danger-color); }
+        
+        .stat-icon {
+            font-size: 2rem;
+            color: #dddfeb;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        /* Progress bars */
+        .progress-sm {
+            height: 0.5rem;
+        }
+        
+        /* Tables */
+        .table-dashboard {
+            background: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .table-dashboard th {
+            background-color: #f8f9fc;
+            border-top: none;
+        }
+        
+        /* Charts container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        /* Badges */
+        .badge-forecast {
+            font-size: 0.8rem;
+            padding: 0.5rem 0.7rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stat-card {
+                margin-bottom: 1rem;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 3px solid rgba(0,0,0,.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-store me-2"></i>
+                Shop Sales Dashboard
+            </a>
+            <div class="ms-auto">
+                <span class="text-white me-3">
+                    <i class="fas fa-calendar me-1"></i>
+                    {{ today|date:"l, F j, Y" }}
+                </span>
+                <button class="btn btn-outline-light btn-sm" onclick="refreshData()">
+                    <i class="fas fa-sync-alt me-1"></i> Refresh
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <!-- Key Metrics Row -->
+        <div class="row mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card primary position-relative">
+                    <div class="row">
+                        <div class="col">
+                            <div class="text-xs text-primary text-uppercase mb-1">Total Income (All Time)</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ currency_symbol }}{{ total_income|floatformat:2 }}</div>
+                            <small class="text-muted">Today: {{ currency_symbol }}{{ today_income|floatformat:2 }}</small>
+                        </div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card success position-relative">
+                    <div class="row">
+                        <div class="col">
+                            <div class="text-xs text-success text-uppercase mb-1">Orders</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ total_orders }}</div>
+                            <small class="text-muted">Today: {{ today_orders }} | Pending: {{ pending_orders }}</small>
+                        </div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card info position-relative">
+                    <div class="row">
+                        <div class="col">
+                            <div class="text-xs text-info text-uppercase mb-1">Customers</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ total_customers }}</div>
+                            <small class="text-muted">New this month: {{ new_customers }}</small>
+                        </div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card warning position-relative">
+                    <div class="row">
+                        <div class="col">
+                            <div class="text-xs text-warning text-uppercase mb-1">Avg Order Value</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ currency_symbol }}{{ avg_order_value|floatformat:2 }}</div>
+                            <small class="text-muted">Retention: {{ retention_rate|floatformat:1 }}%</small>
+                        </div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row mb-4">
+            <div class="col-xl-8 col-lg-7">
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-chart-line me-2"></i>Sales Trend (Last 12 Months)
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="salesTrendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-chart-pie me-2"></i>Category Performance
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Analytics Row -->
+        <div class="row mb-4">
+            <div class="col-xl-4 col-md-6">
+                <div class="card shadow h-100">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-star me-2"></i>Top Performers
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h6 class="font-weight-bold">Most Bought Product</h6>
+                            {% if most_product %}
+                                <p class="mb-1">{{ most_product.product__product_name }}</p>
+                                <small class="text-muted">
+                                    Sold: {{ most_product.total_quantity }} | 
+                                    Revenue: {{ currency_symbol }}{{ most_product.total_revenue|floatformat:2 }}
+                                </small>
+                            {% else %}
+                                <p class="text-muted">No data available</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h6 class="font-weight-bold">Most Bought Category</h6>
+                            {% if most_category %}
+                                <p class="mb-1">{{ most_category.product__subcategory__category__category_name }}</p>
+                                <small class="text-muted">Sales: {{ most_category.total_sales }}</small>
+                            {% else %}
+                                <p class="text-muted">No data available</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            <h6 class="font-weight-bold">Most Bought Brand</h6>
+                            {% if most_brand %}
+                                <p class="mb-1">{{ most_brand.product__brand__brand_name }}</p>
+                                <small class="text-muted">Sales: {{ most_brand.total_sales }}</small>
+                            {% else %}
+                                <p class="text-muted">No data available</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-4 col-md-6">
+                <div class="card shadow h-100">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-chart-simple me-2"></i>Top 10 Products
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-dashboard">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th class="text-end">Quantity</th>
+                                        <th class="text-end">Revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in top_products %}
+                                    <tr>
+                                        <td>{{ product.product__product_name|truncatechars:20 }}</td>
+                                        <td class="text-end">{{ product.quantity_sold }}</td>
+                                        <td class="text-end">{{ currency_symbol }}{{ product.revenue|floatformat:2 }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted">No data available</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-4 col-md-6">
+                <div class="card shadow h-100">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Low Stock Alert
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        {% if low_stock_products %}
+                            {% for product in low_stock_products %}
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ product.product_name|truncatechars:25 }}</span>
+                                    <span class="badge bg-danger">Stock: {{ product.product_quantity }}</span>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-danger" style="width: {{ product.product_quantity }}%"></div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-success mb-0">
+                                <i class="fas fa-check-circle me-1"></i>All products have sufficient stock
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales Forecast Row -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-chart-line me-2"></i>Sales Forecast (Next 30 Days)
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        {% if forecast %}
+                            <div class="row mb-4">
+                                {% for model, data in forecast.items %}
+                                <div class="col-md-3 mb-3">
+                                    <div class="card bg-light">
+                                        <div class="card-body p-3">
+                                            <h6 class="card-title">{{ model }}</h6>
+                                            <h4 class="mb-2">{{ currency_symbol }}{{ data.total|floatformat:2 }}</h4>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <small class="text-muted">Daily avg: {{ currency_symbol }}{{ data.average|floatformat:2 }}</small>
+                                                {% if forecast_accuracy %}
+                                                    <span class="badge bg-success">{{ forecast_accuracy|get_item:model }}% acc</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="chart-container" style="height: 200px;">
+                                <canvas id="forecastChart"></canvas>
+                            </div>
+                        {% else %}
+                            <p class="text-muted mb-0">Insufficient data for sales forecast. Need at least 6 data points.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Analytics Row -->
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-clock me-2"></i>Peak Hours
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-dashboard">
+                                <thead>
+                                    <tr>
+                                        <th>Hour</th>
+                                        <th class="text-end">Orders</th>
+                                        <th>Distribution</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for hour in peak_hours %}
+                                    <tr>
+                                        <td>{{ hour.hour }}:00 - {{ hour.hour|add:"1" }}:00</td>
+                                        <td class="text-end">{{ hour.orders }}</td>
+                                        <td style="width: 50%;">
+                                            <div class="progress progress-sm">
+                                                {% widthratio hour.orders total_orders 100 as percentage %}
+                                                <div class="progress-bar bg-info" style="width: {{ percentage }}%"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted">No data available</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-credit-card me-2"></i>Payment Methods
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="paymentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js Scripts -->
+    <script>
+        // Sales Trend Chart
+        const monthlyData = {{ monthly_sales|safe }};
+        
+        if (monthlyData && monthlyData.length > 0) {
+            const ctx1 = document.getElementById('salesTrendChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: monthlyData.map(d => d.month),
+                    datasets: [{
+                        label: 'Sales',
+                        data: monthlyData.map(d => d.sales),
+                        borderColor: '#4e73df',
+                        backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // Category Chart
+        const categoryData = {{ category_performance|safe }};
+        
+        if (categoryData && categoryData.length > 0) {
+            const ctx2 = document.getElementById('categoryChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: categoryData.map(c => c.product__subcategory__category__category_name || 'Uncategorized'),
+                    datasets: [{
+                        data: categoryData.map(c => c.total_sales),
+                        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // Forecast Chart
+        {% if forecast %}
+        const forecastCtx = document.getElementById('forecastChart').getContext('2d');
+        const days = Array.from({length: 30}, (_, i) => `Day ${i+1}`);
+        
+        const forecastDatasets = [];
+        {% for model, data in forecast.items %}
+        forecastDatasets.push({
+            label: '{{ model }}',
+            data: {{ data.values }},
+            borderColor: ['#4e73df', '#1cc88a', '#f6c23e', '#e74a3b'][{{ forloop.counter0 }}],
+            borderWidth: 2,
+            fill: false,
+            tension: 0.1
+        });
+        {% endfor %}
+        
+        new Chart(forecastCtx, {
+            type: 'line',
+            data: {
+                labels: days,
+                datasets: forecastDatasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+        {% endif %}
+
+        // Payment Methods Chart
+        const paymentData = {{ payment_methods|safe }};
+        
+        if (paymentData && paymentData.length > 0) {
+            const ctx4 = document.getElementById('paymentChart').getContext('2d');
+            new Chart(ctx4, {
+                type: 'pie',
+                data: {
+                    labels: paymentData.map(p => p.payment_method || 'Not specified'),
+                    datasets: [{
+                        data: paymentData.map(p => p.total),
+                        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // Auto-refresh function
+        function refreshData() {
+            location.reload();
+        }
+
+        // Auto-refresh every 5 minutes
+        setInterval(refreshData, 300000);
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

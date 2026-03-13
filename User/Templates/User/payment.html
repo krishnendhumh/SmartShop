@@ -1,501 +1,411 @@
+{% extends 'User/Head.html' %}
+{% block content %}
+
 <!DOCTYPE html>
+
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Payment Gateway | Online </title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    <style>
-        :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4895ef;
-            --dark: #1a1a2e;
-            --light: #f8f9fa;
-            --success: #4cc9f0;
-            --danger: #f72585;
-            --warning: #f8961e;
-        }
+<meta charset="UTF-8">
+<title>Secure Checkout</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+<style>
 
-        .payment-container {
-            display: flex;
-            max-width: 1200px;
-            width: 100%;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            animation: fadeIn 0.8s ease-in-out;
-        }
+/* PAGE BACKGROUND */
 
-        .payment-illustration {
-            flex: 1;
-            background: linear-gradient(to bottom right, var(--primary), var(--secondary));
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
+.shopix-checkout-wrapper{
+display:flex;
+justify-content:center;
+padding:50px;
+background:#f4f6fb;
+min-height:90vh;
+}
 
-        .payment-illustration::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
-            transform: rotate(30deg);
-            animation: shine 8s infinite linear;
-        }
+/* MAIN BOX */
 
-        .payment-form {
-            flex: 1;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+.shopix-checkout-container{
+display:flex;
+gap:30px;
+width:1100px;
+}
 
-        .payment-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+/* LEFT PAYMENT SECTION */
 
-        .payment-header h2 {
-            font-size: 28px;
-            color: var(--dark);
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
+.shopix-payment-section{
+flex:2;
+background:white;
+padding:35px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
 
-        .payment-header p {
-            color: #666;
-            font-size: 14px;
-        }
+/* RIGHT ORDER SUMMARY */
 
-        .payment-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+.shopix-order-summary{
+flex:1;
+background:white;
+padding:25px;
+border-radius:12px;
+height:fit-content;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
 
-        .payment-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
+/* TITLES */
 
-        .form-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
+.shopix-title{
+font-size:24px;
+font-weight:600;
+margin-bottom:20px;
+}
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: var(--dark);
-            font-weight: 500;
-        }
+.shopix-subtitle{
+font-size:14px;
+color:#666;
+margin-bottom:25px;
+}
 
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            background-color: #f9f9f9;
-        }
+/* FORM */
 
-        .form-control:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-            outline: none;
-            background-color: white;
-        }
+.shopix-form-group{
+margin-bottom:18px;
+}
 
-        .form-row {
-            display: flex;
-            gap: 15px;
-        }
+.shopix-form-group label{
+font-size:14px;
+display:block;
+margin-bottom:6px;
+}
 
-        .form-row .form-group {
-            flex: 1;
-        }
+.shopix-input{
+width:100%;
+padding:12px;
+border-radius:6px;
+border:1px solid #ddd;
+font-size:14px;
+}
 
-        .payment-amount {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background-color: #f5f7ff;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
+.shopix-input:focus{
+outline:none;
+border-color:#4361ee;
+box-shadow:0 0 5px rgba(67,97,238,0.2);
+}
 
-        .payment-amount span {
-            font-size: 14px;
-            color: #666;
-        }
+/* ROW */
 
-        .payment-amount .amount {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--primary);
-        }
+.shopix-row{
+display:flex;
+gap:12px;
+}
 
-        .btn-pay {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
+/* PAYMENT OPTIONS */
 
-        .btn-pay:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
-        }
+.shopix-payment-options{
+display:flex;
+gap:10px;
+margin-bottom:25px;
+}
 
-        .btn-pay::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
+.shopix-option{
+flex:1;
+padding:12px;
+border:1px solid #ddd;
+border-radius:6px;
+text-align:center;
+cursor:pointer;
+font-size:14px;
+}
 
-        .btn-pay:hover::before {
-            left: 100%;
-        }
+.shopix-option:hover{
+border-color:#4361ee;
+background:#f5f7ff;
+}
 
-        .payment-methods {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-        }
+/* PAY BUTTON */
 
-        .payment-method {
-            font-size: 36px;
-            color: #555;
-            transition: all 0.3s ease;
-        }
+.shopix-pay-btn{
+width:100%;
+padding:14px;
+border:none;
+background:linear-gradient(90deg,#4361ee,#3f37c9);
+color:white;
+font-size:16px;
+border-radius:6px;
+cursor:pointer;
+margin-top:10px;
+}
 
-        .payment-method:hover {
-            transform: scale(1.1);
-            color: var(--primary);
-        }
+.shopix-pay-btn:hover{
+opacity:.9;
+}
 
-        .fa-cc-visa {
-            color: #1a1f71;
-        }
+/* ORDER SUMMARY */
 
-        .fa-cc-mastercard {
-            color: #eb001b;
-        }
+.shopix-summary-row{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+font-size:14px;
+}
 
-        .fa-cc-paypal {
-            color: #003087;
-        }
+.shopix-total{
+font-size:18px;
+font-weight:600;
+color:#4361ee;
+}
 
-        .fa-cc-amex {
-            color: #002663;
-        }
+/* QR SECTION */
 
-        .secure-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-            font-size: 12px;
-            color: #666;
-        }
+.shopix-qr{
+text-align:center;
+margin-top:20px;
+border-top:1px dashed #ddd;
+padding-top:15px;
+}
 
-        .secure-badge i {
-            color: var(--success);
-            font-size: 16px;
-        }
+.shopix-qr img{
+width:140px;
+}
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+/* PAYMENT ICONS */
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.shopix-icons{
+margin-top:20px;
+text-align:center;
+font-size:32px;
+}
 
-        @keyframes shine {
-            0% {
-                transform: rotate(30deg) translate(-10%, -10%);
-            }
+.shopix-icons i{
+margin:0 8px;
+}
 
-            100% {
-                transform: rotate(30deg) translate(10%, 10%);
-            }
-        }
+.fa-cc-visa{color:#1a1f71}
+.fa-cc-mastercard{color:#eb001b}
+.fa-cc-paypal{color:#003087}
 
-        @keyframes float {
+</style>
 
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .floating {
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @media (max-width: 768px) {
-            .payment-container {
-                flex-direction: column;
-            }
-
-            .payment-illustration {
-                padding: 30px 20px;
-            }
-
-            .payment-form {
-                padding: 30px 20px;
-            }
-        }
-    </style>
 </head>
 
 <body>
-    <form action="" method="post">
-        {% csrf_token %}
-        <div class="payment-container">
-            <div class="payment-illustration">
-                <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_6wutsrox.json"
-                    background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay
-                    class="floating"></lottie-player>
-                <h2 style="color: white; margin-top: 20px;">Secure Payment Gateway</h2>
-                <p style="color: rgba(255,255,255,0.8); text-align: center; max-width: 350px; margin-top: 10px;">Your
-                    payment information is encrypted and secure. We don't store any of your card details.</p>
 
-                <div
-                    style="margin-top: 30px; display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 350px;">
-                    <div
-                        style="display: flex; align-items: center; background: rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 8px;">
-                        <i class="fas fa-lock" style="font-size: 20px; margin-right: 10px;"></i>
-                        <span style="font-size: 13px;">256-bit SSL Encryption</span>
-                    </div>
-                    <div
-                        style="display: flex; align-items: center; background: rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 8px;">
-                        <i class="fas fa-shield-alt" style="font-size: 20px; margin-right: 10px;"></i>
-                        <span style="font-size: 13px;">PCI DSS Compliant</span>
-                    </div>
-                </div>
-            </div>
+<div class="shopix-checkout-wrapper">
 
-            <div class="payment-form">
-                <div class="payment-header">
-                    <h2>Payment Details</h2>
-                    <p>Complete your lab service payment securely</p>
-                </div>
+<form method="post">
+{% csrf_token %}
 
-                <div class="payment-card">
-                    <div class="form-group">
-                        <label for="credit-card">Card Number</label>
-                        <div style="position: relative;">
-                            <input type="text" id="credit-card" required autocomplete="off"
-                                placeholder="1234 5678 9012 3456" title="Enter Correct Card Number" maxlength="19"
-                                name="txtacno" class="form-control">
-                            <i class="far fa-credit-card"
-                                style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #aaa;"></i>
-                        </div>
-                    </div>
+<div class="shopix-checkout-container">
 
-                    <div class="form-group">
-                        <label for="txtname">Cardholder Name</label>
-                        <input type="text" name="txtname" required autocomplete="off" pattern="[a-zA-z ]{3,15}"
-                            title="Enter Correct Name" minlength="3" placeholder="John Doe" class="form-control">
-                    </div>
+<!-- PAYMENT SECTION -->
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="txtexpdate">Expiration Date</label>
-                            <input id="credit-card-exp" type="text" name="txtexpdate" required autocomplete="off"
-                                placeholder="MM/YY" pattern="[0-9/]{5,5}" title="Enter Correct Date" minlength="5"
-                                maxlength="5" class="form-control">
-                            <span id="datecheck"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtccv">CVV</label>
-                            <div style="position: relative;">
-                                <input type="text" id="credit-card-ccv" name="txtccv" required autocomplete="off"
-                                    placeholder="123" pattern="[0-9]{3,3}" title="Enter Correct CVV" minlength="3"
-                                    maxlength="3" class="form-control">
-                                <i class="fas fa-question-circle"
-                                    style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #aaa; cursor: pointer;"
-                                    title="3-digit code on back of your card"></i>
-                            </div>
-                        </div>
-                    </div>
+<div class="shopix-payment-section">
 
-                    <div class="payment-amount">
-                        <span>Total Amount</span>
-                        <div class="amount">
-                            {{bookingdata.booking_amount}}
-                        </div>
-                    </div>
+<div class="shopix-title">
+Secure Checkout
+</div>
 
-                    <button type="submit" class="btn-pay" name="btn_pay">
-                        <i class="fas fa-lock" style="margin-right: 8px;"></i> Pay Securely
-                    </button>
-                </div>
+<div class="shopix-subtitle">
+Your payment is encrypted and secure
+</div>
 
-                <div class="payment-methods">
-                    <i class="fab fa-cc-visa payment-method"></i>
-                    <i class="fab fa-cc-mastercard payment-method"></i>
-                    <i class="fab fa-cc-paypal payment-method"></i>
-                    <i class="fab fa-cc-amex payment-method"></i>
-                </div>
+<div class="shopix-payment-options">
 
-                <div class="secure-badge">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Your payment is secured with 256-bit encryption</span>
-                </div>
-            </div>
-        </div>
-    </form>
-</body>
+<div class="shopix-option">
+<i class="fa-solid fa-credit-card"></i> Card
+</div>
 
-</html>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.6/jquery.inputmask.min.js"></script>
-<!-- ... Your existing JavaScript code ... -->
+<div class="shopix-option">
+<i class="fa-solid fa-qrcode"></i> QR Pay
+</div>
+
+<div class="shopix-option">
+<i class="fa-brands fa-google-pay"></i> UPI
+</div>
+
+</div>
+
+<div class="shopix-form-group">
+<label>Card Number</label>
+<input type="text"
+name="txtacno"
+placeholder="1234 5678 9012 3456"
+class="shopix-input"
+maxlength="19"
+pattern="[0-9 ]{19}"
+inputmode="numeric"
+required>
+</div>
+
+<div class="shopix-form-group">
+<label>Card Holder</label>
+<input type="text"
+name="txtname"
+placeholder="John Doe"
+class="shopix-input"
+required>
+</div>
+
+<div class="shopix-row">
+
+<div class="shopix-form-group">
+<label>Expiry</label>
+<input type="text"
+name="txtexpdate"
+placeholder="MM/YY"
+class="shopix-input"
+maxlength="5"
+required>
+</div>
+
+<div class="shopix-form-group">
+<label>CVV</label>
+<input type="password"
+name="txtccv"
+placeholder="123"
+class="shopix-input"
+maxlength="3"
+pattern="[0-9]{3}"
+inputmode="numeric"
+required>
+</div>
+
+</div>
+
+<button type="submit" name="btn_pay" class="shopix-pay-btn">
+<i class="fa-solid fa-lock"></i> Pay Securely
+</button>
+
+<div class="shopix-icons">
+<i class="fab fa-cc-visa"></i>
+<i class="fab fa-cc-mastercard"></i>
+<i class="fab fa-cc-paypal"></i>
+</div>
+
+</div>
+
+<!-- ORDER SUMMARY -->
+
+<div class="shopix-order-summary">
+
+<h3>Order Summary</h3>
+
+<hr style="margin:15px 0">
+
+<div class="shopix-summary-row">
+<span>Items</span>
+<span>1</span>
+</div>
+
+<div class="shopix-summary-row">
+<span>Shipping</span>
+<span>Free</span>
+</div>
+
+<div class="shopix-summary-row">
+<span>Tax</span>
+<span>₹0</span>
+</div>
+
+<hr style="margin:15px 0">
+
+<div class="shopix-summary-row shopix-total">
+<span>Total</span>
+<span>₹ {{bookingdata.booking_amount}}</span>
+</div>
+
+<div class="shopix-qr">
+
+<p>Scan & Pay</p>
+
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PAYMENT{{bookingdata.id}}">
+
+<p style="font-size:12px;color:#666">
+UPI / Google Pay / PhonePe
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const creditCardInput = document.getElementById("credit-card");
-        const creditCardExp = document.getElementById("credit-card-exp");
-        const creditCardCcv = document.getElementById("credit-card-ccv");
 
-        creditCardInput.addEventListener("input", function () {
-            const inputValue = this.value.replace(/\D/g, ''); // Remove all non-digits
-            const formattedValue = formatCreditCard(inputValue);
-            this.value = formattedValue;
-        });
+/* CARD NUMBER FORMAT */
 
-        creditCardExp.addEventListener("input", function () {
-            const inputValue = this.value.replace(/\D/g, ''); // Remove all non-digits
-            const formattedValue = formatExpirationDate(inputValue);
-            this.value = formattedValue;
-        });
+const cardInput = document.querySelector("input[name='txtacno']");
 
-        // Function to validate expiration date
-        function validateExpirationDate(inputValue) {
-            const month = inputValue.slice(0, 2); // Extract month (assuming format MMYY)
-            const year = inputValue.slice(2, 4); // Extract year (assuming format MMYY)
+cardInput.addEventListener("input", function () {
 
-            // Get current date
-            const currentDate = new Date();
-            const currentYear = currentDate.getFullYear() % 100; // Get last two digits of current year
-            const currentMonth = currentDate.getMonth() + 1; // getMonth() returns 0-11, so add 1
+let value = this.value.replace(/\D/g,'').substring(0,16);
 
-            // Validate month is between 1 and 12
-            const isValidMonth = /^\d{2}$/.test(month) && parseInt(month, 10) >= 1 && parseInt(month, 10) <= 12;
+let formatted = value.match(/.{1,4}/g);
 
-            // Validate year is equal to or greater than current year
-            const isValidYear = /^\d{2}$/.test(year) && parseInt(year, 10) >= currentYear;
+this.value = formatted ? formatted.join(" ") : value;
 
-            let isValidDate = false;
+});
 
-            if (isValidMonth && isValidYear) {
-                const expYear = parseInt(year, 10);
-                const expMonth = parseInt(month, 10);
+/* CVV ONLY NUMBERS */
 
-                if (expYear > currentYear || (expYear === currentYear && expMonth >= currentMonth)) {
-                    isValidDate = true;
-                }
-            }
+const cvv = document.querySelector("input[name='txtccv']");
 
-            if (!isValidDate) {
-                // Handle invalid input (e.g., show error message, disable form submission)
-                console.log('Invalid expiration date');
-                alert('Invalid expiration date');
-                document.getElementById("credit-card-exp").value = '';
-                // Optionally, you can clear the input field or show an error message
-                // creditCardExp.value = '';
-            }
+cvv.addEventListener("input", function(){
+this.value = this.value.replace(/\D/g,'');
+});
+
+/* EXPIRY FORMAT */
+
+const expiry = document.querySelector("input[name='txtexpdate']");
+
+expiry.addEventListener("input", function(){
+    let value = this.value.replace(/\D/g,'').substring(0,4); // only digits, max 4
+
+    if(value.length >=3){
+        this.value = value.substring(0,2) + "/" + value.substring(2);
+    } else {
+        this.value = value;
+    }
+});
+
+expiry.addEventListener("blur", function(){
+    let parts = this.value.split("/");
+
+    if(parts.length === 2){
+        const month = parseInt(parts[0]);
+        const year = parseInt(parts[1]);
+
+        // Validate month
+        if(month < 1 || month > 12){
+            alert("Invalid expiry month");
+            this.value = "";
+            return false;
         }
 
+        // Validate year and month against current date
+        const today = new Date();
+        const currentYear = today.getFullYear() % 100; // last two digits
+        const currentMonth = today.getMonth() + 1;
 
-        // Event listener for onchange
-        creditCardExp.addEventListener("change", function () {
-            const inputValue = this.value.replace(/\D/g, ''); // Remove all non-digits
-            validateExpirationDate(inputValue);
-        });
+        if(year < currentYear || (year === currentYear && month < currentMonth)){
+            alert("Card has expired!");
+            this.value = "";
+            return false;
+        }
 
-
-        creditCardCcv.addEventListener("input", function () {
-            const inputValue = this.value.replace(/\D/g, ''); // Remove all non-digits
-            const formattedValue = formatCVV(inputValue);
-            this.value = formattedValue;
-        });
-    });
-
-    function formatCreditCard(value) {
-        const groups = value.match(/(\d{1,4})/g) || [];
-        return groups.join(' ');
+        alert("Expiry date is valid!");
+        return true;
     }
+});
 
-    function formatExpirationDate(value) {
-        const groups = value.match(/(\d{1,2})/g) || [];
-        return groups.join('/').slice(0, 5);
-    }
 
-    function formatCVV(value) {
-        return value.slice(0, 3);
-    }
+
 </script>
+
+</body>
+</html>
+
+{% endblock %}

@@ -1,64 +1,249 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>wishlist</title>
-<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Wishlist</title>
+
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
 <style>
-    .text-warning {
-        color: orange;
-    }
+
+/* PAGE BACKGROUND */
+
+.wishlist-page-wrapper{
+background:#f4f6fb;
+min-height:100vh;
+padding:40px;
+display:flex;
+justify-content:center;
+}
+
+/* CONTAINER */
+
+.wishlist-container{
+width:1100px;
+background:white;
+padding:30px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+animation:fadeInWishlist .5s ease;
+}
+
+/* TITLE */
+
+.wishlist-title{
+font-size:28px;
+font-weight:600;
+margin-bottom:20px;
+color:#333;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.wishlist-title i{
+color:#ff4d6d;
+}
+
+/* TABLE */
+
+.wishlist-table{
+width:100%;
+border-collapse:collapse;
+}
+
+.wishlist-table th{
+background:#4361ee;
+color:white;
+padding:12px;
+font-size:14px;
+text-align:center;
+}
+
+.wishlist-table td{
+padding:12px;
+border-bottom:1px solid #eee;
+font-size:14px;
+text-align:center;
+}
+
+.wishlist-table tr:hover{
+background:#f9faff;
+transition:.2s;
+}
+
+/* PRODUCT IMAGE */
+
+.wishlist-product-img{
+width:80px;
+height:80px;
+object-fit:cover;
+border-radius:8px;
+border:1px solid #eee;
+}
+
+/* STAR RATING */
+
+.text-warning{
+color:orange;
+font-size:14px;
+}
+
+.star-light{
+color:#ddd;
+}
+
+/* BUTTONS */
+
+.wishlist-btn{
+display:inline-block;
+padding:7px 14px;
+border-radius:6px;
+font-size:13px;
+text-decoration:none;
+margin:3px;
+transition:.2s;
+}
+
+.cart-btn{
+background:#4361ee;
+color:white;
+}
+
+.cart-btn:hover{
+background:#3246c6;
+}
+
+.view-btn{
+background:#f1f3f9;
+color:#333;
+}
+
+.view-btn:hover{
+background:#e4e7f3;
+}
+
+/* OUT OF STOCK */
+
+.out-stock{
+color:red;
+font-weight:500;
+}
+
+/* ANIMATION */
+
+@keyframes fadeInWishlist{
+from{
+opacity:0;
+transform:translateY(10px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
 </style>
+
+</head>
+
 <body>
-    <h2>Products</h2><br>
-    <table border="2" id="result">
 
-        <tr>
-            <td>Sl No</td>
-            <td>Name</td>
-            <td>Details</td>
-            <td>Price</td>
-            <td>Photo</td>
-            <td>Rating</td>
-            <td>Action</td>
-        </tr>
-        {% for i,j in wishlist %}
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{i.product.product_name}}</td>
-            <td>{{i.product.product_details}}</td>
-            <td>{{i.product.product_price}}</td>
-            <td align="center"><img src="{{i.product.product_photo.url}}" alt="" width="150"></td>
-            <td>{% for k in ar %}
-                {% if k <= j %} <i class="fa-solid fa-star text-warning"></i>
-                    {% else %}
-                    <i class="fa-solid fa-star star-light"></i>
-                    {% endif %}
-                    {% endfor %}
-            </td>
+<div class="wishlist-page-wrapper">
 
-            <td align="center">
-                {% if i.total_stock == 0 %}
-                <span style="color: red;">Out Of Stock</span>
-                {% else %}
-                <br><a href="{% url 'User:Addcart' i.product.id  %}">Add To Cart</a>
-                {% endif %}
-                <a href="{% url 'User:Viewmore' i.id  %}">View More</a>
+<div class="wishlist-container">
 
-        </tr>
-        {% endfor %}
-    </table>
+<div class="wishlist-title">
+<i class="fa-solid fa-heart"></i>
+My Wishlist
+</div>
+
+<table class="wishlist-table" id="result">
+
+<tr>
+<th>Sl No</th>
+<th>Name</th>
+<th>Details</th>
+<th>Price</th>
+<th>Photo</th>
+<th>Rating</th>
+<th>Action</th>
+</tr>
+
+{% for i,j in wishlist %}
+
+<tr>
+
+<td>{{forloop.counter}}</td>
+
+<td>{{i.product.product_name}}</td>
+
+<td>{{i.product.product_details}}</td>
+
+<td>₹ {{i.product.product_price}}</td>
+
+<td>
+<img src="{{i.product.product_photo.url}}" class="wishlist-product-img">
+</td>
+
+<td>
+
+{% for k in ar %}
+
+{% if k <= j %} <i class="fa-solid fa-star text-warning"></i>
+{% else %} <i class="fa-solid fa-star star-light"></i>
+{% endif %}
+
+{% endfor %}
+
+</td>
+
+<td>
+
+{% if i.product.total_stock == 0 %}
+
+<span class="out-stock">Out Of Stock</span>
+
+{% else %}
+
+<a href="{% url 'User:Addcart' i.product.id %}" class="wishlist-btn cart-btn">
+<i class="fa-solid fa-cart-shopping"></i> Add To Cart
+</a>
+
+{% endif %}
+
+<br>
+
+<a href="{% url 'User:Viewmore' i.product.id %}" class="wishlist-btn view-btn">
+<i class="fa-solid fa-eye"></i> View More
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</div>
+
 </body>
 
 </html>
+
 {% if msg %}
+
 <script>
-    alert("{{msg}}")
-    window.location = "{% url 'User:Viewproduct' %}"
+alert("{{msg}}")
+window.location="{% url 'User:Viewproduct' %}"
 </script>
+
 {% endif %}

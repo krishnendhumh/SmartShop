@@ -1,50 +1,192 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body><form action="" method="post">
-    {% csrf_token %}
-<h2>Feedbacks</h2>
-    <table border="2">
-        <tr>
-            <td>Content</td>
-            <td><textarea name="txt_content" id="txt_content"></textarea></td>
-        </tr>
-        <tr>
-            
-            <td colspan="2" align="center"><input type="submit" value="Submit"></td>
-        </tr>
-    </table>
+{% extends 'User/Head.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+
+.shopix-feedback-container{
+max-width:1000px;
+margin:auto;
+animation:fadeInUp 0.6s ease;
+}
+
+.shopix-feedback-card{
+background:#fff;
+padding:30px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+margin-bottom:40px;
+}
+
+.shopix-feedback-title{
+font-size:26px;
+font-weight:700;
+margin-bottom:20px;
+color:#333;
+}
+
+.shopix-textarea{
+width:100%;
+height:120px;
+border:1px solid #ddd;
+border-radius:8px;
+padding:12px;
+resize:none;
+font-size:15px;
+}
+
+.shopix-btn{
+background:#F28123;
+border:none;
+padding:10px 25px;
+color:#fff;
+font-weight:600;
+border-radius:6px;
+transition:0.3s;
+}
+
+.shopix-btn:hover{
+background:#051922;
+transform:scale(1.05);
+}
+
+.shopix-table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+.shopix-table th{
+background:#051922;
+color:#fff;
+padding:12px;
+font-weight:600;
+}
+
+.shopix-table td{
+padding:12px;
+border-bottom:1px solid #eee;
+}
+
+.shopix-delete-btn{
+color:#fff;
+background:#dc3545;
+padding:6px 14px;
+border-radius:5px;
+text-decoration:none;
+font-size:14px;
+}
+
+.shopix-delete-btn:hover{
+background:#a71d2a;
+}
+
+@keyframes fadeInUp{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+</style>
+
+
+
+<div class="shopix-feedback-container">
+
+<!-- Feedback Form -->
+
+<div class="shopix-feedback-card">
+
+<h2 class="shopix-feedback-title">
+<i class="fas fa-comment-dots"></i> Submit Feedback
+</h2>
+
+<form action="" method="post">
+
+{% csrf_token %}
+
+<textarea class="shopix-textarea"
+name="txt_content"
+placeholder="Write your feedback here..."
+required></textarea>
+
+<br><br>
+
+<button type="submit" class="shopix-btn">
+<i class="fas fa-paper-plane"></i> Submit Feedback
+</button>
+
 </form>
-<h2> All feedback</h2>
-<table border="2">
-    <tr>
-        <td>Sl No</td>
-        <td>Content</td>
-        <td>Date</td>
-        <td>Action</td>
-    </tr>
-    {% for i in feedback %}
-    <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{i.feed_content}}</td>
-        <td>{{i.feed_date}}</td>
-        <td>
-            <a href="{% url 'User:delfeedback' i.id %}">Delete</a>
-        </td>
-    </tr>
-    {% endfor %}
+
+</div>
+
+
+
+<!-- Feedback List -->
+
+<div class="shopix-feedback-card">
+
+<h2 class="shopix-feedback-title">
+<i class="fas fa-comments"></i> All Feedback
+</h2>
+
+<table class="shopix-table">
+
+<tr>
+<th>#</th>
+<th>Content</th>
+<th>Date</th>
+<th>Action</th>
+</tr>
+
+{% for i in feedback %}
+
+<tr>
+
+<td>{{ forloop.counter }}</td>
+
+<td>{{ i.feed_content }}</td>
+
+<td>{{ i.feed_date }}</td>
+
+<td>
+<a href="{% url 'User:delfeedback' i.id %}"
+class="shopix-delete-btn">
+<i class="fas fa-trash"></i> Delete
+</a>
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="4" align="center">No Feedback Available</td>
+</tr>
+
+{% endfor %}
+
 </table>
-    
-    
-</body>
-</html>
+
+</div>
+
+</div>
+
+
+
 {% if msg %}
+
 <script>
-    alert("{{msg}}")
-    window.location = "{% url 'User:Feedback' %}"
+alert("{{msg}}")
+window.location="{% url 'User:Feedback' %}"
 </script>
+
 {% endif %}
+
+{% endblock %}

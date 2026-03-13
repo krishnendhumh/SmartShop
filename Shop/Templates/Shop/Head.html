@@ -241,10 +241,10 @@ font-size:22px;
 
 <li><a href="{% url 'Shop:Homepage' %}">Home</a></li>
 
-<li><a href="{% url 'Shop:Product' %}">Add Products</a></li>
+<li><a href="{% url 'Shop:Product' %}">Manage Products</a></li>
 
 <li>
-<a href="#">My Account</a>
+<a href="#">Account</a>
 <ul class="sub-menu">
 <li><a href="{% url 'Shop:MyProfile' %}">My Profile</a></li>
 <li><a href="{% url 'Shop:EditProfile' %}">Edit Profile</a></li>
@@ -253,17 +253,20 @@ font-size:22px;
 </li>
 
 <li>
-<a href="{% url 'Shop:ViewBooking' %}">Orders</a>
+<a href="{% url 'Shop:ViewBooking' %}">Manage Order</a>
 <ul class="sub-menu">
 <li><a href="{% url 'Shop:ViewBooking' %}">View Orders</a></li>
 <li><a href="{% url 'Shop:ViewRequests' %}">Order Requests</a></li>
 </ul>
 </li>
+<li>
+<a href="{% url 'Shop:SalesReport' %}">Reports</a>
+</li>
 
 <li>
 <div class="header-icons">
 
-<a href="{% url 'Shop:logout' %}" class="logout-btn">
+<a href="{% url 'Guest:index' %}" class="logout-btn">
 <i class="fa-solid fa-right-from-bracket"></i> Logout
 </a>
 

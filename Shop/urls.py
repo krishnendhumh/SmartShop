@@ -4,8 +4,9 @@ app_name ="Shop"
 
 
 urlpatterns = [
-    path('logout/',views.logout,name="logout"),
+    # path('logout/',views.logout,name="logout"),
     path('Homepage/',views.Homepage,name="Homepage"),
+    path('sales_dashboard/',views.shop_sales_dashboard,name="sales_dashboard"),
     path('MyProfile/',views.MyProfile,name="MyProfile"),
     path('EditProfile/',views.EditProfile,name="EditProfile"),
     path('ChangePass/',views.ChangePass,name="ChangePass"),

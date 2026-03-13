@@ -171,153 +171,193 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Modernize Free</title>
-  <link rel="shortcut icon" type="image/png" href="{% static 'Admin/assets/images/logos/favicon.png' %}" />
+  <title>ShopiX</title>
+  <link rel="shortcut icon" type="image/png" href="{% static 'Main/assets/img/logo.png' %}" />
   <link rel="stylesheet" href="{% static 'Admin/assets/css/styles.min.css' %}" />
 </head>
 
 <body>
+  {% block content %}
+
+<style>
+.dashboard-card{
+border-radius:12px;
+transition:0.3s;
+}
+
+.dashboard-card:hover{
+transform:translateY(-5px);
+box-shadow:0 15px 35px rgba(0,0,0,0.15);
+}
+
+.icon-box{
+width:45px;
+height:45px;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-size:20px;
+}
+
+.users-card{
+border-left:4px solid #5D87FF;
+}
+
+.shop-card{
+border-left:4px solid #13DEB9;
+}
+
+.product-card{
+border-left:4px solid #FFAE1F;
+}
+
+.order-card{
+border-left:4px solid #FA896B;
+}
+</style>
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">
     <!-- Sidebar Start -->
-<aside class="left-sidebar">
-  <div>
-    <!-- Logo -->
-    <div class="brand-logo d-flex align-items-center justify-content-between">
-      <a href="{% url 'Admin:Homepage' %}" class="text-nowrap logo-img">
-        <img src="{% static 'Admin/assets/images/logos/dark-logo.svg' %}" width="180" alt="">
-      </a>
+    <aside class="left-sidebar">
+      <div>
+        <!-- Logo -->
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+          <a href="{% url 'Admin:Homepage' %}" class="text-nowrap logo-img">
+            <img src="{% static 'Main/assets/img/logo.png' %}" width="180" alt="">
+          </a>
 
-      <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
-        <i class="ti ti-x fs-8"></i>
+          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+            <i class="ti ti-x fs-8"></i>
+          </div>
+        </div>
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+          <ul id="sidebarnav">
+
+            <!-- Home -->
+            <li class="nav-small-cap">
+              <span class="hide-menu">HOME</span>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'Admin:Homepage' %}">
+                <i class="ti ti-layout-dashboard"></i>
+                <span class="hide-menu">Dashboard</span>
+              </a>
+            </li>
+
+            <!-- Masters -->
+            <li class="nav-small-cap">
+              <span class="hide-menu">MASTERS</span>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'Admin:District' %}">
+                <i class="ti ti-map"></i>
+                <span class="hide-menu">District</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'Admin:Place' %}">
+                <i class="ti ti-map-pin"></i>
+                <span class="hide-menu">Place</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'Admin:Category' %}">
+                <i class="ti ti-category"></i>
+                <span class="hide-menu">Category</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'Admin:SubCategory' %}">
+                <i class="ti ti-list"></i>
+                <span class="hide-menu">SubCategory</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'Admin:Brand' %}">
+                <i class="ti ti-tag"></i>
+                <span class="hide-menu">Brand</span>
+              </a>
+            </li>
+
+            <!-- Shop -->
+            <li class="nav-small-cap">
+              <span class="hide-menu">SHOP</span>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'Admin:ShopVerification' %}">
+                <i class="ti ti-check"></i>
+                <span class="hide-menu">Shop Verification</span>
+              </a>
+            </li>
+
+            <!-- Users -->
+            <li class="nav-small-cap">
+              <span class="hide-menu">USERS</span>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'Admin:UserList' %}">
+                <i class="ti ti-users"></i>
+                <span class="hide-menu">User List</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'Admin:Viewcomplaint' %}">
+                <i class="ti ti-message"></i>
+                <span class="hide-menu">Complaints</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'Admin:Viewfeedback' %}">
+                <i class="ti ti-star"></i>
+                <span class="hide-menu">Feedback</span>
+              </a>
+            </li>
+
+            <!-- Reports -->
+            <li class="nav-small-cap">
+              <span class="hide-menu">REPORTS</span>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'Admin:SalesReport' %}">
+                <i class="ti ti-chart-bar"></i>
+                <span class="hide-menu">Sales Report</span>
+              </a>
+            </li>
+
+            <!-- Logout -->
+            <li class="nav-small-cap">
+              <span class="hide-menu">AUTH</span>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'Admin:logout' %}">
+                <i class="ti ti-logout"></i>
+                <span class="hide-menu">Logout</span>
+              </a>
+            </li>
+
+          </ul>
+        </nav>
+
       </div>
-    </div>
-
-    <!-- Sidebar Navigation -->
-    <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
-      <ul id="sidebarnav">
-
-        <!-- Home -->
-        <li class="nav-small-cap">
-          <span class="hide-menu">HOME</span>
-        </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'Admin:Homepage' %}">
-            <i class="ti ti-layout-dashboard"></i>
-            <span class="hide-menu">Dashboard</span>
-          </a>
-        </li>
-
-        <!-- Masters -->
-        <li class="nav-small-cap">
-          <span class="hide-menu">MASTERS</span>
-        </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'Admin:District' %}">
-            <i class="ti ti-map"></i>
-            <span class="hide-menu">District</span>
-          </a>
-        </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'Admin:Place' %}">
-            <i class="ti ti-map-pin"></i>
-            <span class="hide-menu">Place</span>
-          </a>
-        </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'Admin:Category' %}">
-            <i class="ti ti-category"></i>
-            <span class="hide-menu">Category</span>
-          </a>
-        </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'Admin:SubCategory' %}">
-            <i class="ti ti-list"></i>
-            <span class="hide-menu">SubCategory</span>
-          </a>
-        </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'Admin:Brand' %}">
-            <i class="ti ti-tag"></i>
-            <span class="hide-menu">Brand</span>
-          </a>
-        </li>
-
-        <!-- Shop -->
-        <li class="nav-small-cap">
-          <span class="hide-menu">SHOP</span>
-        </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'Admin:ShopVerification' %}">
-            <i class="ti ti-check"></i>
-            <span class="hide-menu">Shop Verification</span>
-          </a>
-        </li>
-
-        <!-- Users -->
-        <li class="nav-small-cap">
-          <span class="hide-menu">USERS</span>
-        </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'Admin:UserList' %}">
-            <i class="ti ti-users"></i>
-            <span class="hide-menu">User List</span>
-          </a>
-        </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'Admin:Viewcomplaint' %}">
-            <i class="ti ti-message"></i>
-            <span class="hide-menu">Complaints</span>
-          </a>
-        </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'Admin:Viewfeedback' %}">
-            <i class="ti ti-star"></i>
-            <span class="hide-menu">Feedback</span>
-          </a>
-        </li>
-
-        <!-- Reports -->
-        <li class="nav-small-cap">
-          <span class="hide-menu">REPORTS</span>
-        </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'Admin:SalesReport' %}">
-            <i class="ti ti-chart-bar"></i>
-            <span class="hide-menu">Sales Report</span>
-          </a>
-        </li>
-
-        <!-- Logout -->
-        <li class="nav-small-cap">
-          <span class="hide-menu">AUTH</span>
-        </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'Admin:logout' %}">
-            <i class="ti ti-logout"></i>
-            <span class="hide-menu">Logout</span>
-          </a>
-        </li>
-
-      </ul>
-    </nav>
-
-  </div>
-</aside>
-<!-- Sidebar End -->
+    </aside>
+    <!-- Sidebar End -->
     <!--  Main wrapper -->
     <div class="body-wrapper">
       <!--  Header Start -->
@@ -338,11 +378,13 @@
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-              <a href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/" target="_blank" class="btn btn-primary">Download Free</a>
+              <a href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/" target="_blank"
+                class="btn btn-primary">Download Free</a>
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <img src="{% static 'Admin/assets/images/profile/user-1.jpg' %}" alt="" width="35" height="35" class="rounded-circle">
+                  <img src="{% static 'Admin/assets/images/profile/user-1.jpg' %}" alt="" width="35" height="35"
+                    class="rounded-circle">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
@@ -358,7 +400,8 @@
                       <i class="ti ti-list-check fs-6"></i>
                       <p class="mb-0 fs-3">My Task</p>
                     </a>
-                    <a href="{% static 'Admin/authentication-login.html' %}" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    <a href="{% static 'Admin/authentication-login.html' %}"
+                      class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -368,101 +411,132 @@
       </header>
       <!--  Header End -->
 
-     <div class="container-fluid">
-        <!--  Row 1 -->
+      <div class="container-fluid">
+
         <div class="row">
-          <div class="col-lg-8 d-flex align-items-strech">
-            <div class="card w-100">
-              <div class="card-body">
-                <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                  <div class="mb-3 mb-sm-0">
-                    <h5 class="card-title fw-semibold">Sales Overview</h5>
+
+          <div class="row">
+
+            <!-- SYSTEM OVERVIEW CHART -->
+
+            <div class="col-lg-8 d-flex align-items-stretch">
+              <div class="card w-100 shadow-sm border-0">
+
+                <div class="card-body">
+
+                  <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h5 class="card-title fw-bold">System Overview</h5>
                   </div>
-                  <div>
-                    <select class="form-select">
-                      <option value="1">March 2023</option>
-                      <option value="2">April 2023</option>
-                      <option value="3">May 2023</option>
-                      <option value="4">June 2023</option>
-                    </select>
+
+                  <div style="height:350px;">
+                    <canvas id="adminChart"></canvas>
                   </div>
+
                 </div>
-                <div id="chart"></div>
+
               </div>
             </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="row">
-              <div class="col-lg-12">
-                <!-- Yearly Breakup -->
-                <div class="card overflow-hidden">
-                  <div class="card-body p-4">
-                    <h5 class="card-title mb-9 fw-semibold">Yearly Breakup</h5>
-                    <div class="row align-items-center">
-                      <div class="col-8">
-                        <h4 class="fw-semibold mb-3">$36,358</h4>
-                        <div class="d-flex align-items-center mb-3">
-                          <span
-                            class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-arrow-up-left text-success"></i>
-                          </span>
-                          <p class="text-dark me-1 fs-3 mb-0">+9%</p>
-                          <p class="fs-3 mb-0">last year</p>
-                        </div>
-                        <div class="d-flex align-items-center">
-                          <div class="me-4">
-                            <span class="round-8 bg-primary rounded-circle me-2 d-inline-block"></span>
-                            <span class="fs-2">2023</span>
-                          </div>
-                          <div>
-                            <span class="round-8 bg-light-primary rounded-circle me-2 d-inline-block"></span>
-                            <span class="fs-2">2023</span>
-                          </div>
-                        </div>
+
+
+            <!-- RIGHT SIDE STATISTICS -->
+
+            <div class="col-lg-4">
+
+              <div class="row g-3">
+
+                <!-- USERS -->
+
+                <div class="col-12">
+                  <div class="card border-0 shadow-sm dashboard-card users-card">
+
+                    <div class="card-body d-flex justify-content-between align-items-center">
+
+                      <div>
+                        <p class="text-muted mb-1">Total Users</p>
+                        <h3 class="fw-bold mb-0">{{ user_count }}</h3>
                       </div>
-                      <div class="col-4">
-                        <div class="d-flex justify-content-center">
-                          <div id="breakup"></div>
-                        </div>
+
+                      <div class="icon-box bg-primary">
+                        <i class="ti ti-users"></i>
                       </div>
+
                     </div>
+
                   </div>
                 </div>
-              </div>
-              <div class="col-lg-12">
-                <!-- Monthly Earnings-->
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row alig n-items-start">
-                      <div class="col-8">
-                        <h5 class="card-title mb-9 fw-semibold"> Monthly Earnings </h5>
-                        <h4 class="fw-semibold mb-3">$6,820</h4>
-                        <div class="d-flex align-items-center pb-1">
-                          <span
-                            class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-arrow-down-right text-danger"></i>
-                          </span>
-                          <p class="text-dark me-1 fs-3 mb-0">+9%</p>
-                          <p class="fs-3 mb-0">last year</p>
-                        </div>
+
+
+                <!-- SHOPS -->
+
+                <div class="col-12">
+                  <div class="card border-0 shadow-sm dashboard-card shop-card">
+
+                    <div class="card-body d-flex justify-content-between align-items-center">
+
+                      <div>
+                        <p class="text-muted mb-1">Total Shops</p>
+                        <h3 class="fw-bold mb-0">{{ shop_count }}</h3>
                       </div>
-                      <div class="col-4">
-                        <div class="d-flex justify-content-end">
-                          <div
-                            class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-currency-dollar fs-6"></i>
-                          </div>
-                        </div>
+
+                      <div class="icon-box bg-success">
+                        <i class="ti ti-building-store"></i>
                       </div>
+
                     </div>
+
                   </div>
-                  <div id="earning"></div>
                 </div>
+
+
+                <!-- PRODUCTS -->
+
+                <div class="col-12">
+                  <div class="card border-0 shadow-sm dashboard-card product-card">
+
+                    <div class="card-body d-flex justify-content-between align-items-center">
+
+                      <div>
+                        <p class="text-muted mb-1">Total Products</p>
+                        <h3 class="fw-bold mb-0">{{ product_count }}</h3>
+                      </div>
+
+                      <div class="icon-box bg-warning">
+                        <i class="ti ti-package"></i>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+
+
+                <!-- ORDERS -->
+
+                <div class="col-12">
+                  <div class="card border-0 shadow-sm dashboard-card order-card">
+
+                    <div class="card-body d-flex justify-content-between align-items-center">
+
+                      <div>
+                        <p class="text-muted mb-1">Total Orders</p>
+                        <h3 class="fw-bold mb-0">{{ booking_count }}</h3>
+                      </div>
+
+                      <div class="icon-box bg-danger">
+                        <i class="ti ti-shopping-cart"></i>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+
               </div>
+
             </div>
+
           </div>
-        </div>
-        <!-- <--<div class="row">
+          <!-- <--<div class="row">
           <div class="col-lg-4 d-flex align-items-stretch">
             <div class="card w-100">
               <div class="card-body p-4">
@@ -713,19 +787,79 @@
             </div>
           </div>
         </div> -->
-        <div class="py-6 px-6 text-center">
-          <p class="mb-0 fs-4">Design and Developed by <a href="https://adminmart.com/" target="_blank" class="pe-1 text-primary text-decoration-underline">AdminMart.com</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a></p>
+          <div class="py-6 px-6 text-center">
+            <p class="mb-0 fs-4"><a href="https://adminmart.com/" target="_blank"
+                class="pe-1 text-primary text-decoration-underline"></a> <a href="https://themewagon.com">ThemeWagon</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div> 
-  <script src="{% static 'Admin/assets/libs/jquery/dist/jquery.min.js' %}"></script>
-  <script src="{% static 'Admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'Admin/assets/js/sidebarmenu.js' %}"></script>
-  <script src="{% static 'Admin/assets/js/app.min.js' %}"></script>
-  <script src="{% static 'Admin/assets/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
-  <script src="{% static 'Admin/assets/libs/simplebar/dist/simplebar.js' %}"></script>
-  <script src="{% static 'Admin/assets/js/dashboard.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+
+        const users = Number("{{ user_count|default:0 }}");
+        const shops = Number("{{ shop_count|default:0 }}");
+        const products = Number("{{ product_count|default:0 }}");
+        const orders = Number("{{ booking_count|default:0 }}");
+
+        const ctx = document.getElementById("adminChart");
+
+        if (ctx) {
+
+          new Chart(ctx, {
+
+            type: 'bar',
+
+            data: {
+              labels: ['Users', 'Shops', 'Products', 'Orders'],
+
+              datasets: [{
+                label: 'System Statistics',
+
+                data: [users, shops, products, orders],
+
+                backgroundColor: [
+                  '#5D87FF',
+                  '#49BEFF',
+                  '#13DEB9',
+                  '#FFAE1F'
+                ]
+
+              }]
+
+            },
+
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  display: true
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+
+          });
+
+        }
+
+      });
+    </script>
+    <script src="{% static 'Admin/assets/libs/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'Admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'Admin/assets/js/sidebarmenu.js' %}"></script>
+    <script src="{% static 'Admin/assets/js/app.min.js' %}"></script>
+    <script src="{% static 'Admin/assets/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
+    <script src="{% static 'Admin/assets/libs/simplebar/dist/simplebar.js' %}"></script>
+    <script src="{% static 'Admin/assets/js/dashboard.js' %}"></script>
 </body>
 
 </html>
+{% endblock %}

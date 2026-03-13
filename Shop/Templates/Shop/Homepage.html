@@ -74,13 +74,13 @@
 
                                 <!-- Shop -->
                                 <li>
-                                    <a href="{% url 'Shop:Product' %}">Add Products</a>
+                                    <a href="{% url 'Shop:Product' %}">Manage Products</a>
 
                                 </li>
 
                                 <!-- Profile -->
                                 <li>
-                                    <a href="#">My Account</a>
+                                    <a href="#">Account</a>
                                     <ul class="sub-menu">
                                         <li><a href="{% url 'Shop:MyProfile' %}">My Profile</a></li>
                                         <li><a href="{% url 'Shop:EditProfile' %}">Edit Profile</a></li>
@@ -90,11 +90,14 @@
 
                                 <!-- Orders -->
                                 <li>
-                                    <a href="{% url 'Shop:ViewBooking' %}">Orders</a>
+                                    <a href="{% url 'Shop:ViewBooking' %}">Manage Orders</a>
                                     <ul class="sub-menu">
                                         <li><a href="{% url 'Shop:ViewBooking' %}">View Orders</a></li>
                                         <li><a href="{% url 'Shop:ViewRequests' %}">Order Requests</a></li>
                                     </ul>
+                                </li>
+                                <li>
+                                    <a href="{% url 'Shop:SalesReport' %}">Reports</a>
                                 </li>
 
                                 <!-- Support -->
@@ -106,16 +109,13 @@
                                     </ul>
                                 </li> -->
 
-                                <!-- Logout -->
-                                <!-- <li>
-                                    <a href="{% url 'User:logout' %}">Logout</a>
-                                </li> -->
+
 
                                 <!-- Icons -->
                                 <li>
                                     <div class="header-icons">
 
-                                        <a class="shopping-cart" href="{% url 'User:logout' %}">
+                                        <a class="shopping-cart" href="{% url 'Guest:index' %}">
                                             <i class="fas fa-sign-out-alt"></i> Logout
                                         </a>
 

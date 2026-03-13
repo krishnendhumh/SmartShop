@@ -26,8 +26,6 @@ class tbl_booking(models.Model):
     booking_date = models.DateField(auto_now_add=True)
     user = models.ForeignKey(tbl_user,on_delete=models.CASCADE)
     
-    
-
 class tbl_cart(models.Model):
     cart_qty = models.IntegerField(default=1)
     cart_status = models.IntegerField(default=0)

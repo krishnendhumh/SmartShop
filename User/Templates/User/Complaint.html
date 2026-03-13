@@ -1,70 +1,309 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complaint</title>
-</head>
-<body>
+{% extends 'User/Head.html' %}
+{% block content %}
 
-<h2>Submit Complaint</h2>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 
-<form action="" method="post">
-    {% csrf_token %}
-    <table border="1">
-        <tr>
-            <td>Title</td>
-            <td><input type="text" name="txt_title" required></td>
-        </tr>
-        <tr>
-            <td>Content</td>
-            <td><textarea name="txt_content" required></textarea></td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <input type="submit" value="Submit">
-            </td>
-        </tr>
-    </table>
+<style>
+
+/* PAGE BACKGROUND */
+
+.shopix-complaint-page{
+min-height:100vh;
+background:linear-gradient(135deg,#eef2ff,#f8fafc);
+padding:50px 20px;
+font-family:'Segoe UI',sans-serif;
+animation:shopixFade 0.6s ease;
+}
+
+/* FADE ANIMATION */
+
+@keyframes shopixFade{
+from{opacity:0;transform:translateY(15px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+/* WRAPPER */
+
+.shopix-complaint-wrapper{
+max-width:1100px;
+margin:auto;
+}
+
+/* CARD */
+
+.shopix-complaint-card{
+background:white;
+border-radius:14px;
+padding:30px;
+margin-bottom:30px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.shopix-complaint-card:hover{
+transform:translateY(-4px);
+box-shadow:0 15px 35px rgba(0,0,0,0.12);
+}
+
+/* TITLES */
+
+.shopix-complaint-title{
+font-size:24px;
+font-weight:600;
+margin-bottom:20px;
+color:#1f2937;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+/* FORM */
+
+.shopix-form-group{
+margin-bottom:20px;
+position:relative;
+}
+
+.shopix-form-input,
+.shopix-form-textarea{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:1px solid #ddd;
+font-size:14px;
+background:#fafafa;
+transition:0.25s;
+}
+
+.shopix-form-textarea{
+height:100px;
+resize:none;
+}
+
+.shopix-form-input:focus,
+.shopix-form-textarea:focus{
+outline:none;
+border-color:#4f46e5;
+box-shadow:0 0 0 2px rgba(79,70,229,0.1);
+background:white;
+}
+
+/* SUBMIT BUTTON */
+
+.shopix-submit-btn{
+background:linear-gradient(90deg,#4f46e5,#6366f1);
+color:white;
+border:none;
+padding:12px 25px;
+border-radius:8px;
+font-size:14px;
+cursor:pointer;
+transition:0.3s;
+display:inline-flex;
+align-items:center;
+gap:8px;
+}
+
+.shopix-submit-btn:hover{
+transform:scale(1.05);
+box-shadow:0 6px 15px rgba(79,70,229,0.3);
+}
+
+/* TABLE */
+
+.shopix-complaint-table{
+width:100%;
+border-collapse:collapse;
+overflow:hidden;
+border-radius:10px;
+}
+
+.shopix-complaint-table th{
+background:#111827;
+color:white;
+padding:12px;
+font-size:14px;
+text-align:center;
+}
+
+.shopix-complaint-table td{
+padding:12px;
+border-bottom:1px solid #eee;
+text-align:center;
+font-size:14px;
+transition:0.2s;
+}
+
+.shopix-complaint-table tr:hover{
+background:#f8fafc;
+transform:scale(1.01);
+}
+
+/* STATUS */
+
+.shopix-status-pending{
+background:#fef3c7;
+color:#92400e;
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+}
+
+.shopix-status-replied{
+background:#dcfce7;
+color:#166534;
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+}
+
+/* DELETE BUTTON */
+
+.shopix-delete-btn{
+background:#ef4444;
+color:white;
+padding:6px 12px;
+border-radius:6px;
+text-decoration:none;
+font-size:13px;
+display:inline-flex;
+align-items:center;
+gap:5px;
+transition:0.25s;
+}
+
+.shopix-delete-btn:hover{
+background:#dc2626;
+transform:scale(1.08);
+box-shadow:0 4px 10px rgba(220,38,38,0.3);
+}
+
+/* NO DATA */
+
+.shopix-no-data{
+padding:25px;
+color:#6b7280;
+font-style:italic;
+}
+
+</style>
+
+<div class="shopix-complaint-page">
+
+<div class="shopix-complaint-wrapper">
+
+<!-- SUBMIT FORM -->
+
+<div class="shopix-complaint-card">
+
+<div class="shopix-complaint-title">
+<i class="fa-solid fa-circle-exclamation"></i> Submit Complaint
+</div>
+
+<form method="post">
+
+{% csrf_token %}
+
+<div class="shopix-form-group">
+<input type="text" name="txt_title" placeholder="Complaint Title" class="shopix-form-input" required>
+</div>
+
+<div class="shopix-form-group">
+<textarea name="txt_content" placeholder="Describe your issue..." class="shopix-form-textarea" required></textarea>
+</div>
+
+<button type="submit" class="shopix-submit-btn">
+<i class="fa-solid fa-paper-plane"></i> Submit Complaint
+</button>
+
 </form>
 
-<br><br>
+</div>
 
-<h2>Complaint List</h2>
+<!-- COMPLAINT LIST -->
 
-<table border="1">
-    <tr>
-        <th>Sl No</th>
-        <th>Title</th>
-        <th>Content</th>
-        <th>Date</th>
-        <th>Reply</th>
-        <th>Action</th>
-    </tr>
+<div class="shopix-complaint-card">
 
-    {% for i in complaints %}
-    <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ i.com_title }}</td>
-        <td>{{ i.com_content }}</td>
-        <td>{{ i.com_date }}</td>
-        <td>{{ i.com_reply}}</td>
-        <td>
-            <a href="{% url 'User:delcomplaint' i.id %}">Delete</a>
-        </td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="6" align="center">No complaints found</td>
-    </tr>
-    {% endfor %}
+<div class="shopix-complaint-title">
+<i class="fa-solid fa-list"></i> Complaint History
+</div>
+
+<table class="shopix-complaint-table">
+
+<tr>
+<th>Sl No</th>
+<th>Title</th>
+<th>Content</th>
+<th>Date</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+{% for i in complaints %}
+
+<tr>
+
+<td>{{forloop.counter}}</td>
+
+<td>{{i.com_title}}</td>
+
+<td>{{i.com_content}}</td>
+
+<td>{{i.com_date}}</td>
+
+<td>
+
+{% if i.com_reply %}
+
+<span class="shopix-status-replied">
+Replied
+</span>
+
+{% else %}
+
+<span class="shopix-status-pending">
+Pending
+</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+<a href="{% url 'User:delcomplaint' i.id %}" class="shopix-delete-btn">
+<i class="fa-solid fa-trash"></i> Delete
+</a>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="6" class="shopix-no-data">
+No complaints found
+</td>
+</tr>
+
+{% endfor %}
+
 </table>
 
-</body>
-</html>
+</div>
+
+</div>
+
+</div>
+
 {% if msg %}
+
 <script>
-    alert("{{msg}}")
-    window.location="{% url 'User:Complaint' %}"
+alert("{{msg}}")
+window.location="{% url 'User:Complaint' %}"
 </script>
+
 {% endif %}
+
+{% endblock %}

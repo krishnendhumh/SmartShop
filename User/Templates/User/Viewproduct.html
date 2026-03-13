@@ -1,127 +1,321 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'User/Head.html' %}
+{% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>view product</title>
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-</head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
 <style>
-    .text-warning {
-        color: orange;
-    }
+
+body{
+background:#f1f3f6;
+font-family:'Segoe UI',sans-serif;
+}
+
+/* MAIN WRAPPER */
+
+.shopix-products-wrapper{
+padding:40px;
+max-width:1300px;
+margin:auto;
+}
+
+/* PAGE TITLE */
+
+.shopix-products-title{
+font-size:28px;
+font-weight:600;
+margin-bottom:25px;
+color:#212121;
+}
+
+/* FILTER BAR */
+
+.shopix-filter-bar{
+background:white;
+padding:18px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+margin-bottom:25px;
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.shopix-filter-bar input,
+.shopix-filter-bar select{
+padding:8px 10px;
+border-radius:6px;
+border:1px solid #ccc;
+min-width:170px;
+}
+
+/* PRODUCT GRID */
+
+.shopix-product-grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+gap:25px;
+}
+
+/* PRODUCT CARD */
+
+.shopix-product-card{
+background:white;
+border-radius:10px;
+padding:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+transition:0.25s;
+}
+
+.shopix-product-card:hover{
+transform:translateY(-5px);
+box-shadow:0 12px 25px rgba(0,0,0,0.15);
+}
+
+/* IMAGE */
+
+.shopix-product-img{
+width:100%;
+height:190px;
+object-fit:cover;
+border-radius:8px;
+margin-bottom:10px;
+}
+
+/* PRODUCT NAME */
+
+.shopix-product-name{
+font-size:16px;
+font-weight:600;
+color:#212121;
+margin-bottom:5px;
+}
+
+/* PRODUCT DETAILS */
+
+.shopix-product-details{
+font-size:13px;
+color:#777;
+height:40px;
+overflow:hidden;
+}
+
+/* PRICE */
+
+.shopix-product-price{
+font-size:18px;
+font-weight:700;
+color:#2e7d32;
+margin-top:6px;
+}
+
+/* RATING */
+
+.shopix-product-rating{
+color:orange;
+margin-top:4px;
+font-size:14px;
+}
+
+/* BUTTON AREA */
+
+.shopix-product-actions{
+margin-top:10px;
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}
+
+/* BUTTON */
+
+.shopix-btn{
+padding:6px 10px;
+border-radius:6px;
+font-size:13px;
+color:white;
+text-decoration:none;
+}
+
+.shopix-cart{
+background:#2874f0;
+}
+
+.shopix-view{
+background:#20c997;
+}
+
+.shopix-wish{
+background:#ff6161;
+}
+
+.shopix-cart:hover{
+background:#1a5edb;
+}
+
+.shopix-view:hover{
+background:#17a673;
+}
+
+.shopix-wish:hover{
+background:#e84141;
+}
+
+/* STOCK */
+
+.shopix-outstock{
+color:red;
+font-weight:600;
+margin-top:8px;
+}
+
 </style>
 
-<body>
-    <table border="2">
-        <tr>
+<div class="shopix-products-wrapper">
 
-            <td>Name : <input type="text" name="txt_name" id="txt_name"></td>
-            <td>Category :
-                <select name="sel_category" id="sel_category" onchange="AjaxSearch()">
-                    <option value="">--select--</option>
-                    {% for i in categorydata %}
-                    <option value="{{i.id}}">
-                        {{i.category_name}}</option>
-                    {% endfor %}
-                </select>
-            </td>
-            <td>Subcategory : <select name="sel_subcategory" id="sel_subcategory" onchange="AjaxSearch()">
-                    <option value="">--select--</option>
-                </select></td>
-            <td>Brand :<select name="sel_brand" id="sel_brand" onchange="AjaxSearch()">
-                    <option value="">--select--</option>
-                    {% for i in branddata %}
-                    <option value="{{i.id}}">
-                        {{i.brand_name}}</option>
-                    {% endfor %}
-                </select></td>
+<div class="shopix-products-title">
+<i class="fa-solid fa-bag-shopping"></i> Products
+</div>
 
-        </tr>
-    </table>
-    <h2>Products</h2><br>
-    <table border="2" id="result" cellpadding="10">
+<!-- FILTER BAR -->
 
-        <tr>
-            <td>Sl No</td>
-            <td>Name</td>
-            <td>Details</td>
-            <td>Price</td>
-            <td>Photo</td>
-            <td>Rating</td>
-            <td>Action</td>
-        </tr>
-        {% for i,j in product %}
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{i.product_name}}</td>
-            <td>{{i.product_details}}</td>
-            <td>{{i.product_price}}</td>
+<div class="shopix-filter-bar">
 
-            <td align="center"><img src="{{i.product_photo.url}}" alt="" width="150"></td>
-            <td>
-                {% for k in ar %}
-                {% if k <= j %} <i class="fa-solid fa-star text-warning"></i>
-                    {% else %}
-                    <i class="fa-solid fa-star star-light"></i>
-                    {% endif %}
-                    {% endfor %}
-            </td>
+<input type="text" placeholder="Search Product..." id="txt_name" onkeyup="AjaxSearch()">
 
-            <td align="center">
-                {% if i.total_stock == 0 %}
-                <span style="color: red;">Out Of Stock</span>
-                {% else %}
-                <br><a href="{% url 'User:Addcart' i.id  %}">Add To Cart</a>
-                {% endif %}
-                <a href="{% url 'User:Viewmore' i.id  %}">View More</a>
-                <br><a href="{% url 'User:Wishlist' i.id  %}">Add To WishList</a>
+<select id="sel_category" onchange="AjaxSearch()">
+<option value="">Category</option>
+{% for i in categorydata %}
+<option value="{{i.id}}">{{i.category_name}}</option>
+{% endfor %}
+</select>
 
+<select id="sel_subcategory" onchange="AjaxSearch()">
+<option value="">Subcategory</option>
+</select>
 
-            </td>
+<select id="sel_brand" onchange="AjaxSearch()">
+<option value="">Brand</option>
+{% for i in branddata %}
+<option value="{{i.id}}">{{i.brand_name}}</option>
+{% endfor %}
+</select>
 
-        </tr>
-        {% endfor %}
-    </table>
-</body>
+</div>
 
-</html>
+<!-- PRODUCT GRID -->
+
+<div class="shopix-product-grid" id="result">
+
+{% for i,j in product %}
+
+<div class="shopix-product-card">
+
+<img src="{{i.product_photo.url}}" class="shopix-product-img">
+
+<div class="shopix-product-name">
+{{i.product_name}}
+</div>
+
+<div class="shopix-product-details">
+{{i.product_details}}
+</div>
+
+<div class="shopix-product-price">
+₹ {{i.product_price}}
+</div>
+
+<div class="shopix-product-rating">
+
+{% for k in ar %}
+
+{% if k <= j %} <i class="fa-solid fa-star"></i>
+{% else %} <i class="fa-regular fa-star"></i>
+{% endif %}
+
+{% endfor %}
+
+</div>
+
+{% if i.total_stock == 0 %}
+
+<div class="shopix-outstock">
+Out Of Stock
+</div>
+
+{% else %}
+
+<div class="shopix-product-actions">
+
+<a href="{% url 'User:Addcart' i.id %}" class="shopix-btn shopix-cart">
+<i class="fa-solid fa-cart-shopping"></i>
+</a>
+
+<a href="{% url 'User:Viewmore' i.id %}" class="shopix-btn shopix-view">
+<i class="fa-solid fa-eye"></i>
+</a>
+
+<a href="{% url 'User:Wishlist' i.id %}" class="shopix-btn shopix-wish">
+<i class="fa-solid fa-heart"></i>
+</a>
+
+</div>
+
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
 {% if msg %}
+
 <script>
-    alert("{{msg}}")
-    window.location = "{% url 'User:Viewproduct' %}"
+alert("{{msg}}")
+window.location="{% url 'User:Viewproduct' %}"
 </script>
+
 {% endif %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-    $("#sel_category").change(function () {
-        var categoryId = $(this).val();
-        var ur = "{% url 'Shop:Ajaxsubcategory' %}";
-        $.ajax({
-            url: ur,
-            data: { categoryId: categoryId },
-            success: function (data) {
-                $("#sel_subcategory").html(data);
-            },
-        });
-    });
 
-    function AjaxSearch() {
-        var name = document.getElementById("txt_name").value
-        var categoryId = document.getElementById("sel_category").value
-        var subcategoryId = document.getElementById("sel_subcategory").value
-        var brandId = document.getElementById("sel_brand").value
-        var ur = "{% url 'User:AjaxSearch' %}";
-        $.ajax({
-            url: ur,
-            data: { categoryId: categoryId, subcategoryId: subcategoryId, brandId: brandId, name: name },
-            success: function (data) {
-                $("#result").html(data);
-            },
-        });
-    }
+<script>
+
+$("#sel_category").change(function () {
+
+var categoryId = $(this).val();
+var ur = "{% url 'Shop:Ajaxsubcategory' %}";
+
+$.ajax({
+url: ur,
+data: { categoryId: categoryId },
+success: function (data) {
+$("#sel_subcategory").html(data);
+},
+});
+
+});
+
+function AjaxSearch(){
+
+var name = document.getElementById("txt_name").value
+var categoryId = document.getElementById("sel_category").value
+var subcategoryId = document.getElementById("sel_subcategory").value
+var brandId = document.getElementById("sel_brand").value
+
+var ur = "{% url 'User:AjaxSearch' %}";
+
+$.ajax({
+url: ur,
+data: { categoryId: categoryId, subcategoryId: subcategoryId, brandId: brandId, name: name },
+success: function (data) {
+$("#result").html(data);
+},
+});
+
+}
+
 </script>
+
+{% endblock %}
