@@ -4,7 +4,7 @@ app_name ="User"
 
 
 urlpatterns = [
-    # path('logout/',views.logout,name="logout"),
+    path('logout/',views.logout,name="logout"),
     path('Homepage/',views.Homepage,name="Homepage"),
     path('MyProfile/',views.MyProfile,name="MyProfile"),
     path('EditProfile/',views.EditProfile,name="EditProfile"),

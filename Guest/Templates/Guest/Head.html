@@ -1,234 +1,232 @@
 {% load static %}
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description"
-		content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ShopiX</title>
 
-	<!-- title -->
-	<title>Fruitkha</title>
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/png" href="{% static 'Main/assets/img/favicon.png' %}">
 
-	<!-- favicon -->
-	<link rel="shortcut icon" type="image/png" href="{% static 'Main/assets/img/favicon.png' %}">
-	<!-- google font -->
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-	<!-- fontawesome -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/all.min.css' %}">
-	<!-- bootstrap -->
-	<link rel="stylesheet" href="{% static 'Main/assets/bootstrap/css/bootstrap.min.css' %}">
-	<!-- owl carousel -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/owl.carousel.css' %}">
-	<!-- magnific popup -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/magnific-popup.css' %}">
-	<!-- animate css -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/animate.css' %}">
-	<!-- mean menu css -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/meanmenu.min.css' %}">
-	<!-- main style -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/main.css' %}">
-	<!-- responsive -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/responsive.css' %}">
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
 
+    <!-- css -->
+    <link rel="stylesheet" href="{% static 'Main/assets/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Main/assets/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Main/assets/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'Main/assets/css/meanmenu.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Main/assets/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'Main/assets/css/responsive.css' %}">
+
+    <!-- 🔥 Custom Blue Theme -->
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #e5e7eb;
+        }
+
+        .top-header-area {
+            background: rgba(15, 23, 42, 0.95) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .main-menu ul li a {
+            color: #e5e7eb;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .main-menu ul li a:hover {
+            color: #60a5fa;
+        }
+
+        .sub-menu {
+            background: #020617;
+            border-radius: 10px;
+        }
+
+        .sub-menu li a:hover {
+            color: #3b82f6;
+        }
+
+        .header-icons i {
+            color: #e5e7eb;
+            transition: 0.3s;
+        }
+
+        .header-icons i:hover {
+            color: #60a5fa;
+        }
+
+        /* Footer */
+        .footer-area {
+            background: #020617;
+            color: #94a3b8;
+        }
+
+        .footer-box h2 {
+            color: #60a5fa;
+        }
+
+        .footer-box ul li a {
+            color: #cbd5f5;
+        }
+
+        .footer-box ul li a:hover {
+            color: #60a5fa;
+        }
+
+        .copyright {
+            background: #020617;
+            color: #64748b;
+        }
+
+        /* Smooth animation */
+        .page-container {
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+    </style>
 </head>
 
 <body>
 
-	<!--PreLoader-->
-	<div class="loader">
-		<div class="loader-inner">
-			<div class="circle"></div>
-		</div>
-	</div>
-	<!--PreLoader Ends-->
-
-	<!-- header -->
-	<div class="top-header-area bg-dark" id="sticker">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12 col-sm-12 text-center">
-					<div class="main-menu-wrap">
-						<!-- logo -->
-						<div class="site-logo">
-							<a href="{% static 'Main/index.html' %}">
-								<img src="{% static 'Main/assets/img/logo.png' %}" alt="" width="60">
-							</a>
-						</div>
-						<!-- logo -->
-
-						<!-- menu start -->
-						<nav class="main-menu">
-							<ul>
-								<li class="current-list-item"><a href="#">Home</a>
-									<ul class="sub-menu">
-										<li><a href="{% static 'Main/index.html' %}">Static Home</a></li>
-										<li><a href="{% static 'Main/index_2.html' %}">Slider Home</a></li>
-									</ul>
-								</li>
-								<li><a href="{% static 'Main/about.html' %}">About</a></li>
-								<li><a href="#">Pages</a>
-									<ul class="sub-menu">
-										<li><a href="{% static 'Main/404.html' %}">404 page</a></li>
-										<li><a href="{% static 'Main/about.html' %}">About</a></li>
-										<li><a href="{% static 'Main/cart.html' %}">Cart</a></li>
-										<li><a href="{% static 'Main/checkout.html' %}">Check Out</a></li>
-										<li><a href="{% static 'Main/contact.html' %}">Contact</a></li>
-										<li><a href="{% static 'Main/news.html' %}">News</a></li>
-										<li><a href="{% static 'Main/shop.html' %}">Shop</a></li>
-									</ul>
-								</li>
-								<!-- <li><a href="{% static 'Main/news.html' %}">News</a>
-									<ul class="sub-menu">
-										<li><a href="{% static 'Main/news.html'%}">News</a></li>
-										<li><a href="{% static 'Main/single-news.html'%}">Single News</a></li>
-									</ul>
-								</li>
-								<li><a href="{% static 'Main/contact.html' %}">Contact</a></li> -->
-								<!-- <li><a href="{% static 'Main/shop.html' %}">Shop</a>
-									<ul class="sub-menu">
-										<li><a href="{% static 'Main/shop.html' %}">Shop</a></li>
-										<li><a href="{% static 'Main/checkout.html' %}">Check Out</a></li>
-										<li><a href="{% static 'Main/single-product.html' %}">Single Product</a></li>
-										<li><a href="{% static 'Main/cart.html' %}">Cart</a></li>
-									</ul>
-								</li> -->
-								<li><a href="{% url 'Guest:Login' %}">Login</a></li>
-								<li><a href="{% url 'Guest:UserRegistration' %}">Register</a>
-									<ul class="sub-menu">
-										<li><a href="{% url 'Guest:UserRegistration' %}">Customer</a></li>
-										<li><a href="{% url 'Guest:ShopReg' %}">Shop</a></li>
-									</ul>
-								<li>
-									<div class="header-icons">
-										<a class="shopping-cart" href="{% static 'Main/cart.html' %}"><i
-												class="fas fa-shopping-cart"></i></a>
-										<a class="mobile-hide search-bar-icon" href="#"><i
-												class="fas fa-search"></i></a>
-									</div>
-								</li>
-							</ul>
-						</nav>
-						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-						<div class="mobile-menu"></div>
-						<!-- menu end -->
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end header -->
-
-
-    <div style="padding-top: 160px;padding-bottom: 50px;" align="center">
-
-
-    {% block content %}
-    {% endblock %}
+    <!-- Preloader -->
+    <div class="loader">
+        <div class="loader-inner">
+            <div class="circle"></div>
+        </div>
     </div>
 
-    
-	<!-- footer -->
-	<div class="footer-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box about-widget">
-						<h2 class="widget-title">About us</h2>
-						<p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium
-							doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box get-in-touch">
-						<h2 class="widget-title">Get in Touch</h2>
-						<ul>
-							<li>34/8, East Hukupara, Gifirtok, Sadan.</li>
-							<li>support@fruitkha.com</li>
-							<li>+00 111 222 3333</li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box pages">
-						<h2 class="widget-title">Pages</h2>
-						<ul>
-							<li><a href="{% static 'Main/index.html' %}">Home</a></li>
-							<li><a href="about.html">About</a></li>
-							<li><a href="services.html">Shop</a></li>
-							<li><a href="news.html">News</a></li>
-							<li><a href="contact.html">Contact</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box subscribe">
-						<h2 class="widget-title">Subscribe</h2>
-						<p>Subscribe to our mailing list to get the latest updates.</p>
-						<form action="{% static 'Main/index.html' %}">
-							<input type="email" placeholder="Email">
-							<button type="submit"><i class="fas fa-paper-plane"></i></button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end footer -->
+    <div class="top-header-area" id="sticker">
+    <div class="container">
+        <div class="row align-items-center"> <div class="col-lg-12">
+                <div class="main-menu-wrap d-flex align-items-center justify-content-between">
 
-	<!-- copyright -->
-	<div class="copyright">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6 col-md-12">
-					<p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>, All Rights
-						Reserved.<br>
-						Distributed By - <a href="https://themewagon.com/">Themewagon</a>
-					</p>
-				</div>
-				<div class="col-lg-6 text-right col-md-12">
-					<div class="social-icons">
-						<ul>
-							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end copyright -->
+                    <div class="site-logo">
+                        <a href="{% url 'Guest:index' %}">
+                            <img src="{% static 'Main/assets/img/logo.png' %}" alt="ShopiX Logo" width="60">
+                        </a>
+                    </div>
 
-	<!-- jquery -->
-	<script src="{% static 'Main/assets/js/jquery-1.11.3.min.js' %}"></script>
-	<!-- bootstrap -->
-	<script src="{% static 'Main/assets/bootstrap/js/bootstrap.min.js' %}"></script>
-	<!-- count down -->
-	<script src="{% static 'Main/assets/js/jquery.countdown.js' %}"></script>
-	<!-- isotope -->
-	<script src="{% static 'Main/assets/js/jquery.isotope-3.0.6.min.js' %}"></script>
-	<!-- waypoints -->
-	<script src="{% static 'Main/assets/js/waypoints.js' %}"></script>
-	<!-- owl carousel -->
-	<script src="{% static 'Main/assets/js/owl.carousel.min.js' %}"></script>
-	<!-- magnific popup -->
-	<script src="{% static 'Main/assets/js/jquery.magnific-popup.min.js' %}"></script>
-	<!-- mean menu -->
-	<script src="{% static 'Main/assets/js/jquery.meanmenu.min.js' %}"></script>
-	<!-- sticker js -->
-	<script src="{% static 'Main/assets/js/sticker.js' %}"></script>
-	<!-- main js -->
-	<script src="{% static 'Main/assets/js/main.js' %}"></script>
+                    <nav class="main-menu">
+                        <ul class="d-flex align-items-center list-unstyled mb-0">
+                            <li class="current-list-item"><a href="{% url 'Guest:index' %}">Home</a></li>
+                            <li><a href="{% url 'User:Viewproduct' %}">Shop</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="{% url 'Guest:Login' %}">Login</a></li>
+                            <li class="has-children"> <a href="#">Register <i class="fas fa-angle-down"></i></a>
+                                <ul class="sub-menu">
+                                    <li><a href="{% url 'Guest:UserRegistration' %}">Customer</a></li>
+                                    <li><a href="{% url 'Guest:ShopReg' %}">Shop Owner</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="header-icons ms-4">
+                                    <a class="search-bar-icon me-3" href="#"><i class="fas fa-search"></i></a>
+                                    <a class="shopping-cart" href="{% url 'User:MyCart' %}"><i class="fas fa-shopping-cart"></i></a>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div class="mobile-menu"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- CONTENT -->
+    <div class="page-container" style="padding-top: 140px; padding-bottom: 60px;">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-area">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-box">
+                        <h2>ShopiX</h2>
+                        <p>Your modern marketplace for unique products and trusted sellers.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-box">
+                        <h2>Quick Links</h2>
+                        <ul>
+                            <li><a href="{% url 'Guest:index' %}">Home</a></li>
+                            <li><a href="{% url 'User:Viewproduct' %}">Shop</a></li>
+                            <li><a href="{% url 'Guest:Login' %}">Login</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-box">
+                        <h2>Support</h2>
+                        <ul>
+                            <li>Email: support@shopix.com</li>
+                            <li>Phone: +91 9876543210</li>
+                            <li>Kochi, Kerala</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-box">
+                        <h2>Newsletter</h2>
+                        <p>Get updates & offers</p>
+                        <form>
+                            <input type="email" placeholder="Email">
+                            <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- COPYRIGHT -->
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <p>© 2026 ShopiX. All rights reserved.</p>
+                </div>
+                <div class="col-lg-6 text-right">
+                    <div class="social-icons">
+                        <ul>
+                            <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                            <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="{% static 'Main/assets/js/jquery-1.11.3.min.js' %}"></script>
+    <script src="{% static 'Main/assets/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'Main/assets/js/jquery.meanmenu.min.js' %}"></script>
+    <script src="{% static 'Main/assets/js/sticker.js' %}"></script>
+    <script src="{% static 'Main/assets/js/main.js' %}"></script>
 
 </body>
-
 </html>

@@ -4,7 +4,7 @@ app_name ="Shop"
 
 
 urlpatterns = [
-    # path('logout/',views.logout,name="logout"),
+    path('logout/',views.logout,name="logout"),
     path('Homepage/',views.Homepage,name="Homepage"),
     path('sales_dashboard/',views.shop_sales_dashboard,name="sales_dashboard"),
     path('MyProfile/',views.MyProfile,name="MyProfile"),
@@ -17,6 +17,7 @@ urlpatterns = [
     path('Stock/<int:id>',views.Stock,name="Stock"),
     path('delstock/<int:did>',views.delstock,name="delstock"),
     path('delgallery/<int:did>',views.delgallery,name="delgallery"),
+    path('delproduct/<int:pid>',views.delproduct,name="delproduct"),
     path('ViewBooking/',views.ViewBooking,name="ViewBooking"),
     path('BookingAction/<int:cid>/<int:status>',views.BookingAction,name="BookingAction"),
     path('SalesReport/',views.SalesReport,name="SalesReport"),

@@ -4,9 +4,13 @@ from Admin.models import*
 from Shop.models import*
 from django.core.mail import send_mail
 from django.conf import settings
+import random, datetime
+from django.core.mail import send_mail
+from django.conf import settings
 # Create your views here.
 def index(request):
-    return render(request,"Guest/index.html")
+    productdata = tbl_product.objects.all()[:4]  # Limit to 4 for index page
+    return render(request,"Guest/index.html", {'products': productdata})
 
 def UserRegistration(request):
     districtdata =  tbl_district.objects.all()
@@ -155,23 +159,105 @@ def DeliveryBoy(request):
         return render(request,"Guest/DeliveryBoy.html",{ 'districtdata':districtdata})
 
 
-def ForgotPassword(request):
+
+def forgotpassword(request):
     if request.method == "POST":
         email = request.POST.get("txt_email")
 
-        usercount = tbl_user.objects.filter(user_email=email).count()
+        user_obj = None
+        role = None
 
-        if usercount > 0:
-            user = tbl_user.objects.get(user_email=email)
-            send_mail(
-                'Reset Password',
-                f'Click this link to reset password: http://127.0.0.1:8000/resetpassword/{user.id}/',
-                settings.EMAIL_HOST_USER,
-                [email],
-            )
-            return render(request,'Guest/ForgotPassword.html',{'msg':"Reset link sent to email"})
+        # Check Shop
+        user_obj = tbl_shop.objects.filter(shop_email=email).first()
+        if user_obj:
+            role = "shop"
+
+        # Check User
+        if not user_obj:
+            user_obj = tbl_user.objects.filter(user_email=email).first()
+            if user_obj:
+                role = "user"
+
+        if not user_obj:
+            return render(request, "Guest/ForgotPassword.html", {
+                "msg": "Email not found"
+            })
+
+        # Generate OTP
+        otp = str(random.randint(100000, 999999))
+
+        # Store in session (use different keys ❗)
+        request.session["reset_otp"] = otp
+        request.session["reset_id"] = user_obj.id
+        request.session["reset_role"] = role
+
+        # Send Email
+        send_mail(
+            'Password Reset OTP',
+            f"Your OTP is {otp}",
+            settings.EMAIL_HOST_USER,
+            [email],
+        )
+
+        return redirect("Guest:otp")
+
+    return render(request, "Guest/ForgotPassword.html")
+
+
+def otp(request):
+    if request.method == "POST":
+        inp_otp = request.POST.get("txt_otp")
+
+        session_otp = request.session.get("reset_otp")
+
+        if not session_otp:
+            return redirect("Guest:forgotpassword")
+
+        if inp_otp == session_otp:
+            return redirect("Guest:newpass")
         else:
-            return render(request,'Guest/ForgotPassword.html',{'msg':"Email not found"})
+            return render(request, "Guest/OTP.html", {
+                "msg": "Invalid OTP!"
+            })
 
-    else:
-        return render(request,'Guest/ForgotPassword.html')
+    return render(request, "Guest/OTP.html")
+
+
+def newpass(request):
+    if request.method == "POST":
+
+        uid = request.session.get("reset_id")
+        role = request.session.get("reset_role")
+
+        if not uid or not role:
+            return redirect("Guest:forgotpassword")
+
+        new_pass = request.POST.get("txt_newpassword")
+        con_pass = request.POST.get("txt_confirmpassword")
+
+        if new_pass != con_pass:
+            return render(request, "Guest/NewPassword.html", {
+                "msg": "Passwords do not match!"
+            })
+
+        # Update Password
+        if role == "shop":
+            shop = tbl_shop.objects.get(id=uid)
+            shop.shop_password = new_pass
+            shop.save()
+
+        elif role == "user":
+            user = tbl_user.objects.get(id=uid)
+            user.user_password = new_pass
+            user.save()
+
+        # Clear only reset session (better than flush)
+        request.session.pop("reset_id", None)
+        request.session.pop("reset_role", None)
+        request.session.pop("reset_otp", None)
+
+        return render(request, "Guest/Login.html", {
+            "msg": "Password updated successfully!"
+        })
+
+    return render(request, "Guest/NewPassword.html")

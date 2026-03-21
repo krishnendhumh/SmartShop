@@ -6,51 +6,51 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description"
-		content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
 
-	<!-- title -->
-	<title>ShopiX</title>
+    <!-- title -->
+    <title>ShopiX</title>
 
-	<!-- favicon -->
-	<link rel="shortcut icon" type="image/png" href="{% static 'Main/assets/img/favicon.png' %}">
-	<!-- google font -->
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-	<!-- fontawesome -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/all.min.css' %}">
-	<!-- bootstrap -->
-	<link rel="stylesheet" href="{% static 'Main/assets/bootstrap/css/bootstrap.min.css' %}">
-	<!-- owl carousel -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/owl.carousel.css' %}">
-	<!-- magnific popup -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/magnific-popup.css' %}">
-	<!-- animate css -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/animate.css' %}">
-	<!-- mean menu css -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/meanmenu.min.css' %}">
-	<!-- main style -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/main.css' %}">
-	<!-- responsive -->
-	<link rel="stylesheet" href="{% static 'Main/assets/css/responsive.css' %}">
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/png" href="{% static 'Main/assets/img/favicon.png' %}">
+    <!-- google font -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="{% static 'Main/assets/css/all.min.css' %}">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="{% static 'Main/assets/bootstrap/css/bootstrap.min.css' %}">
+    <!-- owl carousel -->
+    <link rel="stylesheet" href="{% static 'Main/assets/css/owl.carousel.css' %}">
+    <!-- magnific popup -->
+    <link rel="stylesheet" href="{% static 'Main/assets/css/magnific-popup.css' %}">
+    <!-- animate css -->
+    <link rel="stylesheet" href="{% static 'Main/assets/css/animate.css' %}">
+    <!-- mean menu css -->
+    <link rel="stylesheet" href="{% static 'Main/assets/css/meanmenu.min.css' %}">
+    <!-- main style -->
+    <link rel="stylesheet" href="{% static 'Main/assets/css/main.css' %}">
+    <!-- responsive -->
+    <link rel="stylesheet" href="{% static 'Main/assets/css/responsive.css' %}">
 
 </head>
 
 <body>
 
-	<!--PreLoader-->
-	<div class="loader">
-		<div class="loader-inner">
-			<div class="circle"></div>
-		</div>
-	</div>
-	<!--PreLoader Ends-->
+    <!--PreLoader-->
+    <div class="loader">
+        <div class="loader-inner">
+            <div class="circle"></div>
+        </div>
+    </div>
+    <!--PreLoader Ends-->
 
-	<!-- header -->
-		<div class="top-header-area bg-dark" style="background-color: black;" id="sticker">
+    <!-- header -->
+    <div class="top-header-area bg-dark" style="background-color: black;" id="sticker">
 
         <div class="container">
             <div class="row">
@@ -107,21 +107,24 @@
                                     </ul>
                                 </li>
 
-                                
+
 
                                 <!-- Icons -->
                                 <li>
                                     <div class="header-icons">
 
-                                        <a class="shopping-cart" href="{% url 'User:MyCart' %}">
+                                        <a class="shopping-cart" href="{% url 'User:MyCart' %}"
+                                            style="position: relative;">
                                             <i class="fas fa-shopping-cart"></i>
+                                            <span class="cart-count-badge"
+                                                style="position: absolute; top: -8px; right: -8px; background: #ff6161; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">{{cart_count|default:"0" }}</span>
                                         </a>
 
                                         <a href="{% url 'User:Wishlists' %}">
                                             <i class="fas fa-heart"></i>
                                         </a>
 
-                                        <a class="mobile-hide search-bar-icon" href="{% url 'Guest:index' %}">
+                                        <a class="mobile-hide search-bar-icon" href="{% url 'User:logout' %}">
                                             <i class="fas fa-sign-out-alt"></i> Logout
                                         </a>
 
@@ -138,144 +141,144 @@
             </div>
         </div>
     </div>
-	<!-- end header -->
+    <!-- end header -->
 
 
     <div style="padding-top: 160px;padding-bottom: 50px;" align="center">
 
 
-    {% block content %}
-    {% endblock %}
+        {% block content %}
+        {% endblock %}
     </div>
 
-    
-	<!-- Footer -->
-<div class="footer-area">
-<div class="container">
-<div class="row">
 
-<!-- About -->
-<div class="col-lg-3 col-md-6">
-<div class="footer-box about-widget">
-<h2 class="widget-title">About ShopiX</h2>
+    <!-- Footer -->
+    <div class="footer-area">
+        <div class="container">
+            <div class="row">
 
-<p>
-ShopiX is a modern online marketplace where users can explore products,
-manage wishlists, place orders, and track deliveries easily.
-Our goal is to provide a smooth and secure shopping experience.
-</p>
+                <!-- About -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-box about-widget">
+                        <h2 class="widget-title">About ShopiX</h2>
 
-</div>
-</div>
+                        <p>
+                            ShopiX is a modern online marketplace where users can explore products,
+                            manage wishlists, place orders, and track deliveries easily.
+                            Our goal is to provide a smooth and secure shopping experience.
+                        </p>
 
-
-<!-- Quick Links -->
-<div class="col-lg-3 col-md-6">
-<div class="footer-box pages">
-<h2 class="widget-title">Quick Links</h2>
-
-<ul>
-<li><a href="{% url 'User:Homepage' %}">Home</a></li>
-<li><a href="{% url 'User:Viewproduct' %}">Shop</a></li>
-<li><a href="{% url 'User:Wishlists' %}">Wishlist</a></li>
-<li><a href="{% url 'User:MyCart' %}">My Cart</a></li>
-<li><a href="{% url 'User:MyBooking' %}">My Orders</a></li>
-</ul>
-
-</div>
-</div>
+                    </div>
+                </div>
 
 
-<!-- Support -->
-<div class="col-lg-3 col-md-6">
-<div class="footer-box get-in-touch">
-<h2 class="widget-title">Customer Support</h2>
+                <!-- Quick Links -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-box pages">
+                        <h2 class="widget-title">Quick Links</h2>
 
-<ul>
-<li><a href="{% url 'User:Complaint' %}">Submit Complaint</a></li>
-<li><a href="{% url 'User:Feedback' %}">Send Feedback</a></li>
-<li>Email: support@shopix.com</li>
-<li>Phone: +91 98765 43210</li>
-</ul>
+                        <ul>
+                            <li><a href="{% url 'User:Homepage' %}">Home</a></li>
+                            <li><a href="{% url 'User:Viewproduct' %}">Shop</a></li>
+                            <li><a href="{% url 'User:Wishlists' %}">Wishlist</a></li>
+                            <li><a href="{% url 'User:MyCart' %}">My Cart</a></li>
+                            <li><a href="{% url 'User:MyBooking' %}">My Orders</a></li>
+                        </ul>
 
-</div>
-</div>
-
-
-<!-- Newsletter -->
-<div class="col-lg-3 col-md-6">
-<div class="footer-box subscribe">
-<h2 class="widget-title">Newsletter</h2>
-
-<p>
-Subscribe to receive updates on new products and special offers.
-</p>
-
-<form action="#">
-<input type="email" placeholder="Enter Email">
-<button type="submit">
-<i class="fas fa-paper-plane"></i>
-</button>
-</form>
-
-</div>
-</div>
-
-</div>
-</div>
-</div>
-<!-- End Footer -->
+                    </div>
+                </div>
 
 
-<!-- Copyright -->
-<div class="copyright">
-<div class="container">
-<div class="row">
+                <!-- Support -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-box get-in-touch">
+                        <h2 class="widget-title">Customer Support</h2>
 
-<div class="col-lg-6 col-md-12">
-<p>
-© 2026 <b>ShopiX</b>. All Rights Reserved.
-</p>
-</div>
+                        <ul>
+                            <li><a href="{% url 'User:Complaint' %}">Submit Complaint</a></li>
+                            <li><a href="{% url 'User:Feedback' %}">Send Feedback</a></li>
+                            <li>Email: support@shopix.com</li>
+                            <li>Phone: +91 98765 43210</li>
+                        </ul>
 
-<div class="col-lg-6 text-right col-md-12">
-<div class="social-icons">
+                    </div>
+                </div>
 
-<ul>
-<li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-<li><a href="#"><i class="fab fa-instagram"></i></a></li>
-<li><a href="#"><i class="fab fa-twitter"></i></a></li>
-<li><a href="#"><i class="fab fa-linkedin"></i></a></li>
-</ul>
 
-</div>
-</div>
+                <!-- Newsletter -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-box subscribe">
+                        <h2 class="widget-title">Newsletter</h2>
 
-</div>
-</div>
-</div>
-	<!-- end copyright -->
+                        <p>
+                            Subscribe to receive updates on new products and special offers.
+                        </p>
 
-	<!-- jquery -->
-	<script src="{% static 'Main/assets/js/jquery-1.11.3.min.js' %}"></script>
-	<!-- bootstrap -->
-	<script src="{% static 'Main/assets/bootstrap/js/bootstrap.min.js' %}"></script>
-	<!-- count down -->
-	<script src="{% static 'Main/assets/js/jquery.countdown.js' %}"></script>
-	<!-- isotope -->
-	<script src="{% static 'Main/assets/js/jquery.isotope-3.0.6.min.js' %}"></script>
-	<!-- waypoints -->
-	<script src="{% static 'Main/assets/js/waypoints.js' %}"></script>
-	<!-- owl carousel -->
-	<script src="{% static 'Main/assets/js/owl.carousel.min.js' %}"></script>
-	<!-- magnific popup -->
-	<script src="{% static 'Main/assets/js/jquery.magnific-popup.min.js' %}"></script>
-	<!-- mean menu -->
-	<script src="{% static 'Main/assets/js/jquery.meanmenu.min.js' %}"></script>
-	<!-- sticker js -->
-	<script src="{% static 'Main/assets/js/sticker.js' %}"></script>
-	<!-- main js -->
-	<script src="{% static 'Main/assets/js/main.js' %}"></script>
+                        <form action="#">
+                            <input type="email" placeholder="Enter Email">
+                            <button type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- End Footer -->
+
+
+    <!-- Copyright -->
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-6 col-md-12">
+                    <p>
+                        © 2026 <b>ShopiX</b>. All Rights Reserved.
+                    </p>
+                </div>
+
+                <div class="col-lg-6 text-right col-md-12">
+                    <div class="social-icons">
+
+                        <ul>
+                            <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                        </ul>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- end copyright -->
+
+    <!-- jquery -->
+    <script src="{% static 'Main/assets/js/jquery-1.11.3.min.js' %}"></script>
+    <!-- bootstrap -->
+    <script src="{% static 'Main/assets/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!-- count down -->
+    <script src="{% static 'Main/assets/js/jquery.countdown.js' %}"></script>
+    <!-- isotope -->
+    <script src="{% static 'Main/assets/js/jquery.isotope-3.0.6.min.js' %}"></script>
+    <!-- waypoints -->
+    <script src="{% static 'Main/assets/js/waypoints.js' %}"></script>
+    <!-- owl carousel -->
+    <script src="{% static 'Main/assets/js/owl.carousel.min.js' %}"></script>
+    <!-- magnific popup -->
+    <script src="{% static 'Main/assets/js/jquery.magnific-popup.min.js' %}"></script>
+    <!-- mean menu -->
+    <script src="{% static 'Main/assets/js/jquery.meanmenu.min.js' %}"></script>
+    <!-- sticker js -->
+    <script src="{% static 'Main/assets/js/sticker.js' %}"></script>
+    <!-- main js -->
+    <script src="{% static 'Main/assets/js/main.js' %}"></script>
 
 </body>
 

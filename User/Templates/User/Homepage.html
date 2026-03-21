@@ -106,19 +106,20 @@
                                     </ul>
                                 </li>
 
-                                
+
                                 <li>
                                     <div class="header-icons">
 
-                                        <a class="shopping-cart" href="{% url 'User:MyCart' %}">
+                                        <a class="shopping-cart" href="{% url 'User:MyCart' %}" style="position: relative;">
                                             <i class="fas fa-shopping-cart"></i>
+                                            <span class="cart-count-badge" style="position: absolute; top: -8px; right: -8px; background: #ff6161; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">{{ cart_count|default:"0" }}</span>
                                         </a>
 
                                         <a href="{% url 'User:Wishlists' %}">
                                             <i class="fas fa-heart"></i>
                                         </a>
 
-                                        <a class="mobile-hide search-bar-icon" href="{% url 'Guest:index' %}">
+                                        <a class="mobile-hide search-bar-icon" href="{% url 'User:logout' %}">
                                             <i class="fas fa-sign-out-alt"></i> Logout
                                         </a>
 
@@ -138,22 +139,7 @@
     <!-- end header -->
 
     <!-- search area -->
-    <div class="search-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <span class="close-btn"><i class="fas fa-window-close"></i></span>
-                    <div class="search-bar">
-                        <div class="search-bar-tablecell">
-                            <h3>Search For:</h3>
-                            <input type="text" placeholder="Keywords">
-                            <button type="submit">Search <i class="fas fa-search"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <!-- end search area -->
 
     <!-- hero area -->
@@ -172,14 +158,13 @@
                                 all in one place. Enjoy a seamless shopping experience with Shopix
                                 and start exploring today.
                             </p>
-                            <a href="{% static 'Main/shop.html' }" class="boxed-btn">Shop Now</a>
+                            <a href="{% static 'Main/shop.html' %}" class="boxed-btn">Shop Now</a>
                             <a href="{% static 'Main/contact.html' %}" class="bordered-btn">Contact Us</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <!-- end hero area -->
 
@@ -241,37 +226,19 @@
             </div>
 
             <div class="row">
+                {% for p in product %}
                 <div class="col-lg-4 col-md-6 text-center">
                     <div class="single-product-item">
                         <div class="product-image">
-                            <a href="single-product.html"><img
-                                    src="{% static 'massets/img/products/product-img-1.jpg' %}" alt=""></a>
+                            <a href="{% url 'User:Viewmore' p.id %}"><img src="{{ p.product_photo.url }}" alt=""></a>
                         </div>
-                        <h3>Strawberry</h3>
-                        <p class="product-price"><span>Per Kg</span> 85$ </p>
-                        <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                        <h3>{{ p.product_name }}</h3>
+                        <p class="product-price"><span>Per Item</span> ₹ {{ p.product_price }}</p>
+                        <a href="{% url 'User:Addcart' p.id %}" class="cart-btn"><i class="fas fa-shopping-cart"></i>
+                            Add to Cart</a>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 text-center">
-                    <div class="single-product-item">
-                        <div class="product-image">
-                            <a href="single-product.html"><img src="assets/img/products/product-img-2.jpg" alt=""></a>
-                        </div>
-                        <h3>Berry</h3>
-                        <p class="product-price"><span>Per Kg</span> 70$ </p>
-                        <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0 text-center">
-                    <div class="single-product-item">
-                        <div class="product-image">
-                            <a href="single-product.html"><img src="assets/img/products/product-img-3.jpg" alt=""></a>
-                        </div>
-                        <h3>Lemon</h3>
-                        <p class="product-price"><span>Per Kg</span> 35$ </p>
-                        <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -294,424 +261,387 @@
                         <img src="assets/img/a.jpg" alt="">
                     </div>
                 </div>
-               <!-- ================= DEAL OF THE MONTH ================= -->
+                <!-- ================= DEAL OF THE MONTH ================= -->
+                <div class="content-column col-lg-6">
+                    <h3><span class="orange-text">Deal</span> of the Month</h3>
+                    <h4>Premium Organic Product</h4>
+                    <div class="text">
+                        Grab our special discounted product available for a limited time.
+                        ShopiX provides high quality products with secure payment and fast delivery.
+                    </div>
+                    <div class="time-counter">
+                        <div class="time-countdown clearfix" data-countdown="2026/12/31">
+                            <div class="counter-column">
+                                <div class="inner"><span class="count">00</span>Days</div>
+                            </div>
+                            <div class="counter-column">
+                                <div class="inner"><span class="count">00</span>Hours</div>
+                            </div>
+                            <div class="counter-column">
+                                <div class="inner"><span class="count">00</span>Mins</div>
+                            </div>
+                            <div class="counter-column">
+                                <div class="inner"><span class="count">00</span>Secs</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{% url 'User:Viewproduct' %}" class="cart-btn mt-3">
+                        <i class="fas fa-shopping-cart"></i> Shop Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end cart banner section -->
+
+    <!-- ================= TESTIMONIAL SECTION ================= -->
+
+    <div class="testimonail-section mt-150 mb-150">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 offset-lg-1 text-center">
+                    <div class="testimonial-sliders">
+                        <div class="single-testimonial-slider">
+                            <div class="client-avater">
+                                <img src="{% static 'Main/assets/img/avaters/avatar1.png' %}">
+                            </div>
+                            <div class="client-meta">
+                                <h3>Anjali <span>Customer</span></h3>
+                                <p class="testimonial-body">
+                                    "Great shopping experience with fast delivery and excellent product quality."
+                                </p>
+                                <div class="last-icon">
+                                    <i class="fas fa-quote-right"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="single-testimonial-slider">
+                            <div class="client-avater">
+                                <img src="{% static 'Main/assets/img/avaters/avatar2.png' %}">
+                            </div>
+                            <div class="client-meta">
+                                <h3>Rahul <span>Verified Buyer</span></h3>
+                                <p class="testimonial-body">
+                                    "User friendly website and smooth checkout process."
+                                </p>
+                                <div class="last-icon">
+                                    <i class="fas fa-quote-right"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="single-testimonial-slider">
+                            <div class="client-avater">
+                                <img src="{% static 'Main/assets/img/avaters/avatar3.png' %}">
+                            </div>
+                            <div class="client-meta">
+                                <h3>Meera <span>Customer</span></h3>
+                                <p class="testimonial-body">
+                                    "Affordable prices and great customer support."
+                                </p>
+                                <div class="last-icon">
+                                    <i class="fas fa-quote-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+                <!-- ================= ABOUT SHOP ================= -->
+
+                <div class="abt-section mb-150">
+                    <div class="container">
+                        <div class="row">
 
-<section class="cart-banner pt-100 pb-100">
-<div class="container">
-<div class="row clearfix">
+                            <div class="col-lg-6 col-md-12">
 
-<div class="content-column col-lg-6">
+                                <div class="abt-bg">
+                                    <a href="#" class="video-play-btn">
+                                        <i class="fas fa-play"></i>
+                                    </a>
+                                </div>
 
-<h3><span class="orange-text">Deal</span> of the Month</h3>
+                            </div>
 
-<h4>Premium Organic Product</h4>
 
-<div class="text">
-Grab our special discounted product available for a limited time.
-ShopiX provides high quality products with secure payment and fast delivery.
-</div>
+                            <div class="col-lg-6 col-md-12">
 
-<div class="time-counter">
-<div class="time-countdown clearfix" data-countdown="2026/12/31">
+                                <div class="abt-text">
 
-<div class="counter-column">
-<div class="inner"><span class="count">00</span>Days</div>
-</div>
+                                    <p class="top-sub">Since 2024</p>
 
-<div class="counter-column">
-<div class="inner"><span class="count">00</span>Hours</div>
-</div>
+                                    <h2>Welcome to <span class="orange-text">ShopiX</span></h2>
 
-<div class="counter-column">
-<div class="inner"><span class="count">00</span>Mins</div>
-</div>
+                                    <p>
+                                        ShopiX is an online marketplace where customers can explore products,
+                                        add them to cart, manage wishlists and place orders easily.
+                                    </p>
 
-<div class="counter-column">
-<div class="inner"><span class="count">00</span>Secs</div>
-</div>
+                                    <p>
+                                        We aim to deliver quality products with secure payment and
+                                        fast delivery service.
+                                    </p>
 
-</div>
-</div>
+                                    <a href="{% url 'User:Homepage' %}" class="boxed-btn mt-4">
+                                        Explore Shop
+                                    </a>
 
-<a href="{% url 'User:Viewproduct' %}" class="cart-btn mt-3">
-<i class="fas fa-shopping-cart"></i> Shop Now
-</a>
+                                </div>
 
-</div>
+                            </div>
 
-</div>
-</div>
-</section>
+                        </div>
+                    </div>
+                </div>
 
 
-<!-- ================= TESTIMONIAL SECTION ================= -->
 
-<div class="testimonail-section mt-150 mb-150">
-<div class="container">
+                <!-- ================= SALE BANNER ================= -->
 
-<div class="row">
-<div class="col-lg-10 offset-lg-1 text-center">
+                <section class="shop-banner">
 
-<div class="testimonial-sliders">
+                    <div class="container">
 
-<div class="single-testimonial-slider">
+                        <h3>Season Sale is Live! <br>
+                            <span class="orange-text">Up to 50% Discount</span>
+                        </h3>
 
-<div class="client-avater">
-<img src="{% static 'Main/assets/img/avaters/avatar1.png' %}">
-</div>
+                        <div class="sale-percent">
+                            <span>Sale <br> Upto</span>
+                            50% <span>off</span>
+                        </div>
 
-<div class="client-meta">
-<h3>Anjali <span>Customer</span></h3>
+                        <a href="{% url 'User:Viewproduct' %}" class="cart-btn btn-lg">
+                            Shop Now
+                        </a>
 
-<p class="testimonial-body">
-"Great shopping experience with fast delivery and excellent product quality."
-</p>
+                    </div>
 
-<div class="last-icon">
-<i class="fas fa-quote-right"></i>
-</div>
+                </section>
 
-</div>
-</div>
 
 
-<div class="single-testimonial-slider">
+                <!-- ================= LATEST PRODUCTS ================= -->
 
-<div class="client-avater">
-<img src="{% static 'Main/assets/img/avaters/avatar2.png' %}">
-</div>
+                <div class="latest-news pt-150 pb-150">
 
-<div class="client-meta">
-<h3>Rahul <span>Verified Buyer</span></h3>
+                    <div class="container">
 
-<p class="testimonial-body">
-"User friendly website and smooth checkout process."
-</p>
+                        <div class="row">
 
-<div class="last-icon">
-<i class="fas fa-quote-right"></i>
-</div>
+                            <div class="col-lg-8 offset-lg-2 text-center">
 
-</div>
-</div>
+                                <div class="section-title">
 
+                                    <h3><span class="orange-text">Latest</span> Products</h3>
 
-<div class="single-testimonial-slider">
+                                    <p>
+                                        Explore our newly added products.
+                                    </p>
 
-<div class="client-avater">
-<img src="{% static 'Main/assets/img/avaters/avatar3.png' %}">
-</div>
+                                </div>
 
-<div class="client-meta">
-<h3>Meera <span>Customer</span></h3>
+                            </div>
 
-<p class="testimonial-body">
-"Affordable prices and great customer support."
-</p>
+                        </div>
 
-<div class="last-icon">
-<i class="fas fa-quote-right"></i>
-</div>
 
-</div>
-</div>
 
-</div>
+                        <div class="row">
 
-</div>
-</div>
-</div>
-</div>
+                            {% for p in product %}
 
+                            <div class="col-lg-4 col-md-6">
 
+                                <div class="single-latest-news">
 
-<!-- ================= ABOUT SHOP ================= -->
+                                    <div class="latest-news-bg">
+                                        <img src="{{p.product_photo.url}}" width="100%">
+                                    </div>
 
-<div class="abt-section mb-150">
-<div class="container">
-<div class="row">
+                                    <div class="news-text-box">
 
-<div class="col-lg-6 col-md-12">
+                                        <h3>{{p.product_name}}</h3>
 
-<div class="abt-bg">
-<a href="#" class="video-play-btn">
-<i class="fas fa-play"></i>
-</a>
-</div>
+                                        <p class="excerpt">
+                                            ₹ {{p.product_price}}
+                                        </p>
 
-</div>
+                                        <a href="{% url 'User:Viewproduct' %}" class="read-more-btn">
+                                            View Product <i class="fas fa-angle-right"></i>
+                                        </a>
 
+                                    </div>
 
-<div class="col-lg-6 col-md-12">
+                                </div>
 
-<div class="abt-text">
+                            </div>
 
-<p class="top-sub">Since 2024</p>
+                            {% endfor %}
 
-<h2>Welcome to <span class="orange-text">ShopiX</span></h2>
+                        </div>
 
-<p>
-ShopiX is an online marketplace where customers can explore products,
-add them to cart, manage wishlists and place orders easily.
-</p>
+                    </div>
 
-<p>
-We aim to deliver quality products with secure payment and
-fast delivery service.
-</p>
+                </div>
 
-<a href="{% url 'User:Homepage' %}" class="boxed-btn mt-4">
-Explore Shop
-</a>
 
-</div>
 
-</div>
+                <!-- ================= BRAND LOGO CAROUSEL ================= -->
 
-</div>
-</div>
-</div>
+                <div class="logo-carousel-section">
 
+                    <div class="container">
 
+                        <div class="row">
 
-<!-- ================= SALE BANNER ================= -->
+                            <div class="col-lg-12">
 
-<section class="shop-banner">
+                                <div class="logo-carousel-inner">
 
-<div class="container">
+                                    <div class="single-logo-item">
+                                        <img src="{% static 'Main/assets/img/company-logos/1.png' %}">
+                                    </div>
 
-<h3>Season Sale is Live! <br>
-<span class="orange-text">Up to 50% Discount</span>
-</h3>
+                                    <div class="single-logo-item">
+                                        <img src="{% static 'Main/assets/img/company-logos/2.png' %}">
+                                    </div>
 
-<div class="sale-percent">
-<span>Sale <br> Upto</span>
-50% <span>off</span>
-</div>
+                                    <div class="single-logo-item">
+                                        <img src="{% static 'Main/assets/img/company-logos/3.png' %}">
+                                    </div>
 
-<a href="{% url 'User:Viewproduct' %}" class="cart-btn btn-lg">
-Shop Now
-</a>
+                                    <div class="single-logo-item">
+                                        <img src="{% static 'Main/assets/img/company-logos/4.png' %}">
+                                    </div>
 
-</div>
+                                    <div class="single-logo-item">
+                                        <img src="{% static 'Main/assets/img/company-logos/5.png' %}">
+                                    </div>
 
-</section>
+                                </div>
 
+                            </div>
 
+                        </div>
 
-<!-- ================= LATEST PRODUCTS ================= -->
+                    </div>
 
-<div class="latest-news pt-150 pb-150">
+                </div>
+                <!-- Footer -->
+                <div class="footer-area">
+                    <div class="container">
+                        <div class="row">
 
-<div class="container">
+                            <!-- About -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="footer-box about-widget">
+                                    <h2 class="widget-title">About ShopiX</h2>
 
-<div class="row">
+                                    <p>
+                                        ShopiX is a modern online marketplace where users can explore products,
+                                        manage wishlists, place orders, and track deliveries easily.
+                                        Our goal is to provide a smooth and secure shopping experience.
+                                    </p>
 
-<div class="col-lg-8 offset-lg-2 text-center">
+                                </div>
+                            </div>
 
-<div class="section-title">
 
-<h3><span class="orange-text">Latest</span> Products</h3>
+                            <!-- Quick Links -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="footer-box pages">
+                                    <h2 class="widget-title">Quick Links</h2>
 
-<p>
-Explore our newly added products.
-</p>
+                                    <ul>
+                                        <li><a href="{% url 'User:Homepage' %}">Home</a></li>
+                                        <li><a href="{% url 'User:Viewproduct' %}">Shop</a></li>
+                                        <li><a href="{% url 'User:Wishlists' %}">Wishlist</a></li>
+                                        <li><a href="{% url 'User:MyCart' %}">My Cart</a></li>
+                                        <li><a href="{% url 'User:MyBooking' %}">My Orders</a></li>
+                                    </ul>
 
-</div>
+                                </div>
+                            </div>
 
-</div>
 
-</div>
+                            <!-- Support -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="footer-box get-in-touch">
+                                    <h2 class="widget-title">Customer Support</h2>
 
+                                    <ul>
+                                        <li><a href="{% url 'User:Complaint' %}">Submit Complaint</a></li>
+                                        <li><a href="{% url 'User:Feedback' %}">Send Feedback</a></li>
+                                        <li>Email: support@shopix.com</li>
+                                        <li>Phone: +91 98765 43210</li>
+                                    </ul>
 
+                                </div>
+                            </div>
 
-<div class="row">
 
-{% for p in product %}
+                            <!-- Newsletter -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="footer-box subscribe">
+                                    <h2 class="widget-title">Newsletter</h2>
 
-<div class="col-lg-4 col-md-6">
+                                    <p>
+                                        Subscribe to receive updates on new products and special offers.
+                                    </p>
 
-<div class="single-latest-news">
+                                    <form action="#">
+                                        <input type="email" placeholder="Enter Email">
+                                        <button type="submit">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </form>
 
-<div class="latest-news-bg">
-<img src="{{p.product_photo.url}}" width="100%">
-</div>
+                                </div>
+                            </div>
 
-<div class="news-text-box">
+                        </div>
+                    </div>
+                </div>
+                <!-- End Footer -->
 
-<h3>{{p.product_name}}</h3>
 
-<p class="excerpt">
-₹ {{p.product_price}}
-</p>
+                <!-- Copyright -->
+                <div class="copyright">
+                    <div class="container">
+                        <div class="row">
 
-<a href="{% url 'User:Viewproduct' %}" class="read-more-btn">
-View Product <i class="fas fa-angle-right"></i>
-</a>
+                            <div class="col-lg-6 col-md-12">
+                                <p>
+                                    © 2026 <b>ShopiX</b>. All Rights Reserved.
+                                </p>
+                            </div>
 
-</div>
+                            <div class="col-lg-6 text-right col-md-12">
+                                <div class="social-icons">
 
-</div>
+                                    <ul>
+                                        <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                        <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                                    </ul>
 
-</div>
+                                </div>
+                            </div>
 
-{% endfor %}
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<!-- ================= BRAND LOGO CAROUSEL ================= -->
-
-<div class="logo-carousel-section">
-
-<div class="container">
-
-<div class="row">
-
-<div class="col-lg-12">
-
-<div class="logo-carousel-inner">
-
-<div class="single-logo-item">
-<img src="{% static 'Main/assets/img/company-logos/1.png' %}">
-</div>
-
-<div class="single-logo-item">
-<img src="{% static 'Main/assets/img/company-logos/2.png' %}">
-</div>
-
-<div class="single-logo-item">
-<img src="{% static 'Main/assets/img/company-logos/3.png' %}">
-</div>
-
-<div class="single-logo-item">
-<img src="{% static 'Main/assets/img/company-logos/4.png' %}">
-</div>
-
-<div class="single-logo-item">
-<img src="{% static 'Main/assets/img/company-logos/5.png' %}">
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<!-- Footer -->
-<div class="footer-area">
-<div class="container">
-<div class="row">
-
-<!-- About -->
-<div class="col-lg-3 col-md-6">
-<div class="footer-box about-widget">
-<h2 class="widget-title">About ShopiX</h2>
-
-<p>
-ShopiX is a modern online marketplace where users can explore products,
-manage wishlists, place orders, and track deliveries easily.
-Our goal is to provide a smooth and secure shopping experience.
-</p>
-
-</div>
-</div>
-
-
-<!-- Quick Links -->
-<div class="col-lg-3 col-md-6">
-<div class="footer-box pages">
-<h2 class="widget-title">Quick Links</h2>
-
-<ul>
-<li><a href="{% url 'User:Homepage' %}">Home</a></li>
-<li><a href="{% url 'User:Viewproduct' %}">Shop</a></li>
-<li><a href="{% url 'User:Wishlists' %}">Wishlist</a></li>
-<li><a href="{% url 'User:MyCart' %}">My Cart</a></li>
-<li><a href="{% url 'User:MyBooking' %}">My Orders</a></li>
-</ul>
-
-</div>
-</div>
-
-
-<!-- Support -->
-<div class="col-lg-3 col-md-6">
-<div class="footer-box get-in-touch">
-<h2 class="widget-title">Customer Support</h2>
-
-<ul>
-<li><a href="{% url 'User:Complaint' %}">Submit Complaint</a></li>
-<li><a href="{% url 'User:Feedback' %}">Send Feedback</a></li>
-<li>Email: support@shopix.com</li>
-<li>Phone: +91 98765 43210</li>
-</ul>
-
-</div>
-</div>
-
-
-<!-- Newsletter -->
-<div class="col-lg-3 col-md-6">
-<div class="footer-box subscribe">
-<h2 class="widget-title">Newsletter</h2>
-
-<p>
-Subscribe to receive updates on new products and special offers.
-</p>
-
-<form action="#">
-<input type="email" placeholder="Enter Email">
-<button type="submit">
-<i class="fas fa-paper-plane"></i>
-</button>
-</form>
-
-</div>
-</div>
-
-</div>
-</div>
-</div>
-<!-- End Footer -->
-
-
-<!-- Copyright -->
-<div class="copyright">
-<div class="container">
-<div class="row">
-
-<div class="col-lg-6 col-md-12">
-<p>
-© 2026 <b>ShopiX</b>. All Rights Reserved.
-</p>
-</div>
-
-<div class="col-lg-6 text-right col-md-12">
-<div class="social-icons">
-
-<ul>
-<li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-<li><a href="#"><i class="fab fa-instagram"></i></a></li>
-<li><a href="#"><i class="fab fa-twitter"></i></a></li>
-<li><a href="#"><i class="fab fa-linkedin"></i></a></li>
-</ul>
-
-</div>
-</div>
-
-</div>
-</div>
-</div>
-
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
     <!-- jquery -->
     <script src="{% static 'Main/assets/js/jquery-1.11.3.min.js' %}"></script>
     <!-- bootstrap -->

@@ -14,7 +14,7 @@
     body {
         font-family: 'Inter', 'Poppins', 'Segoe UI', Roboto, sans-serif;
         background: #f4f6fb;
-        padding: 25px;
+        
         color: #1f2937;
     }
 
@@ -149,8 +149,8 @@
         <td>{{i.shop_address}}</td>
         <td>{{ i.place.district.district_name }}</td>
         <td>{{i.place.place_name}}</td>
-        <td colspan="2" align="center"><img src="{{i.shop_photo.url}}" alt=""></td>
-        <td colspan="2" align="center"><img src="{{i.shop_proof.url}}" alt=""></td>
+        <td colspan="" align="center"><a href="{{i.shop_photo.url}}"><img src="{{i.shop_photo.url}}" alt=""></a></td>
+        <td colspan="" align="center"><a href="{{i.shop_proof.url}}"><img src="{{i.shop_proof.url}}" alt=""></a></td>
          <td><a href="{% url 'Admin:accept' i.id %}">Accept</a>
                 <a href="{% url 'Admin:reject' i.id %}">Reject</a></td>
     </tr>
@@ -181,8 +181,8 @@
         <td>{{i.shop_address}}</td>
         <td>{{ i.place.district.district_name }}</td>
         <td>{{i.place.place_name}}</td>
-        <td align="center"><img src="{{i.shop_photo.url}}" alt="" width="150"></td>
-        <td  align="center"><img src="{{i.shop_proof.url}}" alt="" width="150"></td>
+        <td colspan="" align="center"><a href="{{i.shop_photo.url}}"><img src="{{i.shop_photo.url}}" alt=""></a></td>
+        <td colspan="" align="center"><a href="{{i.shop_proof.url}}"><img src="{{i.shop_proof.url}}" alt=""></a></td>
          
     </tr>
   {% endfor %}
@@ -213,8 +213,8 @@
         <td>{{i.shop_address}}</td>
         <td>{{ i.place.district.district_name }}</td>
         <td>{{i.place.place_name}}</td>
-        <td colspan="2" align="center"><img src="{{i.shop_photo.url}}" alt="" width="50"></td>
-        <td colspan="2" align="center"><img src="{{i.shop_proof.url}}" alt=""></td>
+        <td colspan="" align="center"><a href="{{i.shop_photo.url}}"><img src="{{i.shop_photo.url}}" alt=""></a></td>
+        <td colspan="" align="center"><a href="{{i.shop_proof.url}}"><img src="{{i.shop_proof.url}}" alt=""></a></td>
          
     </tr>
   {% endfor %}

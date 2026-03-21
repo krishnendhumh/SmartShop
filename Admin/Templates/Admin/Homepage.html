@@ -371,15 +371,15 @@ border-left:4px solid #FA896B;
             </li>
             <li class="nav-item">
               <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                <i class="ti ti-bell-ringing"></i>
-                <div class="notification bg-primary rounded-circle"></div>
+                
+                <!-- <div class="notification bg-primary rounded-circle"></div> -->
               </a>
             </li>
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-              <a href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/" target="_blank"
-                class="btn btn-primary">Download Free</a>
+              <!-- <a href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/" target="_blank"
+                class="btn btn-primary"></a> -->
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
@@ -388,7 +388,7 @@ border-left:4px solid #FA896B;
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                    <!-- <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3">My Profile</p>
                     </a>
@@ -398,9 +398,9 @@ border-left:4px solid #FA896B;
                     </a>
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-list-check fs-6"></i>
-                      <p class="mb-0 fs-3">My Task</p>
+                      <p class="mb-0 fs-3">My Task</p> -->
                     </a>
-                    <a href="{% static 'Admin/authentication-login.html' %}"
+                    <a href="{% url 'Admin:logout' %}"
                       class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
@@ -787,11 +787,7 @@ border-left:4px solid #FA896B;
             </div>
           </div>
         </div> -->
-          <div class="py-6 px-6 text-center">
-            <p class="mb-0 fs-4"><a href="https://adminmart.com/" target="_blank"
-                class="pe-1 text-primary text-decoration-underline"></a> <a href="https://themewagon.com">ThemeWagon</a>
-            </p>
-          </div>
+          
         </div>
       </div>
     </div>

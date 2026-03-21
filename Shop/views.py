@@ -2,10 +2,12 @@ from django.shortcuts import render,redirect
 from Guest.models import*
 from Shop.models import*
 from User.models import*
-
+from django.conf import settings
+from django.core.mail import send_mail
+from django.contrib import messages
 # ML views
 from django.utils import timezone
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date
 from django.db.models import Sum, Count, Q, F, FloatField, IntegerField
 from django.db.models.functions import Cast, ExtractMonth, ExtractYear, ExtractWeekDay
 from django.db.models.expressions import ExpressionWrapper
@@ -615,7 +617,66 @@ def index(request):
     return render(request,"Guest/index.html")
 
 def Homepage(request):
-    return render(request,"Shop/Homepage.html")
+    shop_id = request.session['sid']
+    shop = tbl_shop.objects.get(id=shop_id)
+    
+    # Recent products
+    products = tbl_product.objects.filter(shop=shop)[:5]
+    for product in products:
+        total_stock = tbl_stock.objects.filter(
+            product=product
+        ).aggregate(total=Sum('stock_quantity'))['total'] or 0
+
+        total_cart = tbl_cart.objects.filter(
+            product=product,
+            cart_status__gt=1
+        ).aggregate(total=Sum('cart_qty'))['total'] or 0
+
+        product.total_stock = max(total_stock - total_cart, 0)
+    
+    # Recent orders
+    recent_orders = tbl_booking.objects.filter(
+        tbl_cart__product__shop=shop
+    ).select_related('user').distinct().order_by('-booking_date')[:5]
+    
+    # Total products
+    total_products = tbl_product.objects.filter(shop=shop).count()
+    
+    # Total orders
+    total_orders = tbl_booking.objects.filter(
+        tbl_cart__product__shop=shop
+    ).distinct().count()
+    
+    # Pending orders
+    pending_orders = tbl_cart.objects.filter(
+        product__shop=shop,
+        cart_status=0
+    ).count()
+    
+    # Today's sales
+    today = date.today()
+    today_sales = tbl_cart.objects.filter(
+        product__shop=shop,
+        cart_status=5,
+        del_date=today
+    ).aggregate(
+        total=Sum('product__product_price')
+    )['total'] or 0
+    
+    context = {
+        'shop': shop,
+        'products': products,
+        'recent_orders': recent_orders,
+        'total_products': total_products,
+        'total_orders': total_orders,
+        'pending_orders': pending_orders,
+        'today_sales': today_sales,
+    }
+    return render(request,"Shop/Homepage.html", context)
+
+def logout(request):
+    del request.session['sid']
+    return redirect("Guest:Login")
 
 def MyProfile(request):
     shopdata = tbl_shop.objects.get(id=request.session['sid'])
@@ -736,6 +797,11 @@ def delgallery(request,did):
     tbl_gallery.objects.get(id=did).delete()
     return render(request,"Shop/Gallery.html",{'msg':"Data Deleted.."})
 
+def delproduct(request, pid):
+    product = tbl_product.objects.get(id=pid)
+    product.delete()
+    return redirect("Shop:Homepage")
+
 def ViewBooking(request):
     bookingdata=tbl_booking.objects.all()
     return render(request,"Shop/ViewBooking.html",{'bookingdata':bookingdata})
@@ -822,41 +888,40 @@ Thank you for shopping with us.
     return redirect("Shop:ViewBooking")
 
 def SalesReport(request):
-    bookingdata = None
-    if request.method == "POST":
-        from_date = request.POST.get("from_date")
-        to_date = request.POST.get("to_date")
+    # 1. Initialize variables with default values
+    from_date = request.POST.get("from_date")
+    to_date = request.POST.get("to_date")
+    
+    # 2. Start with a base queryset (All bookings)
+    booking_qs = tbl_booking.objects.filter(tbl_cart__product__shop=request.session['sid']).distinct()
 
-        bookingdata = tbl_booking.objects.filter(
-            booking_date__range=[from_date, to_date]
-        )
-        
+    # 3. Apply Filter ONLY if POST and dates are provided
+    if request.method == "POST" and from_date and to_date:
+        booking_qs = booking_qs.filter(booking_date__range=[from_date, to_date])
 
-    bookingdata = tbl_booking.objects.all()
-
-    total_sales = tbl_cart.objects.filter(cart_status=6).count()
-
-    cancel_count = tbl_cart.objects.filter(cart_status=7).count()
-
-    return_count = tbl_cart.objects.filter(cart_status=9).count()
-
-    refund_count = tbl_cart.objects.filter(cart_status=10).count()
-
-    feedback_count = tbl_feedback.objects.all().count()
+    # 4. Filter Cart/Feedback based on the filtered Bookings
+    # This ensures your summary cards (Total Sales, Cancels) match the date range
+    total_sales = tbl_cart.objects.filter(booking__in=booking_qs, cart_status=6).count()
+    cancel_count = tbl_cart.objects.filter(booking__in=booking_qs, cart_status=7).count()
+    return_count = tbl_cart.objects.filter(booking__in=booking_qs, cart_status=9).count()
+    refund_count = tbl_cart.objects.filter(booking__in=booking_qs, cart_status=10).count()
+    
+    # Assuming feedback is linked to booking or product; if not, you might need a date field in tbl_feedback
+    feedback_count = tbl_feedback.objects.all().count() 
 
     context = {
-        "bookingdata": bookingdata,
+        "bookingdata": booking_qs,
         "total_sales": total_sales,
         "cancel_count": cancel_count,
         "return_count": return_count,
         "refund_count": refund_count,
-        "feedback_count": feedback_count
+        "feedback_count": feedback_count,
+        "from_date": from_date, # Pass this back to keep the input filled
+        "to_date": to_date      # Pass this back to keep the input filled
     }
 
-    
+    return render(request, "Shop/SalesReport.html", context)
 
-    return render(request, "Shop/SalesReport.html",context)
-from datetime import date
 def ViewRequests(request):
     cancel_requests = tbl_cart.objects.filter(cart_status=7)
     return_requests = tbl_cart.objects.filter(cart_status=9)
@@ -902,7 +967,6 @@ def ApproveReturn(request, cid):
 
     return redirect("Shop:ViewRequests")
 
-    return redirect("Shop:RefundList")
 def RejectRequest(request, cid):
     cart = tbl_cart.objects.get(id=cid)
     user = cart.booking.user

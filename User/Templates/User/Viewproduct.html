@@ -1,321 +1,361 @@
 {% extends 'User/Head.html' %}
 {% block content %}
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
+    :root {
+        --vpro-primary: #2563eb; /* Modern Blue */
+        --vpro-dark: #1e293b;
+        --vpro-bg: #f8fafc;
+        --vpro-card: #ffffff;
+        --vpro-success: #10b981;
+    }
 
-body{
-background:#f1f3f6;
-font-family:'Segoe UI',sans-serif;
-}
+    body {
+        background-color: var(--vpro-bg);
+        font-family: 'Inter', sans-serif;
+        color: var(--vpro-dark);
+    }
 
-/* MAIN WRAPPER */
+    .vpro-container {
+        max-width: 1350px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-.shopix-products-wrapper{
-padding:40px;
-max-width:1300px;
-margin:auto;
-}
+    /* --- FILTER SECTION --- */
+    .vpro-filter-wrapper {
+        background: white;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 40px;
+        align-items: center;
+    }
 
-/* PAGE TITLE */
+    .vpro-search-input {
+        flex: 1;
+        min-width: 250px;
+        padding: 12px 20px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        outline: none;
+        transition: 0.3s;
+    }
 
-.shopix-products-title{
-font-size:28px;
-font-weight:600;
-margin-bottom:25px;
-color:#212121;
-}
+    .vpro-search-input:focus { border-color: var(--vpro-primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
 
-/* FILTER BAR */
+    .vpro-select {
+        padding: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background: white;
+        min-width: 160px;
+        cursor: pointer;
+    }
 
-.shopix-filter-bar{
-background:white;
-padding:18px;
-border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.08);
-margin-bottom:25px;
-display:flex;
-gap:20px;
-flex-wrap:wrap;
-}
+    /* --- GRID & CARD --- */
+    .vpro-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+    }
 
-.shopix-filter-bar input,
-.shopix-filter-bar select{
-padding:8px 10px;
-border-radius:6px;
-border:1px solid #ccc;
-min-width:170px;
-}
+    .vpro-card {
+        background: var(--vpro-card);
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid #f1f5f9;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
 
-/* PRODUCT GRID */
+    .vpro-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
 
-.shopix-product-grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-gap:25px;
-}
+    /* Image Box with View More Overlay */
+    .vpro-img-container {
+        height: 260px;
+        background: #fcfcfc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+    }
 
-/* PRODUCT CARD */
+    .vpro-img-container img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transition: 0.5s ease;
+    }
 
-.shopix-product-card{
-background:white;
-border-radius:10px;
-padding:15px;
-box-shadow:0 5px 15px rgba(0,0,0,0.08);
-transition:0.25s;
-}
+    /* View More Hover Overlay */
+    .vpro-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: 0.3s;
+    }
 
-.shopix-product-card:hover{
-transform:translateY(-5px);
-box-shadow:0 12px 25px rgba(0,0,0,0.15);
-}
+    .vpro-card:hover .vpro-overlay { opacity: 1; }
 
-/* IMAGE */
+    .vpro-view-link {
+        background: white;
+        color: var(--vpro-dark);
+        padding: 10px 20px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transform: translateY(20px);
+        transition: 0.4s;
+    }
 
-.shopix-product-img{
-width:100%;
-height:190px;
-object-fit:cover;
-border-radius:8px;
-margin-bottom:10px;
-}
+    .vpro-card:hover .vpro-view-link { transform: translateY(0); }
 
-/* PRODUCT NAME */
+    /* --- CARD BODY --- */
+    .vpro-content {
+        padding: 20px;
+        flex-grow: 1;
+        text-align: center;
+    }
 
-.shopix-product-name{
-font-size:16px;
-font-weight:600;
-color:#212121;
-margin-bottom:5px;
-}
+    .vpro-brand {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: #94a3b8;
+        letter-spacing: 1px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
 
-/* PRODUCT DETAILS */
+    .vpro-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: var(--vpro-dark);
+    }
 
-.shopix-product-details{
-font-size:13px;
-color:#777;
-height:40px;
-overflow:hidden;
-}
+    .vpro-price {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--vpro-primary);
+        margin-bottom: 15px;
+    }
 
-/* PRICE */
+    .vpro-stock {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
 
-.shopix-product-price{
-font-size:18px;
-font-weight:700;
-color:#2e7d32;
-margin-top:6px;
-}
+    .vpro-stock.in-stock {
+        color: #059669;
+    }
 
-/* RATING */
+    .vpro-stock.out-of-stock {
+        color: #dc2626;
+    }
 
-.shopix-product-rating{
-color:orange;
-margin-top:4px;
-font-size:14px;
-}
+    /* --- FOOTER ACTIONS --- */
+    .vpro-footer {
+        padding: 0 20px 20px;
+        display: flex;
+        gap: 10px;
+    }
 
-/* BUTTON AREA */
+    .vpro-add-cart {
+        flex: 1;
+        background: var(--vpro-primary);
+        color: white;
+        text-decoration: none;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: 0.3s;
+    }
 
-.shopix-product-actions{
-margin-top:10px;
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-}
+    .vpro-add-cart:hover {
+        background: #1d4ed8;
+        box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+    }
 
-/* BUTTON */
+    .vpro-wishlist {
+        width: 45px;
+        height: 45px;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #64748b;
+        text-decoration: none;
+        transition: 0.3s;
+    }
 
-.shopix-btn{
-padding:6px 10px;
-border-radius:6px;
-font-size:13px;
-color:white;
-text-decoration:none;
-}
+    .vpro-wishlist:hover {
+        background: #fff1f2;
+        color: #e11d48;
+        border-color: #fecdd3;
+    }
 
-.shopix-cart{
-background:#2874f0;
-}
+    /* Status Badges */
+    .vpro-badge {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 800;
+        z-index: 10;
+        text-transform: uppercase;
+    }
+    .badge-out { background: #fee2e2; color: #b91c1c; }
 
-.shopix-view{
-background:#20c997;
-}
-
-.shopix-wish{
-background:#ff6161;
-}
-
-.shopix-cart:hover{
-background:#1a5edb;
-}
-
-.shopix-view:hover{
-background:#17a673;
-}
-
-.shopix-wish:hover{
-background:#e84141;
-}
-
-/* STOCK */
-
-.shopix-outstock{
-color:red;
-font-weight:600;
-margin-top:8px;
-}
-
+    /* Out of Stock State */
+    .vpro-card.out-of-stock { opacity: 0.7; }
 </style>
 
-<div class="shopix-products-wrapper">
+<div class="vpro-container">
+    
+    <div class="vpro-filter-wrapper">
+        <input type="text" class="vpro-search-input" placeholder="Search for products..." id="txt_name" onkeyup="AjaxSearch()">
+        
+        <select class="vpro-select" id="sel_category" onchange="AjaxSearch()">
+            <option value="">Category</option>
+            {% for i in categorydata %}
+            <option value="{{i.id}}">{{i.category_name}}</option>
+            {% endfor %}
+        </select>
 
-<div class="shopix-products-title">
-<i class="fa-solid fa-bag-shopping"></i> Products
-</div>
+        <select class="vpro-select" id="sel_subcategory" onchange="AjaxSearch()">
+            <option value="">Subcategory</option>
+        </select>
 
-<!-- FILTER BAR -->
+        <select class="vpro-select" id="sel_sort" onchange="AjaxSearch()">
+            <option value="">Sort By</option>
+            <option value="price_low">Price: Low to High</option>
+            <option value="price_high">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+        </select>
+    </div>
 
-<div class="shopix-filter-bar">
+    <div class="vpro-grid" id="result">
+        {% for i,j in product %}
+        <div class="vpro-card {% if i.total_stock == 0 %}out-of-stock{% endif %}">
+            
+            {% if i.total_stock == 0 %}
+            <span class="vpro-badge badge-out">Out of Stock</span>
+            {% endif %}
 
-<input type="text" placeholder="Search Product..." id="txt_name" onkeyup="AjaxSearch()">
+            <div class="vpro-img-container">
+                <img src="{{i.product_photo.url}}" alt="{{i.product_name}}">
+                
+                <div class="vpro-overlay">
+                    <a href="{% url 'User:Viewmore' i.id %}" class="vpro-view-link">
+                        <i class="fa-solid fa-eye me-1"></i> View Details
+                    </a>
+                </div>
+            </div>
 
-<select id="sel_category" onchange="AjaxSearch()">
-<option value="">Category</option>
-{% for i in categorydata %}
-<option value="{{i.id}}">{{i.category_name}}</option>
-{% endfor %}
-</select>
+            <div class="vpro-content">
+                <div class="vpro-brand">Product Details</div>
+                <h3 class="vpro-name">{{i.product_name}}</h3>
+                
+                <div style="color: #fbbf24; margin-bottom: 10px; font-size: 0.8rem;">
+                    {% for k in ar %}
+                        {% if k <= j %}<i class="fa-solid fa-star"></i>
+                        {% else %}<i class="fa-regular fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
 
-<select id="sel_subcategory" onchange="AjaxSearch()">
-<option value="">Subcategory</option>
-</select>
+                <div class="vpro-price">₹{{i.product_price}}</div>
+                
+                <div class="vpro-stock {% if i.total_stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+                    {% if i.total_stock > 0 %}
+                        In Stock ({{ i.total_stock }})
+                    {% else %}
+                        Out of Stock
+                    {% endif %}
+                </div>
+            </div>
 
-<select id="sel_brand" onchange="AjaxSearch()">
-<option value="">Brand</option>
-{% for i in branddata %}
-<option value="{{i.id}}">{{i.brand_name}}</option>
-{% endfor %}
-</select>
-
-</div>
-
-<!-- PRODUCT GRID -->
-
-<div class="shopix-product-grid" id="result">
-
-{% for i,j in product %}
-
-<div class="shopix-product-card">
-
-<img src="{{i.product_photo.url}}" class="shopix-product-img">
-
-<div class="shopix-product-name">
-{{i.product_name}}
-</div>
-
-<div class="shopix-product-details">
-{{i.product_details}}
-</div>
-
-<div class="shopix-product-price">
-₹ {{i.product_price}}
-</div>
-
-<div class="shopix-product-rating">
-
-{% for k in ar %}
-
-{% if k <= j %} <i class="fa-solid fa-star"></i>
-{% else %} <i class="fa-regular fa-star"></i>
-{% endif %}
-
-{% endfor %}
-
-</div>
-
-{% if i.total_stock == 0 %}
-
-<div class="shopix-outstock">
-Out Of Stock
-</div>
-
-{% else %}
-
-<div class="shopix-product-actions">
-
-<a href="{% url 'User:Addcart' i.id %}" class="shopix-btn shopix-cart">
-<i class="fa-solid fa-cart-shopping"></i>
-</a>
-
-<a href="{% url 'User:Viewmore' i.id %}" class="shopix-btn shopix-view">
-<i class="fa-solid fa-eye"></i>
-</a>
-
-<a href="{% url 'User:Wishlist' i.id %}" class="shopix-btn shopix-wish">
-<i class="fa-solid fa-heart"></i>
-</a>
-
-</div>
-
-{% endif %}
-
-</div>
-
-{% endfor %}
-
-</div>
-
+            <div class="vpro-footer">
+                {% if i.total_stock > 0 %}
+                <a href="{% url 'User:Addcart' i.id %}" class="vpro-add-cart">
+                    <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                </a>
+                <a href="{% url 'User:Wishlist' i.id %}" class="vpro-wishlist">
+                    <i class="fa-regular fa-heart"></i>
+                </a>
+                {% else %}
+                <a href="#" class="vpro-add-cart" style="background:#cbd5e1; cursor:not-allowed; pointer-events:none; width: 100%;">
+                    Unavailable
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 {% if msg %}
-
 <script>
-alert("{{msg}}")
-window.location="{% url 'User:Viewproduct' %}"
+    alert("{{msg}}")
+    window.location="{% url 'User:Viewproduct' %}"
 </script>
-
 {% endif %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
 <script>
+    $("#sel_category").change(function () {
+        var categoryId = $(this).val();
+        $.ajax({
+            url: "{% url 'Shop:Ajaxsubcategory' %}",
+            data: { categoryId: categoryId },
+            success: function (data) {
+                $("#sel_subcategory").html(data);
+            },
+        });
+    });
 
-$("#sel_category").change(function () {
-
-var categoryId = $(this).val();
-var ur = "{% url 'Shop:Ajaxsubcategory' %}";
-
-$.ajax({
-url: ur,
-data: { categoryId: categoryId },
-success: function (data) {
-$("#sel_subcategory").html(data);
-},
-});
-
-});
-
-function AjaxSearch(){
-
-var name = document.getElementById("txt_name").value
-var categoryId = document.getElementById("sel_category").value
-var subcategoryId = document.getElementById("sel_subcategory").value
-var brandId = document.getElementById("sel_brand").value
-
-var ur = "{% url 'User:AjaxSearch' %}";
-
-$.ajax({
-url: ur,
-data: { categoryId: categoryId, subcategoryId: subcategoryId, brandId: brandId, name: name },
-success: function (data) {
-$("#result").html(data);
-},
-});
-
-}
-
+    function AjaxSearch(){
+        var name = $("#txt_name").val();
+        var categoryId = $("#sel_category").val();
+        var subcategoryId = $("#sel_subcategory").val();
+        var sort = $("#sel_sort").val();
+        
+        $.ajax({
+            url: "{% url 'User:AjaxSearch' %}",
+            data: { categoryId: categoryId, subcategoryId: subcategoryId, name: name, sort: sort },
+            success: function (data) {
+                $("#result").html(data);
+            },
+        });
+    }
 </script>
 
 {% endblock %}

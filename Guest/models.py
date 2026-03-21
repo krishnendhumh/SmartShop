@@ -1,5 +1,6 @@
 from django.db import models
 from Admin.models import *
+from django.utils import timezone
 
 # Create your models here.
 class tbl_user(models.Model):
@@ -33,3 +34,9 @@ class tbl_deliveryboy(models.Model):
     delboy_password=models.CharField(max_length=50)
     delboy_status=models.IntegerField(default=0)
     place = models.ForeignKey(tbl_place,on_delete=models.CASCADE)
+
+class tbl_otp(models.Model):
+    otp_email = models.EmailField()
+    otp_code = models.CharField(max_length=6)
+    otp_time = models.DateTimeField(auto_now_add=True)
+    otp_status = models.IntegerField(default=0)

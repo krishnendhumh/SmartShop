@@ -4,213 +4,218 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>ShopiX</title>
+    <title>ShopiX</title>
 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@300;400;600&display=swap"
+        rel="stylesheet">
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<!-- Bootstrap -->
-<link rel="stylesheet" href="{% static 'Main/assets/bootstrap/css/bootstrap.min.css' %}">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{% static 'Main/assets/bootstrap/css/bootstrap.min.css' %}">
 
-<!-- Main CSS -->
-<link rel="stylesheet" href="{% static 'Main/assets/css/main.css' %}">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'Main/assets/css/main.css' %}">
 
-<style>
-
-/* ==========================
+    <style>
+        /* ==========================
 GLOBAL FONT SETTINGS
 ========================== */
 
-body{
-font-family:'Open Sans',sans-serif;
-font-size:15px;
-color:#444;
-background:#f5f7fb;
-}
+        body {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 15px;
+            color: #444;
+            background: #f5f7fb;
+        }
 
-h1,h2,h3,h4,h5{
-font-family:'Poppins',sans-serif;
-font-weight:700;
-}
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
 
-/* ==========================
+        /* ==========================
 PAGE TITLE
 ========================== */
 
-.page-title{
-font-size:26px;
-font-weight:700;
-margin-bottom:20px;
-}
+        .page-title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
 
-/* ==========================
+        /* ==========================
 CARD DESIGN
 ========================== */
 
-.card-box{
-background:white;
-border-radius:15px;
-padding:30px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-animation:fadeUp .6s ease;
-}
+        .card-box {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            animation: fadeUp .6s ease;
+        }
 
-/* ==========================
+        /* ==========================
 FORM STYLES
 ========================== */
 
-label{
-font-weight:600;
-font-size:14px;
-margin-bottom:5px;
-}
+        label {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
 
-input,
-select,
-textarea{
-width:100%;
-padding:10px;
-border-radius:8px;
-border:1px solid #ddd;
-font-size:14px;
-}
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
 
-input:focus,
-select:focus,
-textarea:focus{
-border-color:#ff7b7b;
-box-shadow:0 0 6px rgba(255,123,123,.4);
-outline:none;
-}
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #ff7b7b;
+            box-shadow: 0 0 6px rgba(255, 123, 123, .4);
+            outline: none;
+        }
 
-/* ==========================
+        /* ==========================
 BUTTON STYLE
 ========================== */
 
-.btn-main{
-background:#ff7b7b;
-color:white;
-padding:10px 25px;
-border:none;
-border-radius:8px;
-font-weight:600;
-cursor:pointer;
-transition:.3s;
-}
+        .btn-main {
+            background: #ff7b7b;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .3s;
+        }
 
-.btn-main:hover{
-background:#ff5252;
-transform:translateY(-2px);
-}
+        .btn-main:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
 
-/* ==========================
+        /* ==========================
 TABLE STYLE
 ========================== */
 
-.table-modern{
-width:100%;
-border-collapse:collapse;
-background:white;
-border-radius:10px;
-overflow:hidden;
-box-shadow:0 8px 25px rgba(0,0,0,.08);
-}
+        .table-modern {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .08);
+        }
 
-.table-modern th{
-background:#ff7b7b;
-color:white;
-padding:12px;
-font-size:14px;
-}
+        .table-modern th {
+            background: #ff7b7b;
+            color: white;
+            padding: 12px;
+            font-size: 14px;
+        }
 
-.table-modern td{
-padding:10px;
-border-bottom:1px solid #eee;
-font-size:14px;
-}
+        .table-modern td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
 
-.table-modern tr:hover{
-background:#fafafa;
-}
+        .table-modern tr:hover {
+            background: #fafafa;
+        }
 
-/* ==========================
+        /* ==========================
 BADGES
 ========================== */
 
-.badge-green{
-background:#d4f8e8;
-color:#009e60;
-padding:4px 10px;
-border-radius:20px;
-font-size:12px;
-font-weight:600;
-}
+        .badge-green {
+            background: #d4f8e8;
+            color: #009e60;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
 
-.badge-red{
-background:#ffd6d6;
-color:#e00000;
-padding:4px 10px;
-border-radius:20px;
-font-size:12px;
-font-weight:600;
-}
+        .badge-red {
+            background: #ffd6d6;
+            color: #e00000;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
 
-/* ==========================
+        /* ==========================
 NAVBAR STYLE
 ========================== */
 
-.top-header-area{
-box-shadow:0 3px 10px rgba(0,0,0,.1);
-}
+        .top-header-area {
+            box-shadow: 0 3px 10px rgba(0, 0, 0, .1);
+        }
 
-.main-menu ul li a{
-font-family:'Poppins',sans-serif;
-font-size:15px;
-font-weight:600;
-}
+        .main-menu ul li a {
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+        }
 
-.header-icons a{
-font-size:14px;
-}
+        .header-icons a {
+            font-size: 14px;
+        }
 
-/* ==========================
+        /* ==========================
 ANIMATION
 ========================== */
 
-@keyframes fadeUp{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
 
-/* ==========================
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==========================
 RESPONSIVE
 ========================== */
 
-@media(max-width:768px){
+        @media(max-width:768px) {
 
-.card-box{
-padding:20px;
-}
+            .card-box {
+                padding: 20px;
+            }
 
-.page-title{
-font-size:22px;
-}
+            .page-title {
+                font-size: 22px;
+            }
 
-}
-
-</style>
+        }
+    </style>
 
 </head>
 
@@ -218,112 +223,92 @@ font-size:22px;
 <body>
 
 
-<!-- HEADER -->
-<div class="top-header-area bg-dark" id="sticker">
+    <!-- HEADER -->
+    <div class="top-header-area bg-dark" id="sticker">
 
-<div class="container">
-<div class="row">
+        <div class="container">
+            <div class="row">
 
-<div class="col-lg-12 text-center">
+                <div class="col-lg-12 text-center">
 
-<div class="main-menu-wrap">
+                    <div class="main-menu-wrap">
 
-<!-- LOGO -->
-<div class="site-logo">
-<a href="{% url 'Shop:Homepage' %}">
-<img src="{% static 'Main/assets/img/logo.png' %}" width="60">
-</a>
-</div>
+                        <!-- LOGO -->
+                        <div class="site-logo">
+                            <a href="{% url 'Shop:Homepage' %}">
+                                <img src="{% static 'Main/assets/img/logo.png' %}" width="60">
+                            </a>
+                        </div>
 
-<!-- MENU -->
-<nav class="main-menu">
-<ul>
+                        <!-- MENU -->
+                        <nav class="main-menu">
+                            <ul>
 
-<li><a href="{% url 'Shop:Homepage' %}">Home</a></li>
+                                <li><a href="{% url 'Shop:Homepage' %}">Home</a></li>
 
-<li><a href="{% url 'Shop:Product' %}">Manage Products</a></li>
+                                <li><a href="{% url 'Shop:Product' %}">Manage Products</a></li>
 
-<li>
-<a href="#">Account</a>
-<ul class="sub-menu">
-<li><a href="{% url 'Shop:MyProfile' %}">My Profile</a></li>
-<li><a href="{% url 'Shop:EditProfile' %}">Edit Profile</a></li>
-<li><a href="{% url 'Shop:ChangePass' %}">Change Password</a></li>
-</ul>
-</li>
+                                <li>
+                                    <a href="#">Account</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="{% url 'Shop:MyProfile' %}">My Profile</a></li>
+                                        <li><a href="{% url 'Shop:EditProfile' %}">Edit Profile</a></li>
+                                        <li><a href="{% url 'Shop:ChangePass' %}">Change Password</a></li>
+                                    </ul>
+                                </li>
 
-<li>
-<a href="{% url 'Shop:ViewBooking' %}">Manage Order</a>
-<ul class="sub-menu">
-<li><a href="{% url 'Shop:ViewBooking' %}">View Orders</a></li>
-<li><a href="{% url 'Shop:ViewRequests' %}">Order Requests</a></li>
-</ul>
-</li>
-<li>
-<a href="{% url 'Shop:SalesReport' %}">Reports</a>
-</li>
+                                <li>
+                                    <a href="{% url 'Shop:ViewBooking' %}">Manage Order</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="{% url 'Shop:ViewBooking' %}">View Orders</a></li>
+                                        <li><a href="{% url 'Shop:ViewRequests' %}">Order Requests</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="{% url 'Shop:SalesReport' %}">Reports</a>
+                                </li>
 
-<li>
-<div class="header-icons">
+                                <li>
+                                    <div class="header-icons">
 
-<a href="{% url 'Guest:index' %}" class="logout-btn">
-<i class="fa-solid fa-right-from-bracket"></i> Logout
-</a>
+                                        <a href="{% url 'Shop:logout' %}" class="logout-btn">
+                                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                                        </a>
 
-</div>
-</li>
+                                    </div>
+                                </li>
 
-</ul>
-</nav>
+                            </ul>
+                        </nav>
 
-</div>
-</div>
+                    </div>
+                </div>
 
-</div>
-</div>
-</div>
-
-
-<!-- PAGE CONTENT -->
-<div style="padding-top:150px;padding-bottom:60px">
-
-<div class="container">
-
-{% block content %}
-{% endblock %}
-
-</div>
-
-</div>
+            </div>
+        </div>
+    </div>
 
 
-<!-- FOOTER -->
-<div class="footer-area">
-<div class="container">
+    <!-- PAGE CONTENT -->
+    <div style="padding-top:150px;padding-bottom:60px">
 
-<div class="row">
+        <div class="container">
 
-<div class="col-lg-6">
-<p>© 2026 Shop Dashboard. All rights reserved.</p>
-</div>
+            {% block content %}
+            {% endblock %}
 
-<div class="col-lg-6 text-right">
+        </div>
 
-<a href="#"><i class="fab fa-facebook"></i></a>
-<a href="#"><i class="fab fa-instagram"></i></a>
-<a href="#"><i class="fab fa-twitter"></i></a>
-
-</div>
-
-</div>
-
-</div>
-</div>
+    </div>
 
 
-<!-- JS -->
-<script src="{% static 'Main/assets/js/jquery-1.11.3.min.js' %}"></script>
-<script src="{% static 'Main/assets/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!-- FOOTER -->
+    
+
+    <!-- JS -->
+    <script src="{% static 'Main/assets/js/jquery-1.11.3.min.js' %}"></script>
+    <script src="{% static 'Main/assets/bootstrap/js/bootstrap.min.js' %}"></script>
 
 </body>
+
 </html>

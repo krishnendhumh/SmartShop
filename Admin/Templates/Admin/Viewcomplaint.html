@@ -146,9 +146,11 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{% url 'Admin:replycomplaint' i.id %}" class="btn-reply">
-                        ✉ Reply
-                    </a>
+                    {% if not i.com_reply %}
+                        <a href="{% url 'Admin:replycomplaint' i.id %}" class="btn-reply">
+                            ✉ Reply
+                        </a>
+                    {% endif %}
                 </td>
             </tr>
         {% empty %}

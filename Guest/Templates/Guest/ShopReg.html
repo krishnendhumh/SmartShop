@@ -1,190 +1,294 @@
 {% extends 'Guest/Head.html' %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <style>
-       
+<style>
+    :root {
+        --shop-primary: #0f172a; /* Slate 900 */
+        --shop-accent: #0ea5e9;  /* Sky 500 */
+        --shop-bg: #f1f5f9;
+        --shop-card: #ffffff;
+        --shop-border: #e2e8f0;
+    }
 
-        form {
-            background: #ffffff;
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            width: 420px;
-        }
+    .shop-reg-wrapper {
+        min-height: 100vh;
+        background-color: var(--shop-bg);
+        font-family: 'Outfit', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px 20px;
+    }
 
-        table {
-            width: 100%;
-            border: none;
-        }
+    .shop-reg-card {
+        background: var(--shop-card);
+        width: 100%;
+        max-width: 850px;
+        border-radius: 24px;
+        box-shadow: 0 20px 25px -5px rgba(235, 0, 0, 0.1), 0 8px 10px -6px rgba(204, 197, 197, 0.1);
+        overflow: hidden;
+        border: 1px solid var(--shop-border);
+    }
 
-        td {
-            border: none;
-            padding: 8px;
-            font-size: 14px;
-        }
+    /* --- HEADER --- */
+    /* --- HEADER TEXT COLOR --- */
+.shop-reg-header {
+    background: var(--shop-primary);
+    color: #ffffff; /* Explicitly white */
+    padding: 40px;
+    text-align: center;
+}
 
-        input[type="text"],
-        input[type="password"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 8px 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-            outline: none;
-        }
+.shop-reg-header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #ffffff; /* Ensures the title is visible */
+    letter-spacing: -0.5px;
+}
 
-        textarea {
-            resize: none;
-            height: 70px;
-        }
+.shop-reg-header p {
+    color: rgba(255, 255, 255, 0.9); /* Slightly transparent white for the subtext */
+    font-weight: 300;
+}
 
-        input:focus,
-        textarea:focus,
-        select:focus {
-            border-color: #43cea2;
-        }
+/* --- ICON COLORS --- */
+.shop-reg-label i {
+    color: var(--shop-accent); /* Makes the small icons blue/sky color */
+    width: 20px;
+    text-align: center;
+}
+    /* --- FORM BODY --- */
+    .shop-reg-body {
+        padding: 40px;
+    }
 
-        input[type="file"] {
-            font-size: 13px;
-        }
+    .shop-reg-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+    }
 
-        input[type="submit"] {
-            background: #43cea2;
-            color: #fff;
-            padding: 10px 25px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
-        }
+    .shop-reg-full {
+        grid-column: span 2;
+    }
 
-        input[type="submit"]:hover {
-            background: #36b39c;
-        }
+    .shop-reg-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 
-        option {
-            padding: 8px;
-        }
+    .shop-reg-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--shop-primary);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-        @media (max-width: 480px) {
-            form {
-                width: 90%;
-            }
-        }
-    </style>
-</head>
+    .shop-reg-input, .shop-reg-select, .shop-reg-textarea {
+        padding: 12px 16px;
+        border: 2px solid var(--shop-border);
+        border-radius: 12px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: #f8fafc;
+        outline: none;
+    }
 
-<body>
-    <form action="" method="post" enctype="multipart/form-data">
-         {% csrf_token %}
-        <table border="2">
-        <tr>
-            <td>Name</td>
-            <td><input type="text" name="txt_name" id="txt_name" required placeholder="Enter Your Name"
-                title="Name Allows Only Alphabets,Spaces and First Letter Must Be Capital Letter"
-                pattern="^[A-Z]+[a-zA-Z ]*$" minlength="3"></td>
-        </tr>
+    .shop-reg-input:focus, .shop-reg-select:focus, .shop-reg-textarea:focus {
+        border-color: var(--shop-accent);
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(125, 210, 250, 0.1);
+    }
 
-        <tr>
-            <td>Email</td>
-            <td><input type="text" name="txt_email" id="txt_email" required minlength="5"></td>
-        </tr>
+    .shop-reg-textarea {
+        height: 100px;
+        resize: none;
+    }
 
-        <tr>
-            <td>Contact</td>
-            <td><input type="text" name="txt_contact" id="txt_contact"
-                pattern="[6-9]{1}[0-9]{9}"
-                title="Phone number with 6-9 and remaing 9 digit with 0-9"
-                minlength="7" maxlength="10"></td>
-        </tr>
+    /* --- FILE UPLOAD STYLE --- */
+    .shop-reg-file-container {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        background: #f1f5f9;
+        padding: 10px;
+        border-radius: 12px;
+        border: 1px dashed #cbd5e1;
+    }
 
-        <tr>
-            <td>Address</td>
-            <td><textarea name="txt_address" id="txt_address" required minlength="3"></textarea></td>
-        </tr>
+    .shop-reg-file-input {
+        font-size: 0.8rem;
+        width: 100%;
+    }
 
-        <tr>
-            <td>Photo</td>
-            <td><input type="file" name="file_photo" id="file_photo" required accept="images/*"></td>
-        </tr>
+    .shop-preview-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        object-fit: cover;
+        display: none;
+        border: 1px solid #ddd;
+    }
 
-        <tr>
-            <td>Proof</td>
-            <td><input type="file" name="file_proof" id="file_proof" required accept="images/*"></td>
-        </tr>
+    /* --- SUBMIT --- */
+    .shop-reg-btn {
+        width: 100%;
+        margin-top: 40px;
+        padding: 16px;
+        background: var(--shop-accent);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
 
-        <tr>
-            <td>District</td>
-            <td>
-                <select required ="sel_district" id="sel_district">
-                    <option value="">--select--</option>
-                    {% for i in districtdata %}
-                    <option value="{{i.id}}">
-                        {{i.district_name}}
-                    </option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
+    .shop-reg-btn:hover {
+        background: #0284c7;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.3);
+    }
 
-        <tr>
-            <td>Place</td>
-            <td>
-                <select name="sel_place" id="sel_place" required>
-                    <option value="">--select--</option>
-                </select>
-            </td>
-        </tr>
+    /* Responsive */
+    @media (max-width: 768px) {
+        .shop-reg-grid { grid-template-columns: 1fr; }
+        .shop-reg-full { grid-column: auto; }
+        .shop-reg-header { padding: 30px 20px; }
+        .shop-reg-body { padding: 30px 20px; }
+    }
+</style>
 
-        <tr>
-            <td>Password</td>
-            <td>
-                <input type="password" name="txt_password" id="txt_password"
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters">
-            </td>
-        </tr>
+<div class="shop-reg-wrapper">
+    <div class="shop-reg-card">
+       <header class="shop-reg-header">
+    <h1><i class="fa-solid fa-store" style="color: var(--shop-accent);"></i> Partner Registration</h1>
+    <p>Complete the form below to register your business</p>
+</header>
 
-        <tr>
-            <td colspan="2" align="center">
-                <input type="submit" value="Submit">
-            </td>
-        </tr>
-        </table>
-    </form>
-</body>
-</html>
+        <form action="" method="post" enctype="multipart/form-data" class="shop-reg-body">
+            {% csrf_token %}
+            <div class="shop-reg-grid">
+                
+                <div class="shop-reg-group shop-reg-full">
+                    <label class="shop-reg-label"><i class="fa-solid fa-signature"></i> Shop Name</label>
+                    <input type="text" name="txt_name" class="shop-reg-input" required placeholder="Business Title" 
+                           pattern="^[A-Z]+[a-zA-Z ]*$" minlength="3">
+                </div>
+
+                <div class="shop-reg-group">
+                    <label class="shop-reg-label"><i class="fa-solid fa-envelope"></i> Business Email</label>
+                    <input type="email" name="txt_email" class="shop-reg-input" required placeholder="contact@shop.com">
+                </div>
+
+                <div class="shop-reg-group">
+                    <label class="shop-reg-label"><i class="fa-solid fa-phone"></i> Contact Number</label>
+                    <input type="text" name="txt_contact" class="shop-reg-input" required pattern="[6-9]{1}[0-9]{9}" placeholder="9876543210">
+                </div>
+
+                <div class="shop-reg-group shop-reg-full">
+                    <label class="shop-reg-label"><i class="fa-solid fa-location-dot"></i> Shop Address</label>
+                    <textarea name="txt_address" class="shop-reg-textarea" required placeholder="Full physical location..."></textarea>
+                </div>
+
+                <div class="shop-reg-group">
+                    <label class="shop-reg-label"><i class="fa-solid fa-map"></i> District</label>
+                    <select name="sel_district" id="sel_district" class="shop-reg-select" required>
+                        <option value="">Select District</option>
+                        {% for i in districtdata %}
+                        <option value="{{i.id}}">{{i.district_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="shop-reg-group">
+                    <label class="shop-reg-label"><i class="fa-solid fa-location-crosshairs"></i> Place</label>
+                    <select name="sel_place" id="sel_place" class="shop-reg-select" required>
+                        <option value="">Select Place</option>
+                    </select>
+                </div>
+
+                <div class="shop-reg-group">
+                    <label class="shop-reg-label"><i class="fa-solid fa-image"></i> Shop Photo</label>
+                    <div class="shop-reg-file-container">
+                        <img id="photo-preview" class="shop-preview-img">
+                        <input type="file" name="file_photo" class="shop-reg-file-input" required accept="image/*" onchange="previewFile(this, 'photo-preview')">
+                    </div>
+                </div>
+
+                <div class="shop-reg-group">
+                    <label class="shop-reg-label"><i class="fa-solid fa-file-invoice"></i> ID Proof</label>
+                    <div class="shop-reg-file-container">
+                        <img id="proof-preview" class="shop-preview-img">
+                        <input type="file" name="file_proof" class="shop-reg-file-input" required accept="image/*" onchange="previewFile(this, 'proof-preview')">
+                    </div>
+                </div>
+
+                <div class="shop-reg-group shop-reg-full">
+                    <label class="shop-reg-label"><i class="fa-solid fa-lock"></i> Secure Password</label>
+                    <input type="password" name="txt_password" class="shop-reg-input" required 
+                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+                           placeholder="••••••••">
+                    <small style="font-size: 0.75rem; color: #64748b;">Must include 8+ chars, Uppercase, Lowercase, and Number.</small>
+                </div>
+            </div>
+
+            <button type="submit" class="shop-reg-btn">
+                Submit Business Application <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+</div>
 
 {% if msg %}
 <script>
-    alert("{{msg}}")
-    window.location = "{% url 'Guest:ShopReg' %}"
+    alert("{{msg}}");
+    window.location = "{% url 'Guest:ShopReg' %}";
 </script>
 {% endif %}
 
-<!-- jQuery & AJAX -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
+    // AJAX for Place
     $("#sel_district").change(function () {
         var districtId = $(this).val();
-        var ur = "{% url 'Guest:Ajaxplace' %}";
         $.ajax({
-            url: ur,
+            url: "{% url 'Guest:Ajaxplace' %}",
             data: { districtId: districtId },
             success: function (data) {
                 $("#sel_place").html(data);
             },
         });
     });
+
+    // File Preview Logic
+    function previewFile(input, previewId) {
+        const preview = document.getElementById(previewId);
+        const file = input.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+            preview.style.display = "block";
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "";
+            preview.style.display = "none";
+        }
+    }
 </script>
-
-
 {% endblock %}

@@ -5,8 +5,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Modernize Free</title>
-    <link rel="shortcut icon" type="image/png" href="{% static 'Admin/assets/images/logos/favicon.png' %}" />
+    <title>ShopiX</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'Main/assets/img/logo.png' %}" />
     <link rel="stylesheet" href="{% static 'Admin/assets/css/styles.min.css' %}" />
 </head>
 
@@ -20,7 +20,7 @@
     <!-- Logo -->
     <div class="brand-logo d-flex align-items-center justify-content-between">
       <a href="{% url 'Admin:Homepage' %}" class="text-nowrap logo-img">
-        <img src="{% static 'Admin/assets/images/logos/dark-logo.svg' %}" width="180" alt="">
+        <img src="{% static 'Main/assets/img/logo.png' %}" width="180" alt="">
       </a>
 
       <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
@@ -166,15 +166,15 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                                <i class="ti ti-bell-ringing"></i>
-                                <div class="notification bg-primary rounded-circle"></div>
+                                <!-- <i class="ti ti-bell-ringing"></i> -->
+                                <!-- <div class="notification bg-primary rounded-circle"></div> -->
                             </a>
                         </li>
                     </ul>
                     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
                         <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-                            <a href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/"
-                                target="_blank" class="btn btn-primary">Download Free</a>
+                            <!-- <a href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/"
+                                target="_blank" class="btn btn-primary"></a> -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -184,7 +184,7 @@
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
                                     aria-labelledby="drop2">
                                     <div class="message-body">
-                                        <a href="javascript:void(0)"
+                                        <!-- <a href="javascript:void(0)"
                                             class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-user fs-6"></i>
                                             <p class="mb-0 fs-3">My Profile</p>
@@ -198,8 +198,8 @@
                                             class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-list-check fs-6"></i>
                                             <p class="mb-0 fs-3">My Task</p>
-                                        </a>
-                                        <a href="{% static 'Admin/authentication-login.html' %}"
+                                        </a> -->
+                                        <a href="{% url 'Admin:logout' %}"
                                             class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                                     </div>
                                 </div>
@@ -218,11 +218,7 @@
 
             </div>
 
-            <div class="py-6 px-6 text-center">
-                <p class="mb-0 fs-4">Design and Developed by <a href="https://adminmart.com/" target="_blank"
-                        class="pe-1 text-primary text-decoration-underline">AdminMart.com</a> Distributed by <a
-                        href="https://themewagon.com">ThemeWagon</a></p>
-            </div>
+            
         </div>
     </div>
     </div>

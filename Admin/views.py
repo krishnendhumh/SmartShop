@@ -318,33 +318,36 @@ def Viewfeedback(request):
     return render(request, "Admin/Viewfeedback.html", {"feedback": feedback})
 
 def SalesReport(request):
+    # 1. Initialize variables with default values
+    from_date = request.POST.get("from_date")
+    to_date = request.POST.get("to_date")
+    
+    # 2. Start with a base queryset (All bookings)
+    booking_qs = tbl_booking.objects.all()
 
-    bookingdata = tbl_booking.objects.all()
+    # 3. Apply Filter ONLY if POST and dates are provided
+    if request.method == "POST" and from_date and to_date:
+        booking_qs = booking_qs.filter(booking_date__range=[from_date, to_date])
 
-    # date filter
-    if request.method == "POST":
-        from_date = request.POST.get("from_date")
-        to_date = request.POST.get("to_date")
-
-        if from_date and to_date:
-            bookingdata = tbl_booking.objects.filter(
-                booking_date__range=[from_date, to_date]
-            )
-
-    # admin statistics
-    total_sales = tbl_cart.objects.filter(cart_status=6).count()
-    cancel_count = tbl_cart.objects.filter(cart_status=7).count()
-    return_count = tbl_cart.objects.filter(cart_status=9).count()
-    refund_count = tbl_cart.objects.filter(cart_status=10).count()
-    feedback_count = tbl_feedback.objects.count()
+    # 4. Filter Cart/Feedback based on the filtered Bookings
+    # This ensures your summary cards (Total Sales, Cancels) match the date range
+    total_sales = tbl_cart.objects.filter(booking__in=booking_qs, cart_status=6).count()
+    cancel_count = tbl_cart.objects.filter(booking__in=booking_qs, cart_status=7).count()
+    return_count = tbl_cart.objects.filter(booking__in=booking_qs, cart_status=9).count()
+    refund_count = tbl_cart.objects.filter(booking__in=booking_qs, cart_status=10).count()
+    
+    # Assuming feedback is linked to booking or product; if not, you might need a date field in tbl_feedback
+    feedback_count = tbl_feedback.objects.all().count() 
 
     context = {
-        "bookingdata": bookingdata,
+        "bookingdata": booking_qs,
         "total_sales": total_sales,
         "cancel_count": cancel_count,
         "return_count": return_count,
         "refund_count": refund_count,
         "feedback_count": feedback_count,
+        "from_date": from_date, # Pass this back to keep the input filled
+        "to_date": to_date      # Pass this back to keep the input filled
     }
 
     return render(request, "Admin/SalesReport.html", context)

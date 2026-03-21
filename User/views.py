@@ -14,8 +14,13 @@ from datetime import date
 def index(request):
     return render(request,"Guest/index.html")
 
+def logout(request):
+    del request.session['uid']
+    return redirect("Guest:Login")
+
 def Homepage(request):
-    return render(request,"User/Homepage.html")
+    productdata = tbl_product.objects.all()[:3]  # Limit to 3 for homepage
+    return render(request,"User/Homepage.html", {'product': productdata})
 
 def MyProfile(request):
     userdata = tbl_user.objects.get(id=request.session['uid'])
@@ -143,6 +148,7 @@ def AjaxSearch(request):
     category = request.GET.get("categoryId")
     subcategory = request.GET.get("subcategoryId")
     brand = request.GET.get("brandId")
+    sort = request.GET.get("sort")
 
     productdata = tbl_product.objects.all()
 
@@ -157,6 +163,15 @@ def AjaxSearch(request):
 
     if brand:
         productdata = productdata.filter(brand=brand)
+
+    # Sorting
+    if sort == "price_low":
+        productdata = productdata.order_by('product_price')
+    elif sort == "price_high":
+        productdata = productdata.order_by('-product_price')
+    elif sort == "name":
+        productdata = productdata.order_by('product_name')
+    # For rating, it's complex, skip for now
     
     for i in productdata:
         total_stock = tbl_stock.objects.filter(
@@ -165,7 +180,7 @@ def AjaxSearch(request):
 
         total_cart = tbl_cart.objects.filter(
             product=i.id,
-            cart_status=1
+            cart_status__gt=1
         ).aggregate(total=Sum('cart_qty'))['total'] or 0
 
         i.total_stock = total_stock - total_cart
@@ -186,7 +201,7 @@ def AjaxSearch(request):
 
     
 
-    return render(request, "User/AjaxSearch.html", {'productdata': datas,'ar': ar})
+    return render(request, "User/AjaxSearch.html", {'product': datas,'ar': ar})
 
 def Wishlist(request,id):
     productdata = tbl_product.objects.get(id=id)
@@ -301,6 +316,19 @@ def Mycart(request):
             bookingdata=tbl_booking.objects.get(id=request.session["bookingid"])
             bookingdata.booking_amount=request.POST.get("carttotalamt")
             bookingdata.booking_status=1
+            
+            # Handle address selection
+            address_option = request.POST.get("address_option")
+            if address_option == "registered":
+                # Use registered address from user profile
+                user = tbl_user.objects.get(id=request.session["uid"])
+                bookingdata.delivery_address = user.user_address
+            elif address_option == "new":
+                # Use new address provided by user
+                new_address = request.POST.get("new_address")
+                if new_address:
+                    bookingdata.delivery_address = new_address
+            
             bookingdata.save()
             cart = tbl_cart.objects.filter(booking=bookingdata)
             for i in cart:
@@ -324,7 +352,9 @@ def Mycart(request):
                         total_cart = 0
                     total =  total_stock - total_cart
                     i.total_stock = total
-                return render(request,"User/MyCart.html",{'cartdata':cart})
+                # Get user data for address display
+                user = tbl_user.objects.get(id=request.session["uid"])
+                return render(request,"User/MyCart.html",{'cartdata':cart, 'user': user})
             else:
                 return render(request,"User/MyCart.html")
    

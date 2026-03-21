@@ -25,6 +25,7 @@ class tbl_booking(models.Model):
     booking_amount = models.FloatField(null=True)
     booking_date = models.DateField(auto_now_add=True)
     user = models.ForeignKey(tbl_user,on_delete=models.CASCADE)
+    delivery_address = models.TextField(null=True, blank=True)
     
 class tbl_cart(models.Model):
     cart_qty = models.IntegerField(default=1)
