@@ -56,15 +56,15 @@
 
                     <div class="site-logo">
                         <a href="{% url 'Guest:index' %}">
-                            <img src="{% static 'Main/assets/img/logo.png' %}" alt="ShopiX Logo" width="60">
+                            <img src="{% static 'Main/assets/img/Logo1.png' %}" alt="ShopiX Logo" width="60">
                         </a>
                     </div>
 
                     <nav class="main-menu">
                         <ul class="d-flex align-items-center list-unstyled mb-0">
                             <li class="current-list-item"><a href="{% url 'Guest:index' %}">Home</a></li>
-                            <li><a href="{% url 'User:Viewproduct' %}">Shop</a></li>
-                            <li><a href="#about">About</a></li>
+                            <!-- <li><a href="{% url 'User:Viewproduct' %}">Shop</a></li>
+                            <li><a href="#about">About</a></li> -->
                             <li><a href="{% url 'Guest:Login' %}">Login</a></li>
                             <li class="has-children"> <a href="#">Register <i class="fas fa-angle-down"></i></a>
                                 <ul class="sub-menu">
@@ -75,7 +75,7 @@
                             <li>
                                 <div class="header-icons ms-4">
                                     <a class="search-bar-icon me-3" href="#"><i class="fas fa-search"></i></a>
-                                    <a class="shopping-cart" href="{% url 'User:MyCart' %}"><i class="fas fa-shopping-cart"></i></a>
+                                    <a class="shopping-cart" href="{% url 'Guest:Login' %}"><i class="fas fa-shopping-cart"></i></a>
                                 </div>
                             </li>
                         </ul>
@@ -123,7 +123,7 @@
 								all in one place. Enjoy a seamless shopping experience with ShopiX
 								and start exploring today.
 							</p>
-							<a href="{% url 'User:Viewproduct' %}" class="boxed-btn">Shop Now</a>
+							<a href="{% url 'Guest:Login' %}" class="boxed-btn">Shop Now</a>
 							<a href="#about" class="bordered-btn">Learn More</a>
 						</div>
 					</div>
@@ -226,7 +226,7 @@
 	</div>
 
 
-	<!-- DEAL / BANNER SECTION -->
+	<!-- DEAL / BANNER SECTION 
 	<section class="cart-banner pt-100 pb-100">
 		<div class="container">
 			<div class="row clearfix">
@@ -250,7 +250,7 @@
 
 			</div>
 		</div>
-	</section>
+	</section>-->
 
 
 	<!-- TESTIMONIALS -->

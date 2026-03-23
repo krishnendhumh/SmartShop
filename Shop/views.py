@@ -31,44 +31,43 @@ def shop_sales_dashboard(request):
     # BASIC METRICS
     # -------------------------
     
-    # Total Income (All time) - using completed orders (cart_status=5 = Delivered)
-    # Convert product_price to float for calculations
+    # Total Income (All time) - using completed payments (booking_status=2)
     income = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5  # Delivered
+        booking__booking_status__gte=2
     ).aggregate(
-        total=Sum(Cast('product__product_price', output_field=FloatField()))
+        total=Sum(ExpressionWrapper(Cast('product__product_price', output_field=FloatField()) * F('cart_qty'), output_field=FloatField()))
     )
     total_income = income['total'] or 0
     
     # Today's Income
     today_income = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5,
-        del_date=current_date
+        booking__booking_status__gte=2,
+        booking__booking_date=current_date
     ).aggregate(
-        total=Sum(Cast('product__product_price', output_field=FloatField()))
+        total=Sum(ExpressionWrapper(Cast('product__product_price', output_field=FloatField()) * F('cart_qty'), output_field=FloatField()))
     )['total'] or 0
     
     # This Month's Income
     month_income = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5,
-        del_date__month=current_date.month,
-        del_date__year=current_date.year
+        booking__booking_status__gte=2,
+        booking__booking_date__month=current_date.month,
+        booking__booking_date__year=current_date.year
     ).aggregate(
-        total=Sum(Cast('product__product_price', output_field=FloatField()))
+        total=Sum(ExpressionWrapper(Cast('product__product_price', output_field=FloatField()) * F('cart_qty'), output_field=FloatField()))
     )['total'] or 0
     
     # Last Month's Income
     last_month = current_date.replace(day=1) - timedelta(days=1)
     last_month_income = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5,
-        del_date__month=last_month.month,
-        del_date__year=last_month.year
+        booking__booking_status__gte=2,
+        booking__booking_date__month=last_month.month,
+        booking__booking_date__year=last_month.year
     ).aggregate(
-        total=Sum(Cast('product__product_price', output_field=FloatField()))
+        total=Sum(ExpressionWrapper(Cast('product__product_price', output_field=FloatField()) * F('cart_qty'), output_field=FloatField()))
     )['total'] or 0
     
     # Calculate growth percentage
@@ -77,52 +76,49 @@ def shop_sales_dashboard(request):
     else:
         income_growth = 100 if month_income > 0 else 0
     
-    # Total Orders (Delivered)
+    # Total Orders (Completed Payment)
     total_orders = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5
-    ).count()
+        booking__booking_status__gte=2
+    ).values('booking').distinct().count()
     
     # Today's Orders
     today_orders = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5,
-        del_date=current_date
-    ).count()
+        booking__booking_status__gte=2,
+        booking__booking_date=current_date
+    ).values('booking').distinct().count()
     
     # Orders by Status (based on your model)
     pending_orders = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=0  # Pending
-    ).count()
+        booking__booking_status=1  # Assuming 1 is Pending/Booked but not paid
+    ).values('booking').distinct().count()
     
     packed_orders = tbl_cart.objects.filter(
         product__shop=shop_id,
-        pack_date__isnull=False,
-        ship_date__isnull=True
+        cart_status=3  # Packed
     ).count()
     
     shipped_orders = tbl_cart.objects.filter(
         product__shop=shop_id,
-        ship_date__isnull=False,
-        outdel_date__isnull=True
+        cart_status=4  # Shipped
     ).count()
     
     out_for_delivery_orders = tbl_cart.objects.filter(
         product__shop=shop_id,
-        outdel_date__isnull=False,
-        del_date__isnull=True
+        cart_status=5  # Out for Delivery
     ).count()
     
     cancelled_orders = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cancel_date__isnull=False
-    ).exclude(cancel_reason__isnull=True).count()
+        cart_status=7  # Cancelled
+    ).count()
     
     returned_orders = tbl_cart.objects.filter(
         product__shop=shop_id,
-        return_date__isnull=False
-    ).exclude(return_reason__isnull=True).count()
+        cart_status=9  # Returned
+    ).count()
     
     # Average Order Value
     avg_order_value = total_income / total_orders if total_orders > 0 else 0
@@ -140,20 +136,20 @@ def shop_sales_dashboard(request):
     
     this_week_income = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5,
-        del_date__gte=week_start,
-        del_date__lte=current_date
+        booking__booking_status__gte=2,
+        booking__booking_date__gte=week_start,
+        booking__booking_date__lte=current_date
     ).aggregate(
-        total=Sum(Cast('product__product_price', output_field=FloatField()))
+        total=Sum(ExpressionWrapper(Cast('product__product_price', output_field=FloatField()) * F('cart_qty'), output_field=FloatField()))
     )['total'] or 0
     
     last_week_income = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5,
-        del_date__gte=last_week_start,
-        del_date__lte=last_week_end
+        booking__booking_status__gte=2,
+        booking__booking_date__gte=last_week_start,
+        booking__booking_date__lte=last_week_end
     ).aggregate(
-        total=Sum(Cast('product__product_price', output_field=FloatField()))
+        total=Sum(ExpressionWrapper(Cast('product__product_price', output_field=FloatField()) * F('cart_qty'), output_field=FloatField()))
     )['total'] or 0
     
     # Week-over-Week Growth
@@ -169,7 +165,7 @@ def shop_sales_dashboard(request):
     # Most Bought Product
     most_product = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5
+        booking__booking_status__gte=2
     ).values(
         'product__product_name',
         'product__product_price',
@@ -187,7 +183,7 @@ def shop_sales_dashboard(request):
     # Most Bought Category
     most_category = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5
+        booking__booking_status__gte=2
     ).values(
         'product__subcategory__category__category_name',
         'product__subcategory__category__id'
@@ -204,7 +200,7 @@ def shop_sales_dashboard(request):
     # Most Bought Brand
     most_brand = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5
+        booking__booking_status__gte=2
     ).values(
         'product__brand__brand_name',
         'product__brand__id'
@@ -221,7 +217,7 @@ def shop_sales_dashboard(request):
     # Top 10 Products
     top_products = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5
+        booking__booking_status__gte=2
     ).values(
         'product__product_name',
         'product__product_price',
@@ -278,21 +274,21 @@ def shop_sales_dashboard(request):
     # Total Customers
     total_customers = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5
+        booking__booking_status__gte=2
     ).values('booking__user').distinct().count()
     
     # New Customers This Month
     new_customers = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5,
-        del_date__month=current_date.month,
-        del_date__year=current_date.year
+        booking__booking_status__gte=2,
+        booking__booking_date__month=current_date.month,
+        booking__booking_date__year=current_date.year
     ).values('booking__user').distinct().count()
     
     # Repeat Customers (customers with >1 order)
     repeat_customers = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5
+        booking__booking_status__gte=2
     ).values('booking__user').annotate(
         order_count=Count('booking', distinct=True)
     ).filter(order_count__gt=1).count()
@@ -306,12 +302,22 @@ def shop_sales_dashboard(request):
     
     # Monthly Sales Data (Last 12 months)
     twelve_months_ago = current_date - timedelta(days=365)
-    monthly_sales = tbl_booking.objects.filter(
-        tbl_cart__product__shop=shop_id,
-        booking_date__gte=twelve_months_ago,
-        tbl_cart__cart_status=1
-    )
-    print(monthly_sales)
+    monthly_sales = tbl_cart.objects.filter(
+        product__shop=shop_id,
+        booking__booking_status__gte=2,
+        booking__booking_date__gte=twelve_months_ago
+    ).annotate(
+        month=ExtractMonth('booking__booking_date'),
+        year=ExtractYear('booking__booking_date')
+    ).values('month', 'year').annotate(
+        total_sales=Sum(
+            ExpressionWrapper(
+                Cast('product__product_price', output_field=FloatField()) * F('cart_qty'),
+                output_field=FloatField()
+            )
+        ),
+        order_count=Count('booking__id', distinct=True)
+    ).order_by('year', 'month')
     monthly_data = []
     months_list = []
     for ms in monthly_sales:
@@ -330,10 +336,10 @@ def shop_sales_dashboard(request):
     thirty_days_ago = current_date - timedelta(days=30)
     daily_sales = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5,
-        del_date__gte=thirty_days_ago,
-        del_date__lte=current_date
-    ).values('del_date').annotate(
+        booking__booking_status__gte=2,
+        booking__booking_date__gte=thirty_days_ago,
+        booking__booking_date__lte=current_date
+    ).values('booking__booking_date').annotate(
         total_sales=Sum(
             ExpressionWrapper(
                 Cast('product__product_price', output_field=FloatField()) * F('cart_qty'),
@@ -341,7 +347,7 @@ def shop_sales_dashboard(request):
             )
         ),
         order_count=Count('booking', distinct=True)
-    ).order_by('del_date')
+    ).order_by('booking__booking_date')
     
     # Create a complete date range for the last 30 days
     date_range = []
@@ -350,7 +356,7 @@ def shop_sales_dashboard(request):
         date_range.append(date)
     
     daily_data = []
-    sales_dict = {item['del_date']: item for item in daily_sales if item['del_date']}
+    sales_dict = {item['booking__booking_date']: item for item in daily_sales if item['booking__booking_date']}
     
     for date in date_range:
         if date in sales_dict:
@@ -394,14 +400,14 @@ def shop_sales_dashboard(request):
         
         day_orders = tbl_cart.objects.filter(
             product__shop=shop_id,
-            cart_status=5,
-            del_date__week_day=django_week_day
-        ).count()
+            booking__booking_status__gte=2,
+            booking__booking_date__week_day=django_week_day
+        ).values('booking').distinct().count()
         
         day_revenue = tbl_cart.objects.filter(
             product__shop=shop_id,
-            cart_status=5,
-            del_date__week_day=django_week_day
+            booking__booking_status__gte=2,
+            booking__booking_date__week_day=django_week_day
         ).aggregate(
             total=Sum(
                 ExpressionWrapper(
@@ -418,22 +424,27 @@ def shop_sales_dashboard(request):
         })
     
     # -------------------------
-    # SALES FORECASTING
+    # SALES FORECASTING & DEMAND PREDICTION
     # -------------------------
     
-    # Get historical data from tbl_booking
-    historical_sales = tbl_booking.objects.filter(
-        tbl_cart__product__shop=shop_id,
-        tbl_cart__cart_status=5
-    ).values('booking_date').annotate(
-        total=Sum('booking_amount')
-    ).order_by('booking_date')
+    # Get historical data from tbl_cart for Sales
+    historical_sales = tbl_cart.objects.filter(
+        product__shop=shop_id,
+        booking__booking_status__gte=2,
+    ).values('booking__booking_date').annotate(
+        total=Sum(
+            ExpressionWrapper(
+                Cast('product__product_price', output_field=FloatField()) * F('cart_qty'),
+                output_field=FloatField()
+            )
+        )
+    ).order_by('booking__booking_date')
     
     data = []
     for s in historical_sales:
-        if s['total']:
+        if s['total'] and s['booking__booking_date']:
             data.append({
-                "date": s['booking_date'],
+                "date": s['booking__booking_date'],
                 "sales": float(s['total'])
             })
     
@@ -441,23 +452,24 @@ def shop_sales_dashboard(request):
     forecast = {}
     forecast_accuracy = {}
     
-    if not df.empty and len(df) > 7:
+    if not df.empty:
+        df['date'] = pd.to_datetime(df['date'])
+        df = df.groupby(df['date'].dt.date)['sales'].sum().reset_index()
         df['date'] = pd.to_datetime(df['date'])
         df = df.sort_values('date')
         
-        # Create features
-        df['day_num'] = range(len(df))
-        df['month'] = df['date'].dt.month
-        df['weekday'] = df['date'].dt.weekday
-        
-        # Rolling averages
-        df['rolling_7'] = df['sales'].rolling(window=7, min_periods=1).mean()
-        df['rolling_30'] = df['sales'].rolling(window=30, min_periods=1).mean()
-        
-        # Fill NaN values
-        df = df.fillna(method='bfill').fillna(method='ffill')
-        
         if len(df) > 7:
+            full_date_range = pd.date_range(start=df['date'].min(), end=df['date'].max())
+            df = df.set_index('date').reindex(full_date_range).fillna(0).reset_index()
+            df.rename(columns={'index': 'date'}, inplace=True)
+            
+            df['day_num'] = range(len(df))
+            df['month'] = df['date'].dt.month
+            df['weekday'] = df['date'].dt.weekday
+            
+            df['rolling_7'] = df['sales'].rolling(window=7, min_periods=1).mean()
+            df['rolling_30'] = df['sales'].rolling(window=30, min_periods=1).mean()
+            
             feature_cols = ['day_num', 'month', 'weekday', 'rolling_7', 'rolling_30']
             X = df[feature_cols]
             y = df['sales']
@@ -477,56 +489,139 @@ def shop_sales_dashboard(request):
                     
                     if len(y_test) > 0:
                         predictions = model.predict(X_test)
-                        mask = y_test.values != 0
+                        mask = y_test.values > 0
                         if mask.any():
                             mape = np.mean(np.abs((y_test.values[mask] - predictions[mask]) / y_test.values[mask])) * 100
                             accuracy = max(0, 100 - mape)
                             forecast_accuracy[name] = round(accuracy, 2)
+                        else:
+                            forecast_accuracy[name] = 100.0
                     
                     last_day_num = df['day_num'].max()
-                    last_rolling_7 = df['rolling_7'].iloc[-1]
-                    last_rolling_30 = df['rolling_30'].iloc[-1]
                     
                     future_predictions = []
-                    for i in range(1, 8):
+                    simulated_sales = list(df['sales'].values)
+                    
+                    for i in range(1, 31):
                         future_day = last_day_num + i
                         future_date = current_date + timedelta(days=i)
                         
-                        future_features = np.array([[
+                        r7 = np.mean(simulated_sales[-7:]) if len(simulated_sales) >= 7 else np.mean(simulated_sales)
+                        r30 = np.mean(simulated_sales[-30:]) if len(simulated_sales) >= 30 else np.mean(simulated_sales)
+                        
+                        future_features = pd.DataFrame([[
                             future_day,
                             future_date.month,
                             future_date.weekday(),
-                            last_rolling_7,
-                            last_rolling_30
-                        ]])
+                            r7,
+                            r30
+                        ]], columns=feature_cols)
                         
                         pred = model.predict(future_features)[0]
-                        future_predictions.append(max(0, pred))
+                        pred = max(0, pred)
+                        future_predictions.append(pred)
+                        simulated_sales.append(pred)
                     
                     forecast[name] = {
-                        'values': future_predictions,
+                        'values': [round(p, 2) for p in future_predictions],
                         'total': sum(future_predictions),
                         'average': np.mean(future_predictions),
-                        'daily': [round(p, 2) for p in future_predictions]
+                        'accuracy': forecast_accuracy.get(name, 0)
                     }
-    
+                    
+    # Demand Prediction (Quantities for top products)
+    top_products_demand = tbl_cart.objects.filter(
+        product__shop=shop_id,
+        cart_status__gte=1
+    ).values('product__product_name', 'product__id').annotate(
+        total_qty=Sum('cart_qty')
+    ).order_by('-total_qty')[:5]
+
+    demand_forecast = []
+    for prod in top_products_demand:
+        prod_id = prod['product__id']
+        prod_name = prod['product__product_name']
+        
+        hist = tbl_cart.objects.filter(
+            product__id=prod_id,
+            cart_status__gte=1
+        ).values('booking__booking_date').annotate(
+            qty=Sum('cart_qty')
+        ).order_by('booking__booking_date')
+        
+        d_data = []
+        for h in hist:
+            if h['qty'] and h['booking__booking_date']:
+                d_data.append({
+                    "date": h['booking__booking_date'],
+                    "qty": float(h['qty'])
+                })
+        
+        d_df = pd.DataFrame(d_data)
+        if not d_df.empty and len(d_df) > 3:
+            d_df['date'] = pd.to_datetime(d_df['date'])
+            d_df = d_df.groupby(d_df['date'].dt.date)['qty'].sum().reset_index()
+            d_df['date'] = pd.to_datetime(d_df['date'])
+            
+            full_date_range = pd.date_range(start=d_df['date'].min(), end=d_df['date'].max())
+            d_df = d_df.set_index('date').reindex(full_date_range).fillna(0).reset_index()
+            d_df.rename(columns={'index': 'date'}, inplace=True)
+            
+            d_df['day_num'] = range(len(d_df))
+            
+            X_d = d_df[['day_num']]
+            y_d = d_df['qty']
+            
+            d_model = LinearRegression()
+            d_model.fit(X_d, y_d)
+            
+            last_day_d = d_df['day_num'].max()
+            future_qty = []
+            for i in range(1, 31):
+                pred = d_model.predict(pd.DataFrame([[last_day_d + i]], columns=['day_num']))[0]
+                future_qty.append(max(0, pred))
+            
+            total_pred = int(round(sum(future_qty)))
+            demand_forecast.append({
+                'product_name': prod_name,
+                'current_sales': prod['total_qty'],
+                'predicted_demand_30d': total_pred
+            })
+
     # -------------------------
     # ADDITIONAL METRICS
     # -------------------------
     
-    # Payment Methods Distribution
-    payment_methods = tbl_booking.objects.filter(
-        tbl_cart__product__shop=shop_id,
-        tbl_cart__cart_status=5
-    ).values('payment_method').annotate(
-        count=Count('id', distinct=True),
-        total=Sum('booking_amount')
-    ).order_by('-total')
+    # Payment Methods Distribution - If booking_status 2 (payment complete), payment method is 'Online'
+    online_payments_count = tbl_cart.objects.filter(
+        product__shop=shop_id,
+        booking__booking_status__gte=2
+    ).values('booking').distinct().count()
+    
+    online_payments_total = tbl_cart.objects.filter(
+        product__shop=shop_id,
+        booking__booking_status__gte=2
+    ).aggregate(
+        total=Sum(
+            ExpressionWrapper(
+                Cast('product__product_price', output_field=FloatField()) * F('cart_qty'),
+                output_field=FloatField()
+            )
+        )
+    )['total'] or 0
+
+    payment_methods = []
+    if online_payments_count > 0:
+        payment_methods.append({
+            'payment_method': 'Online',
+            'count': online_payments_count,
+            'total': online_payments_total
+        })
     
     # Category Performance
     category_performance = tbl_cart.objects.filter(
         product__shop=shop_id,
-        cart_status=5
+        booking__booking_status__gte=2
     ).values(
         'product__subcategory__category__category_name'
     ).annotate(
@@ -542,9 +637,9 @@ def shop_sales_dashboard(request):
     # Recent Transactions
     recent_transactions = tbl_booking.objects.filter(
         tbl_cart__product__shop=shop_id,
-        tbl_cart__cart_status=5
+        booking_status__gte=2
     ).select_related(
-        'user', 'tbl_cart__product'
+        'user'
     ).distinct().order_by('-booking_date')[:10]
     
     context = {
@@ -552,10 +647,10 @@ def shop_sales_dashboard(request):
         "total_income": total_income,
         "today_income": today_income,
         "month_income": month_income,
-        "income_growth": round(income_growth, 1),
+        "income_growth": round(float(income_growth), 1),
         "this_week_income": this_week_income,
         "last_week_income": last_week_income,
-        "wow_growth": round(wow_growth, 1),
+        "wow_growth": round(float(wow_growth), 1),
         "total_orders": total_orders,
         "today_orders": today_orders,
         
@@ -584,7 +679,7 @@ def shop_sales_dashboard(request):
         "total_customers": total_customers,
         "new_customers": new_customers,
         "repeat_customers": repeat_customers,
-        "retention_rate": round(retention_rate, 1),
+        "retention_rate": round(float(retention_rate), 1),
         
         # Time-based Analytics
         "monthly_sales": json.dumps(monthly_data),
@@ -593,10 +688,11 @@ def shop_sales_dashboard(request):
         "current_month": current_date.strftime('%B %Y'),
         "dow_data": json.dumps(dow_data),
         
-        # Forecasting
+        # Forecasting & Demand
         "forecast": forecast,
         "forecast_accuracy": forecast_accuracy,
         "has_forecast": bool(forecast),
+        "demand_forecast": demand_forecast,
         
         # Additional Analytics
         "payment_methods": payment_methods,

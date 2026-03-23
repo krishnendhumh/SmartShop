@@ -57,8 +57,8 @@
                     <div class="main-menu-wrap">
                         <!-- logo -->
                         <div class="site-logo">
-                            <a href="{% static 'Main/index.html' %}">
-                                <img src="{% static 'Main/assets/img/logo.png' %}" alt="" width="60">
+                            <a href="{% static 'Shop:Homepage' %}">
+                                <img src="{% static 'Main/assets/img/Logo1.png' %}" alt="" width="60">
                             </a>
                         </div>
                         <!-- logo -->
@@ -97,7 +97,11 @@
                                     </ul>
                                 </li>
                                 <li>
-                                    <a href="{% url 'Shop:SalesReport' %}">Reports</a>
+                                    <a href="#">Reports</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="{% url 'Shop:SalesReport' %}">Sales Report</a></li>
+                                        <li><a href="{% url 'Shop:sales_dashboard' %}">Sales Dashboard</a></li>
+                                    </ul>
                                 </li>
 
                                 <!-- Support -->
@@ -309,6 +313,7 @@
                             <li><a href="{% url 'Shop:Product' %}">Products</a></li>
                             <li><a href="{% url 'Shop:ViewBooking' %}">Orders</a></li>
                             <li><a href="{% url 'Shop:SalesReport' %}">Reports</a></li>
+                            <li><a href="{% url 'Shop:sales_dashboard' %}">Sales Dashboard</a></li>
                         </ul>
                     </div>
                 </div>

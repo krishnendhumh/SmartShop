@@ -236,7 +236,7 @@ RESPONSIVE
                         <!-- LOGO -->
                         <div class="site-logo">
                             <a href="{% url 'Shop:Homepage' %}">
-                                <img src="{% static 'Main/assets/img/logo.png' %}" width="60">
+                                <img src="{% static 'Main/assets/img/Logo1.png' %}" width="60">
                             </a>
                         </div>
 
@@ -265,7 +265,11 @@ RESPONSIVE
                                     </ul>
                                 </li>
                                 <li>
-                                    <a href="{% url 'Shop:SalesReport' %}">Reports</a>
+                                    <a href="#">Reports</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="{% url 'Shop:SalesReport' %}">Sales Report</a></li>
+                                        <li><a href="{% url 'Shop:sales_dashboard' %}">Sales Dashboard</a></li>
+                                    </ul>
                                 </li>
 
                                 <li>

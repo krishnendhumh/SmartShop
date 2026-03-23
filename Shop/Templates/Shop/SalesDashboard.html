@@ -1,3 +1,5 @@
+{% extends 'Shop/Head.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -330,11 +332,11 @@
                             {% for product in low_stock_products %}
                             <div class="mb-2">
                                 <div class="d-flex justify-content-between">
-                                    <span>{{ product.product_name|truncatechars:25 }}</span>
-                                    <span class="badge bg-danger">Stock: {{ product.product_quantity }}</span>
+                                    <span>{{ product.product__product_name|truncatechars:25 }}</span>
+                                    <span class="badge bg-danger">Stock: {{ product.stock_quantity }}</span>
                                 </div>
                                 <div class="progress progress-sm">
-                                    <div class="progress-bar bg-danger" style="width: {{ product.product_quantity }}%"></div>
+                                    <div class="progress-bar bg-danger" style="width: {{ product.stock_quantity }}%"></div>
                                 </div>
                             </div>
                             {% endfor %}
@@ -368,8 +370,8 @@
                                             <h4 class="mb-2">{{ currency_symbol }}{{ data.total|floatformat:2 }}</h4>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <small class="text-muted">Daily avg: {{ currency_symbol }}{{ data.average|floatformat:2 }}</small>
-                                                {% if forecast_accuracy %}
-                                                    <span class="badge bg-success">{{ forecast_accuracy|get_item:model }}% acc</span>
+                                                {% if data.accuracy %}
+                                                    <span class="badge bg-success">{{ data.accuracy }}% acc</span>
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -383,6 +385,52 @@
                             </div>
                         {% else %}
                             <p class="text-muted mb-0">Insufficient data for sales forecast. Need at least 6 data points.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demand Prediction Row -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-success">
+                            <i class="fas fa-boxes me-2"></i>Demand Prediction (Next 30 Days)
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        {% if demand_forecast %}
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover action-table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th class="text-center">Total Historical Sales</th>
+                                        <th class="text-center">Predicted Demand (Next 30 Days)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in demand_forecast %}
+                                    <tr>
+                                        <td><strong>{{ item.product_name }}</strong></td>
+                                        <td class="text-center">{{ item.current_sales }}</td>
+                                        <td class="text-center">
+                                            <span class="badge bg-warning text-dark px-3 py-2" style="font-size: 1rem;">
+                                                {{ item.predicted_demand_30d }} Units
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="text-center p-4">
+                            <i class="fas fa-chart-bar text-muted mb-3" style="font-size: 3rem;"></i>
+                            <p class="text-muted mb-0">Insufficient data for demand prediction.</p>
+                        </div>
                         {% endif %}
                     </div>
                 </div>
@@ -574,3 +622,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+{% endblock %}
