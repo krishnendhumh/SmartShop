@@ -398,24 +398,25 @@ def MyBooking(request):
     bookingdata=tbl_booking.objects.filter(user=request.session['uid'])
     return render(request,"User/MyBooking.html",{'bookingdata':bookingdata})
 
-def rating(request,mid):
-    parray=[1,2,3,4,5]
-    mid=mid
-    # wdata=tbl_booking.objects.get(id=mid)
+def rating(request, mid):
+    parray = [1, 2, 3, 4, 5] # This array creates the 5 stars
+    stardata = tbl_rating.objects.filter(product=mid).order_by('-datetime')
+    counts = stardata.count()
     
-    counts=0
-    counts=stardata=tbl_rating.objects.filter(product=mid).count()
-    if counts>0:
-        res=0
-        stardata=tbl_rating.objects.filter(product=mid).order_by('-datetime')
-        for i in stardata:
-            res=res+i.rating_data
-        avg=res//counts
-        # print(avg)
-        return render(request,"User/Rating.html",{'mid':mid,'data':stardata,'ar':parray,'avg':avg,'count':counts})
-    else:
-         return render(request,"User/Rating.html",{'mid':mid})
+    context = {
+        'mid': mid,
+        'ar': parray, # ALWAYS send this
+        'data': stardata,
+        'count': counts,
+    }
 
+    if counts > 0:
+        res = sum(i.rating_data for i in stardata)
+        context['avg'] = res // counts
+    else:
+        context['avg'] = 0
+
+    return render(request, "User/Rating.html", context)
 def ajaxstar(request):
     parray=[1,2,3,4,5]
     rating_data=request.GET.get('rating_data')

@@ -3,320 +3,229 @@
 
 <!DOCTYPE HTML>
 <html>
-
 <head>
-<meta charset="utf-8" />
-<title>Review & Rating System</title>
+    <meta charset="utf-8" />
+    <title>Review & Rating System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
 
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-<link rel="stylesheet"
-href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
-<link rel="stylesheet"
-href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-<style>
-
-.card-header{
-display:flex;
-justify-content:space-between;
-}
-
-/* PAGE HEADER */
-
-.rating-page-header{
-background:linear-gradient(90deg,#4361ee,#3f37c9);
-padding:18px 0;
-margin-bottom:30px;
-box-shadow:0 4px 10px rgba(0,0,0,0.1);
-}
-
-.rating-header-container{
-width:90%;
-margin:auto;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.rating-title{
-font-size:22px;
-font-weight:600;
-color:white;
-}
-
-.rating-title i{
-color:#ffd700;
-margin-right:8px;
-}
-
-.rating-nav a{
-color:white;
-font-size:15px;
-text-decoration:none;
-background:rgba(255,255,255,0.15);
-padding:8px 14px;
-border-radius:6px;
-}
-
-.rating-nav a:hover{
-background:white;
-color:#4361ee;
-}
-
-/* EXISTING STYLE */
-
-.progress-label-left{
-float:left;
-margin-right:0.5em;
-line-height:1em;
-}
-
-.progress-label-right{
-float:right;
-margin-left:0.3em;
-line-height:1em;
-}
-
-.star-light{
-color:#e9ecef;
-}
-
-</style>
-
+    <style>
+        .card-header { display: flex; justify-content: space-between; align-items: center; }
+        .rating-page-header {
+            background: linear-gradient(90deg, #4361ee, #3f37c9);
+            padding: 18px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .rating-header-container {
+            width: 90%; margin: auto;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .rating-title { font-size: 22px; font-weight: 600; color: white; }
+        .rating-title i { color: #ffd700; margin-right: 8px; }
+        .rating-nav a {
+            color: white; font-size: 15px; text-decoration: none;
+            background: rgba(255,255,255,0.15); padding: 8px 14px; border-radius: 6px;
+        }
+        .rating-nav a:hover { background: white; color: #4361ee; }
+        .star-light { color: #e9ecef; }
+        .text-warning { color: #ffc107 !important; }
+        .progress-label-left { float: left; margin-right: 0.5em; line-height: 1em; width: 20px; }
+        .progress-label-right { float: right; margin-left: 0.3em; line-height: 1em; }
+        .star_icon { transition: transform 0.2s; }
+        .star_icon:hover { transform: scale(1.2); }
+    </style>
 </head>
 
 <body onload="starrating()">
 
-<!-- HEADER -->
-
 <div class="rating-page-header">
-
-<div class="rating-header-container">
-
-<div class="rating-title">
-<i class="fas fa-star"></i> Product Reviews & Ratings
-</div>
-
-<div class="rating-nav">
-<a href="{% url 'User:Homepage' %}">
-<i class="fas fa-home"></i> Home
-</a>
-</div>
-
-</div>
-
+    <div class="rating-header-container">
+        <div class="rating-title"><i class="fas fa-star"></i> Product Reviews & Ratings</div>
+        <div class="rating-nav">
+            <a href="{% url 'User:Homepage' %}"><i class="fas fa-home"></i> Home</a>
+        </div>
+    </div>
 </div>
 
 <div class="container">
+    <h2 class="text-center mb-4">Customer Reviews</h2>
 
-<h2 class="text-center mb-4">Customer Reviews</h2>
+    <div class="card mb-4">
+        <div class="card-header">
+            <span>Rating Summary</span>
+            <a href="{% url 'User:Homepage' %}" class="btn btn-sm btn-outline-primary">Back to Home</a>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-4 text-center">
+                    <h1 class="text-warning mt-4 mb-2">
+                        <b><span id="average_rating">{% if avg %}{{avg}}{% else %}0{% endif %}</span> / 5</b>
+                    </h1>
+                    <div class="mb-3" id="avg_star_display">
+                        {% for i in ar %}
+                            <i class="fas fa-star {% if i <= avg %}text-warning{% else %}star-light{% endif %}"></i>
+                        {% endfor %}
+                    </div>
+                    <h3><span id="total_review">{{count|default:0}}</span> Reviews</h3>
+                </div>
 
-<div class="card">
+                <div class="col-sm-4">
+                    {% for i in "54321" %}
+                    <div class="clearfix mb-2">
+                        <div class="progress-label-left"><b>{{i}}</b></div>
+                        <i class="fas fa-star text-warning float-left mr-2"></i>
+                        <div class="progress-label-right">(<span id="total_{{i}}_star_review">0</span>)</div>
+                        <div class="progress mt-1" style="height: 12px;">
+                            <div class="progress-bar bg-warning" role="progressbar" id="star_progress_{{i}}" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
 
-<div class="card-header">
-Rating Box
-<a href="{% url 'User:Homepage' %}" style="text-decoration:none;">Home</a>
+                <div class="col-sm-4 text-center">
+                    <h3 class="mt-4 mb-3">Share your thoughts</h3>
+                    <button type="button" id="add_review" class="btn btn-primary btn-lg">Write a Review</button>
+
+                    <div id="review_form" class="mt-3 card p-3" style="display: none; text-align: left;">
+                        <input type="hidden" id="txt_lid" value="{{ mid }}" />
+                        <input type="hidden" id="rating_data" value="0" />
+                        
+                        <label>Your Rating:</label>
+                        <div class="mb-2">
+                            {% for i in ar %}
+                                <i class="fas fa-star fa-2x star-light star_icon" data-rating="{{ i }}" style="cursor: pointer;"></i>
+                            {% endfor %}
+                        </div>
+
+                        <label>Your Review:</label>
+                        <textarea id="user_review" class="form-control" rows="3" placeholder="What did you think of the product?"></textarea>
+                        <button type="button" id="submit_review" class="btn btn-success mt-3 btn-block">Submit Review</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="review_content">
+        {% if data %}
+            {% for i in data %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header bg-light"><b>{{i.user.user_name}}</b></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {% for j in ar %}
+                                <i class="fas fa-star {% if j <= i.rating_data %}text-warning{% else %}star-light{% endif %}"></i>
+                            {% endfor %}
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="mb-0">{{i.user_review}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center text-muted p-5">No reviews yet. Be the first to review!</div>
+        {% endif %}
+    </div>
 </div>
 
-<div class="card-body">
+<script>
+// Load Rating stats (Progress bars and average)
+function starrating(){
+    var pdt = $('#txt_lid').val();
+    $.ajax({
+        url: "{% url 'User:starrating' %}",
+        data: {pdt: pdt},
+        success: function(data){
+            // Update counts
+            $('#total_5_star_review').text(data.five);
+            $('#total_4_star_review').text(data.four);
+            $('#total_3_star_review').text(data.three);
+            $('#total_2_star_review').text(data.two);
+            $('#total_1_star_review').text(data.one);
+            $('#total_review').text(data.total_review);
 
-<div class="row">
+            if(data.total_review > 0){
+                // Update Progress Bars
+                $('#star_progress_5').css('width', (data.five/data.total_review)*100+'%');
+                $('#star_progress_4').css('width', (data.four/data.total_review)*100+'%');
+                $('#star_progress_3').css('width', (data.three/data.total_review)*100+'%');
+                $('#star_progress_2').css('width', (data.two/data.total_review)*100+'%');
+                $('#star_progress_1').css('width', (data.one/data.total_review)*100+'%');
 
-<div class="col-sm-4 text-center">
+                // Update Average
+                var avg = (5*data.five + 4*data.four + 3*data.three + 2*data.two + 1*data.one)/data.total_review;
+                $('#average_rating').text(avg.toFixed(1));
+            }
+        }
+    });
+}
 
-<h1 class="text-warning mt-4 mb-4">
+$(document).ready(function(){
+    // Setup CSRF for Django
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": '{{ csrf_token }}' }
+    });
 
-{% if avg %}
-<b><span id="average_rating">{{avg}}</span> / 5</b>
-{% else %}
-<b><span id="average_rating">0</span> / 5</b>
-{% endif %}
+    // Toggle Review Form
+    $('#add_review').click(function(){
+        $('#review_form').slideToggle();
+    });
 
-</h1>
+    // Star Hover and Click Logic
+    $(document).on('mouseenter', '.star_icon', function(){
+        var idx = $(this).data('rating');
+        $('.star_icon').each(function(){
+            $(this).toggleClass('text-warning', $(this).data('rating') <= idx)
+                   .toggleClass('star-light', $(this).data('rating') > idx);
+        });
+    }).on('mouseleave', '.star_icon', function(){
+        var selected = parseInt($('#rating_data').val());
+        $('.star_icon').each(function(){
+            $(this).toggleClass('text-warning', $(this).data('rating') <= selected)
+                   .toggleClass('star-light', $(this).data('rating') > selected);
+        });
+    });
 
-<div class="mb-3">
+    $(document).on('click', '.star_icon', function(){
+        $('#rating_data').val($(this).data('rating'));
+    });
 
-{% if avg == 1 %}
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star star-light"></i>
-<i class="fas fa-star star-light"></i>
-<i class="fas fa-star star-light"></i>
-<i class="fas fa-star star-light"></i>
+    // Submit via AJAX
+    $('#submit_review').click(function(){
+        var rating = $('#rating_data').val();
+        var review = $('#user_review').val().trim();
+        var pid = $('#txt_lid').val();
 
-{% elif avg == 2 %}
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star star-light"></i>
-<i class="fas fa-star star-light"></i>
-<i class="fas fa-star star-light"></i>
+        if(rating == "0") { alert("Please select a star rating!"); return; }
+        if(review == "") { alert("Please write a comment!"); return; }
 
-{% elif avg == 3 %}
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star star-light"></i>
-<i class="fas fa-star star-light"></i>
-
-{% elif avg == 4 %}
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star star-light"></i>
-
-{% elif avg == 5 %}
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star text-warning"></i>
-<i class="fas fa-star text-warning"></i>
-{% endif %}
-
-</div>
-
-<h3><span id="total_review">{{count}}</span> Review</h3>
-
-</div>
-
-<div class="col-sm-4">
-
-<p>
-<div class="progress-label-left"><b>5</b> <i class="fas fa-star text-warning"></i></div>
-<div class="progress-label-right">(<span id="total_five_star_review">0</span>)</div>
-
-<div class="progress">
-<div class="progress-bar bg-warning"
-role="progressbar"
-id="five_star_progress">
-</div>
-</div>
-</p>
-
-<p>
-<div class="progress-label-left"><b>4</b> <i class="fas fa-star text-warning"></i></div>
-<div class="progress-label-right">(<span id="total_four_star_review">0</span>)</div>
-
-<div class="progress">
-<div class="progress-bar bg-warning"
-role="progressbar"
-id="four_star_progress">
-</div>
-</div>
-</p>
-
-<p>
-<div class="progress-label-left"><b>3</b> <i class="fas fa-star text-warning"></i></div>
-<div class="progress-label-right">(<span id="total_three_star_review">0</span>)</div>
-
-<div class="progress">
-<div class="progress-bar bg-warning"
-role="progressbar"
-id="three_star_progress">
-</div>
-</div>
-</p>
-
-<p>
-<div class="progress-label-left"><b>2</b> <i class="fas fa-star text-warning"></i></div>
-<div class="progress-label-right">(<span id="total_two_star_review">0</span>)</div>
-
-<div class="progress">
-<div class="progress-bar bg-warning"
-role="progressbar"
-id="two_star_progress">
-</div>
-</div>
-</p>
-
-<p>
-<div class="progress-label-left"><b>1</b> <i class="fas fa-star text-warning"></i></div>
-<div class="progress-label-right">(<span id="total_one_star_review">0</span>)</div>
-
-<div class="progress">
-<div class="progress-bar bg-warning"
-role="progressbar"
-id="one_star_progress">
-</div>
-</div>
-</p>
-
-</div>
-
-<div class="col-sm-4 text-center">
-
-<h3 class="mt-4 mb-3">Write Review Here</h3>
-
-<button type="button"
-name="add_review"
-id="add_review"
-class="btn btn-primary">
-Review
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="mt-5" id="review_content">
-
-{% if data %}
-{% for i in data %}
-
-<div class="card">
-
-<div class="card-header">
-{{i.user.user_name}}
-</div>
-
-<div class="card-body">
-
-<div class="row">
-
-{% for j in ar %}
-
-<col-sm-6>
-
-{% if j <= i.rating_data %}
-<i class="fas fa-star text-warning"></i>
-{% else %}
-<i class="fas fa-star star-light"></i>
-{% endif %}
-
-</col-sm-6>
-
-{% endfor %}
-
-<div class="col-sm-6">
-{{i.user_review}}
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-{% endfor %}
-{% endif %}
-
-</div>
-
-</div>
+        $.ajax({
+            url: "{% url 'User:ajaxstar' %}",
+            data: {rating_data: rating, user_review: review, pid: pid},
+            success: function(response){
+                $('#review_content').html(response); // Update review list
+                $('#review_form').hide();
+                $('#user_review').val('');
+                $('#rating_data').val('0');
+                $('.star_icon').removeClass('text-warning').addClass('star-light');
+                starrating(); // Refresh summary stats
+            },
+            error: function() { alert("Submission failed. Check your login status."); }
+        });
+    });
+});
+</script>
 
 </body>
-
 </html>
-
 {% endblock %}

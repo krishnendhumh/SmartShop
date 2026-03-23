@@ -70,17 +70,25 @@
             text-align: left;
         }
 
-        .reply-col {
-            max-width: 260px;
-            text-align: left;
-        }
+        /* Replied Status Badge */
+.status-replied {
+    color: #10b981; /* A nice emerald green */
+    font-weight: 600;
+    font-size: 13px;
+    background: #ecfdf5;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: inline-block;
+}
 
-        /* Status */
-        .pending {
-            color: #ef4444;
-            font-weight: 600;
-        }
-
+/* Adjusting the pending status to match the style if you like */
+.pending {
+    color: #ef4444;
+    font-weight: 600;
+    background: #fef2f2;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
         /* Reply Button */
         .btn-reply {
             background: #3b82f6;
@@ -128,37 +136,41 @@
         </thead>
 
         <tbody>
-        {% for i in complaints %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td class="user-col">
-                    <strong>{{ i.user.user_name }}</strong><br>
-                    <small>{{ i.user.user_email }}</small>
-                </td>
-                <td>{{ i.com_title }}</td>
-                <td class="content-col">{{ i.com_content }}</td>
-                <td>{{ i.com_date }}</td>
-                <td class="reply-col">
-                    {% if i.com_reply %}
-                        {{ i.com_reply }}
-                    {% else %}
-                        <span class="pending">Pending</span>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if not i.com_reply %}
-                        <a href="{% url 'Admin:replycomplaint' i.id %}" class="btn-reply">
-                            ✉ Reply
-                        </a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="7" align="center"><b>No complaints found</b></td>
-            </tr>
-        {% endfor %}
-        </tbody>
+{% for i in complaints %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td class="user-col">
+            <strong>{{ i.user.user_name }}</strong><br>
+            <small>{{ i.user.user_email }}</small>
+        </td>
+        <td>{{ i.com_title }}</td>
+        <td class="content-col">{{ i.com_content }}</td>
+        <td>{{ i.com_date }}</td>
+        
+        <td class="reply-col">
+            {% if i.com_reply %}
+                {{ i.com_reply }}
+            {% else %}
+                <span class="pending">Pending</span>
+            {% endif %}
+        </td>
+
+        <td>
+            {% if not i.com_reply %}
+                <a href="{% url 'Admin:replycomplaint' i.id %}" class="btn-reply">
+                    ✉ Reply
+                </a>
+            {% else %}
+                <span class="status-replied">✅ Replied</span>
+            {% endif %}
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="7" align="center"><b>No complaints found</b></td>
+    </tr>
+{% endfor %}
+</tbody>
     </table>
 </div>
 
