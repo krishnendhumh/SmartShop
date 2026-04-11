@@ -16,7 +16,7 @@ def District(request):
     if "aid" not in request.session:    
         return redirect("Guest:Login")
     else:
-        districtdata = tbl_district.objects.all()
+        districtdata = tbl_district.objects.all().order_by('district_name')
         if request.method == "POST":
             name = (request.POST.get("txt_district"))
             districtcount=tbl_district.objects.filter(district_name=name).count()
@@ -109,20 +109,36 @@ def editcategory(request,eid):
    
     
 def Place(request):
-    districtdata=  tbl_district.objects.all()
-    placedata = tbl_place.objects.all()
-    if request.method == "POST":
-        place= request.POST.get("txt_place")
-        district = tbl_district.objects.get(id=request.POST.get("sel_district"))
-        placecount=tbl_place.objects.filter(place_name=place).count()
-        if placecount > 0:
-            return render(request,"Admin/Place.html",{'msg':"Already Inserted.."})
-        else:
-            tbl_place.objects.create(place_name = place,district=district)
-        return render(request,"Admin/Place.html",{'msg':"Data Inserted.."})
-    else:
-        return render(request,"Admin/Place.html",{'placedata':placedata, 'districtdata':districtdata})
+    districtdata = tbl_district.objects.all()
+    # Order first by District Name, then alphabetically by Place Name
+    placedata = tbl_place.objects.all().order_by('district__district_name', 'place_name')
 
+    if request.method == "POST":
+        place = request.POST.get("txt_place")
+        district_id = request.POST.get("sel_district")
+        district = tbl_district.objects.get(id=district_id)
+        
+        # Check if the place already exists in that SPECIFIC district
+        placecount = tbl_place.objects.filter(place_name=place, district=district).count()
+
+        if placecount > 0:
+            return render(request, "Admin/Place.html", {
+                'msg': "Already Inserted..", 
+                'placedata': placedata, 
+                'districtdata': districtdata
+            })
+        else:
+            tbl_place.objects.create(place_name=place, district=district)
+            return render(request, "Admin/Place.html", {
+                'msg': "Data Inserted..", 
+                'placedata': placedata, 
+                'districtdata': districtdata
+            })
+    else:
+        return render(request, "Admin/Place.html", {
+            'placedata': placedata, 
+            'districtdata': districtdata
+        })
 def delplace(request,did):
     tbl_place.objects.get(id=did).delete()
     return render(request,"Admin/Place.html",{'msg':"Data Deleted.."})
@@ -147,7 +163,8 @@ def SubCategory(request):
         return redirect("Guest:Login")
     else:
         categorydata=  tbl_category.objects.all()
-        subdata = tbl_subcategory.objects.all()
+        # This orders first by Category Name, then alphabetically by Subcategory Name
+        subdata = tbl_subcategory.objects.all().order_by('category__category_name', 'subcategory_name')
         if request.method == "POST":
             subcategory= request.POST.get("txt_subcategory")
             category = tbl_category.objects.get(id=request.POST.get("sel_category"))
@@ -264,7 +281,8 @@ def Brand(request):
     if "aid" not in request.session:    
         return redirect("Guest:Login")
     else:
-        branddata = tbl_brand.objects.all()
+        # Orders brands alphabetically A-Z
+        branddata = tbl_brand.objects.all().order_by('brand_name')
         if request.method == "POST":
             name = (request.POST.get("txt_brand"))
             brandcount=tbl_brand.objects.filter(brand_name=name).count()

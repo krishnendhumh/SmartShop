@@ -24,14 +24,29 @@ def UserRegistration(request):
         place= tbl_place.objects.get(id=request.POST.get("sel_place"))
         usercount=tbl_user.objects.filter(user_email=email).count()
         if usercount > 0:
-            return render(request,"Admin/UserRegistration.html",{'msg':"Email Already Inserted.."})
+            # FIX: Added "Guest/" prefix here
+            return render(request, "Guest/UserRegistration.html", {'msg': "Email Already Inserted..", 'districtdata': districtdata})
+        if usercount > 0:
+            return render(request, "Guest/UserRegistration.html", {
+                'msg': "Email Already Inserted..", 
+                'districtdata': districtdata
+            })
         else:
-            tbl_user.objects.create(user_name=name,user_email=email,user_contact=contact,user_address=address,user_photo=photo,user_password=password,place=place)
-        
-        return render(request,"Guest/UserRegistration.html",{'msg':"Data Inserted.."})
+            tbl_user.objects.create(
+                user_name=name,
+                user_email=email,
+                user_contact=contact,
+                user_address=address,
+                user_photo=photo,
+                user_password=password,
+                place=place
+            )
+            # Redirect to Login page after successful save
+            # Replace 'Guest:Login' with the actual name defined in your urls.py
+            return redirect("Guest:Login") 
+            
     else:
-        return render(request,"Guest/UserRegistration.html",{ 'districtdata':districtdata})
-
+        return render(request, "Guest/UserRegistration.html", {'districtdata': districtdata})
 def Ajaxplace(request):
     place=tbl_place.objects.filter(district=request.GET.get('districtId'))
     return render(request,"Guest/Ajaxplace.html",{'data':place})

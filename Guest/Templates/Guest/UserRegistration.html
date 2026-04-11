@@ -297,10 +297,14 @@
     </div>
 </div>
 
-{% if msg %}
+{% if msg == "Data Inserted.." %}
 <script>
     alert("{{msg}}");
-    window.location="{% url 'Guest:UserRegistration' %}";
+    window.location = "{% url 'Guest:Login' %}"; 
+</script>
+{% elif msg %}
+<script>
+    alert("{{msg}}");
 </script>
 {% endif %}
 
