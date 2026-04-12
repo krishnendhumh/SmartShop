@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from Guest.models import*
 from Shop.models import*
 from User.models import*
@@ -899,87 +899,60 @@ def delproduct(request, pid):
     return redirect("Shop:Homepage")
 
 def ViewBooking(request):
-    bookingdata=tbl_booking.objects.all()
-    return render(request,"Shop/ViewBooking.html",{'bookingdata':bookingdata})
+    # This sorts by Date first (Newest first), then by ID as a backup
+    # select_related('user') helps performance by fetching user details in one query
+    bookingdata = tbl_booking.objects.select_related('user').all().order_by('-booking_date', '-id')
+    return render(request, "Shop/ViewBooking.html", {'bookingdata': bookingdata})
 
 def BookingAction(request, cid, status):
-    cart = tbl_cart.objects.get(id=cid)
+    # 1. Fetch the cart item safely
+    cart = get_object_or_404(tbl_cart, id=cid)
     booking = cart.booking
     user = booking.user
     email = user.user_email
 
+    # 2. Convert status to integer (CRITICAL for the if-statements to work)
+    status = int(status)
+    
     subject = "Order Status Update"
+    message = "" # Initialize empty message to avoid NameError
 
-    # PACKED
+    # 3. Handle Status Updates
     if status == 3:
         cart.cart_status = 3
         cart.pack_date = date.today()
+        message = f"Hello {user.user_name},\n\n📦 Your order has been packed successfully.\nIt will be shipped shortly.\n\nThank you for shopping with us."
 
-        message = f"""
-Hello {user.user_name},
-
-📦 Your order has been packed successfully.
-
-It will be shipped shortly.
-
-Thank you for shopping with us.
-"""
-
-    # SHIPPED
     elif status == 4:
         cart.cart_status = 4
         cart.ship_date = date.today()
+        message = f"Hello {user.user_name},\n\n🚚 Good news!\nYour order has been shipped.\nIt will reach you soon.\n\nThank you for shopping with us."
 
-        message = f"""
-Hello {user.user_name},
-🚚 Good news!
-Your order has been shipped.
-
-It will reach you soon.
-
-Thank you for shopping with us.
-"""
-
-    # OUT FOR DELIVERY
     elif status == 5:
         cart.cart_status = 5
         cart.outdel_date = date.today()
+        message = f"Hello {user.user_name},\n\n🚚 Your order is out for delivery today.\nPlease keep your phone available.\n\nThank you for choosing us."
 
-        message = f"""
-Hello {user.user_name},
-
-🚚 Your order is out for delivery today.
-
-Please keep your phone available.
-
-Thank you for choosing us.
-"""
-
-    # DELIVERED
     elif status == 6:
         cart.cart_status = 6
         cart.del_date = date.today()
+        message = f"Hello {user.user_name},\n\n🎉 Your order has been delivered successfully!\nWe hope you enjoy your purchase.\n\nThank you for shopping with us."
 
-        message = f"""
-Hello {user.user_name},
-
-🎉 Your order has been delivered successfully!
-
-We hope you enjoy your purchase.
-Thank you for shopping with us.
-"""
-
-    # SAVE CART
+    # 4. SAVE THE CHANGES (This is what updates the DB)
     cart.save()
 
-    # SEND MAIL
-    send_mail(
-        subject,
-        message,
-        settings.EMAIL_HOST_USER,
-        [email],
-        fail_silently=True
-    )
+    # 5. SEND MAIL (Only if a message was created)
+    if message:
+        try:
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [email],
+                fail_silently=True
+            )
+        except Exception as e:
+            print(f"Email failed but status was saved: {e}")
 
     return redirect("Shop:ViewBooking")
 

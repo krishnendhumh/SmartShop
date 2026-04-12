@@ -2,407 +2,522 @@
 {% block content %}
 
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Secure Checkout</title>
+    <meta charset="UTF-8">
+    <title>SmartShop | Premium Secure Checkout</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1; /* Modern Indigo */
+            --primary-dark: #4f46e5;
+            --secondary: #22c55e; /* Success Green */
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-<style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
 
-/* PAGE BACKGROUND */
+        .shopix-checkout-wrapper {
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: 90vh;
+        }
 
-.shopix-checkout-wrapper{
-display:flex;
-justify-content:center;
-padding:50px;
-background:#f4f6fb;
-min-height:90vh;
-}
+        .shopix-checkout-container {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            max-width: 1100px;
+            align-items: flex-start;
+        }
 
-/* MAIN BOX */
+        /* --- LEFT CONTENT (Interactive Area) --- */
+        .shopix-main-content { flex: 2; display: flex; flex-direction: column; gap: 20px; }
 
-.shopix-checkout-container{
-display:flex;
-gap:30px;
-width:1100px;
-}
+        .interactive-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: var(--transition);
+        }
 
-/* LEFT PAYMENT SECTION */
+        .interactive-card:hover {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
 
-.shopix-payment-section{
-flex:2;
-background:white;
-padding:35px;
-border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.08);
-}
+        .step-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-/* RIGHT ORDER SUMMARY */
+        .step-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-.shopix-order-summary{
-flex:1;
-background:white;
-padding:25px;
-border-radius:12px;
-height:fit-content;
-box-shadow:0 10px 25px rgba(0,0,0,0.08);
-}
+        .step-number {
+            background: #e0e7ff;
+            color: var(--primary);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
 
-/* TITLES */
+        .step-status {
+            color: var(--secondary);
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-.shopix-title{
-font-size:24px;
-font-weight:600;
-margin-bottom:20px;
-}
+        /* PREMIUM TAB SYSTEM */
+        .payment-tabs { 
+            display: flex; 
+            padding: 10px;
+            background: #f1f5f9;
+            margin: 20px 30px 0;
+            border-radius: 12px;
+            gap: 8px;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-muted);
+            border-radius: 8px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
 
-.shopix-subtitle{
-font-size:14px;
-color:#666;
-margin-bottom:25px;
-}
+        .tab-btn i { font-size: 16px; transition: var(--transition); }
 
-/* FORM */
+        /* INTERACTION: Subtle scale/shadow on hover */
+        .tab-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.5);
+            color: var(--text-main);
+        }
 
-.shopix-form-group{
-margin-bottom:18px;
-}
+        /* INTERACTION: Press effect when active */
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-1px);
+        }
+        
+        .tab-btn.active i { color: var(--primary); }
 
-.shopix-form-group label{
-font-size:14px;
-display:block;
-margin-bottom:6px;
-}
+        .payment-body { padding: 30px; min-height: 250px; }
+        .payment-method-content { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.3s ease, transform 0.3s ease; }
+        .payment-method-content.active { display: block; opacity: 1; transform: translateY(0); }
 
-.shopix-input{
-width:100%;
-padding:12px;
-border-radius:6px;
-border:1px solid #ddd;
-font-size:14px;
-}
+        /* INTERACTIVE INPUTS */
+        .shopix-form-group { margin-bottom: 20px; position: relative; }
+        .shopix-form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .input-wrapper { position: relative; }
+        
+        .shopix-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            box-sizing: border-box;
+            transition: var(--transition);
+            color: var(--text-main);
+            background: #FBFCFD;
+        }
 
-.shopix-input:focus{
-outline:none;
-border-color:#4361ee;
-box-shadow:0 0 5px rgba(67,97,238,0.2);
-}
+        /* INTERACTION: Border glow and shift on focus */
+        .shopix-input:focus { 
+            border-color: var(--primary); 
+            outline: none; 
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
 
-/* ROW */
+        /* INTERACTION: Card icon floating in input */
+        .card-brand-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #cbd5e1;
+            transition: var(--transition);
+            opacity: 0;
+        }
+        
+        .card-brand-icon.visible { opacity: 1; }
+        .card-num-input { padding-right: 55px; } /* Space for icon */
 
-.shopix-row{
-display:flex;
-gap:12px;
-}
+        .shopix-row { display: flex; gap: 20px; }
 
-/* PAYMENT OPTIONS */
+        /* HOLOGRAPHIC PAY BUTTON */
+        .shopix-pay-btn {
+            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
 
-.shopix-payment-options{
-display:flex;
-gap:10px;
-margin-bottom:25px;
-}
+        /* INTERACTION: Shine effect on hover */
+        .shopix-pay-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%; height: 200%;
+            width: 50px;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+            transform: rotate(30deg);
+            left: -100px;
+            transition: 0.7s;
+        }
 
-.shopix-option{
-flex:1;
-padding:12px;
-border:1px solid #ddd;
-border-radius:6px;
-text-align:center;
-cursor:pointer;
-font-size:14px;
-}
+        .shopix-pay-btn:hover { 
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+            transform: translateY(-1px);
+        }
+        
+        .shopix-pay-btn:hover::after { left: 120%; }
+        
+        .shopix-pay-btn:active { transform: translateY(1px); }
 
-.shopix-option:hover{
-border-color:#4361ee;
-background:#f5f7ff;
-}
+        /* --- RIGHT SIDEBAR (Summary) --- */
+        .shopix-order-summary {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            position: sticky;
+            top: 20px;
+            padding: 30px;
+        }
 
-/* PAY BUTTON */
+        .summary-title { font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 25px; }
 
-.shopix-pay-btn{
-width:100%;
-padding:14px;
-border:none;
-background:linear-gradient(90deg,#4361ee,#3f37c9);
-color:white;
-font-size:16px;
-border-radius:6px;
-cursor:pointer;
-margin-top:10px;
-}
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 15px; color: var(--text-muted); }
+        .summary-row.total-row { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; color: var(--text-main); font-weight: 700; font-size: 18px; }
+        .summary-row.total-row span:last-child { color: var(--primary); }
 
-.shopix-pay-btn:hover{
-opacity:.9;
-}
+        .secure-badge { text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 30px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 15px; background: #f8fafc; border-radius: 10px; }
 
-/* ORDER SUMMARY */
+        /* LOADING SPINNER */
+        #loader { display: none; margin-left: 8px; }
 
-.shopix-summary-row{
-display:flex;
-justify-content:space-between;
-margin-bottom:10px;
-font-size:14px;
-}
-
-.shopix-total{
-font-size:18px;
-font-weight:600;
-color:#4361ee;
-}
-
-/* QR SECTION */
-
-.shopix-qr{
-text-align:center;
-margin-top:20px;
-border-top:1px dashed #ddd;
-padding-top:15px;
-}
-
-.shopix-qr img{
-width:140px;
-}
-
-/* PAYMENT ICONS */
-
-.shopix-icons{
-margin-top:20px;
-text-align:center;
-font-size:32px;
-}
-
-.shopix-icons i{
-margin:0 8px;
-}
-
-.fa-cc-visa{color:#1a1f71}
-.fa-cc-mastercard{color:#eb001b}
-.fa-cc-paypal{color:#003087}
-
-</style>
-
+    </style>
 </head>
-
 <body>
 
 <div class="shopix-checkout-wrapper">
+    <form method="post" id="paymentForm">
+        {% csrf_token %}
+        <div class="shopix-checkout-container">
+            
+            <div class="shopix-main-content">
+                
+                <div class="interactive-card">
+                    <div class="step-header">
+                        <div class="step-title"><div class="step-number">1</div> Order Review</div>
+                        <div class="step-status"><i class="fa-solid fa-circle-check"></i> Confirmed</div>
+                    </div>
+                </div>
 
-<form method="post">
-{% csrf_token %}
+                <div class="interactive-card">
+                    <div class="step-header">
+                        <div class="step-title"><div class="step-number">2</div> Payment Method</div>
+                    </div>
+                    
+                    <div class="payment-tabs">
+                        <button type="button" class="tab-btn active" onclick="switchTab(event, 'card-pay')">
+                            <i class="fa-solid fa-credit-card"></i> Card
+                        </button>
+                        <button type="button" class="tab-btn" onclick="switchTab(event, 'upi-pay')">
+                            <i class="fa-brands fa-google-pay"></i> UPI
+                        </button>
+                        <button type="button" class="tab-btn" onclick="switchTab(event, 'qr-pay')">
+                            <i class="fa-solid fa-qrcode"></i> QR Code
+                        </button>
+                    </div>
 
-<div class="shopix-checkout-container">
-
-<!-- PAYMENT SECTION -->
-
-<div class="shopix-payment-section">
-
-<div class="shopix-title">
-Secure Checkout
+                    <div class="payment-body">
+                        
+                        <div id="card-pay" class="payment-method-content active">
+                            <div class="shopix-form-group">
+                                <label>Card Number</label>
+                                <div class="input-wrapper">
+                                    <input type="text" name="txtacno" id="cardNumInput" placeholder="0000 0000 0000 0000" class="shopix-input card-num-input" maxlength="19" required inputmode="numeric">
+                                    <i id="cardIcon" class="fab fa-cc-visa card-brand-icon"></i> </div>
+                            </div>
+                            <div class="shopix-row">
+                                <div class="shopix-form-group" style="flex:1">
+                                    <label>Expiry (MM/YY)</label>
+                                    <input type="text" name="txtexpdate" id="expiryInput" placeholder="MM/YY" class="shopix-input" maxlength="5" required inputmode="numeric">
+                                </div>
+                               <div class="shopix-form-group" style="flex:1">
+    <label>CVV</label>
+    <div class="input-wrapper">
+        <input type="password" 
+               name="txtccv" 
+               id="cvvInput"
+               placeholder="123" 
+               class="shopix-input" 
+               maxlength="3" 
+               pattern="\d{3}"
+               inputmode="numeric" 
+               required>
+    </div>
 </div>
+                            </div>
+                            <button type="submit" name="btn_pay" class="shopix-pay-btn" onclick="startLoading(this)">
+                                <i class="fa-solid fa-lock"></i> Pay ₹{{bookingdata.booking_amount}}
+                            </button>
+                        </div>
 
-<div class="shopix-subtitle">
-Your payment is encrypted and secure
-</div>
+                        <div id="upi-pay" class="payment-method-content">
+                            <div class="shopix-form-group">
+                                <label>UPI ID</label>
+                                <input type="text" placeholder="mobilenumber@upi" class="shopix-input">
+                            </div>
+                            <button type="submit" name="btn_pay" class="shopix-pay-btn">Verify UPI ID</button>
+                        </div>
 
-<div class="shopix-payment-options">
+                        <div id="qr-pay" class="payment-method-content" style="text-align: center;">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=PAYMENT{{bookingdata.id}}" alt="QR Code" style="border: 4px solid white; border-radius: 12px; box-shadow: var(--shadow-md);">
+                            <p style="margin: 20px 0; color: var(--text-muted); font-size: 14px;">Scan using Google Pay, PhonePe or Paytm</p>
+                            <button type="submit" name="btn_pay" class="shopix-pay-btn">I Have Paid</button>
+                        </div>
 
-<div class="shopix-option">
-<i class="fa-solid fa-credit-card"></i> Card
-</div>
+                    </div>
+                </div>
 
-<div class="shopix-option">
-<i class="fa-solid fa-qrcode"></i> QR Pay
-</div>
+            </div>
 
-<div class="shopix-option">
-<i class="fa-brands fa-google-pay"></i> UPI
-</div>
+            <div class="shopix-order-summary">
+                <div class="summary-title">Order Summary</div>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>₹{{bookingdata.booking_amount}}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span style="color: var(--secondary); font-weight: 600;">FREE</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span>Total</span>
+                    <span>₹{{bookingdata.booking_amount}}</span>
+                </div>
+                
+                <div class="secure-badge">
+                    <i class="fa-solid fa-shield-check" style="color: var(--primary); font-size: 18px;"></i>
+                    SSL Secured Payment
+                </div>
+            </div>
 
-</div>
-
-<div class="shopix-form-group">
-<label>Card Number</label>
-<input type="text"
-name="txtacno"
-placeholder="1234 5678 9012 3456"
-class="shopix-input"
-maxlength="19"
-pattern="[0-9 ]{19}"
-inputmode="numeric"
-required>
-</div>
-
-<div class="shopix-form-group">
-<label>Card Holder</label>
-<input type="text"
-name="txtname"
-placeholder="John Doe"
-class="shopix-input"
-required>
-</div>
-
-<div class="shopix-row">
-
-<div class="shopix-form-group">
-<label>Expiry</label>
-<input type="text"
-name="txtexpdate"
-placeholder="MM/YY"
-class="shopix-input"
-maxlength="5"
-required>
-</div>
-
-<div class="shopix-form-group">
-<label>CVV</label>
-<input type="password"
-name="txtccv"
-placeholder="123"
-class="shopix-input"
-maxlength="3"
-pattern="[0-9]{3}"
-inputmode="numeric"
-required>
-</div>
-
-</div>
-
-<button type="submit" name="btn_pay" class="shopix-pay-btn">
-<i class="fa-solid fa-lock"></i> Pay Securely
-</button>
-
-<div class="shopix-icons">
-<i class="fab fa-cc-visa"></i>
-<i class="fab fa-cc-mastercard"></i>
-<i class="fab fa-cc-paypal"></i>
-</div>
-
-</div>
-
-<!-- ORDER SUMMARY -->
-
-<div class="shopix-order-summary">
-
-<h3>Order Summary</h3>
-
-<hr style="margin:15px 0">
-
-<div class="shopix-summary-row">
-<span>Items</span>
-<span>1</span>
-</div>
-
-<div class="shopix-summary-row">
-<span>Shipping</span>
-<span>Free</span>
-</div>
-
-<div class="shopix-summary-row">
-<span>Tax</span>
-<span>₹0</span>
-</div>
-
-<hr style="margin:15px 0">
-
-<div class="shopix-summary-row shopix-total">
-<span>Total</span>
-<span>₹ {{bookingdata.booking_amount}}</span>
-</div>
-
-<div class="shopix-qr">
-
-<p>Scan & Pay</p>
-
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PAYMENT{{bookingdata.id}}">
-
-<p style="font-size:12px;color:#666">
-UPI / Google Pay / PhonePe
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</form>
-
+        </div>
+    </form>
 </div>
 
 <script>
-
-/* CARD NUMBER FORMAT */
-
-const cardInput = document.querySelector("input[name='txtacno']");
-
-cardInput.addEventListener("input", function () {
-
-let value = this.value.replace(/\D/g,'').substring(0,16);
-
-let formatted = value.match(/.{1,4}/g);
-
-this.value = formatted ? formatted.join(" ") : value;
-
-});
-
-/* CVV ONLY NUMBERS */
-
-const cvv = document.querySelector("input[name='txtccv']");
-
-cvv.addEventListener("input", function(){
-this.value = this.value.replace(/\D/g,'');
-});
-
-/* EXPIRY FORMAT */
-
-const expiry = document.querySelector("input[name='txtexpdate']");
-
-expiry.addEventListener("input", function(){
-    let value = this.value.replace(/\D/g,'').substring(0,4); // only digits, max 4
-
-    if(value.length >=3){
-        this.value = value.substring(0,2) + "/" + value.substring(2);
-    } else {
-        this.value = value;
+    // 1. Smooth Tab Switching Logic
+    function switchTab(evt, methodName) {
+        // Hide all contents with fade-out effect
+        const contents = document.querySelectorAll(".payment-method-content");
+        contents.forEach(content => content.classList.remove("active"));
+        
+        // Deactivate all tab buttons
+        const tabs = document.querySelectorAll(".tab-btn");
+        tabs.forEach(tab => tab.classList.remove("active"));
+        
+        // Show selected content (fade-in handled by CSS transition)
+        document.getElementById(methodName).classList.add("active");
+        
+        // Set clicked button to active
+        evt.currentTarget.classList.add("active");
     }
-});
 
-expiry.addEventListener("blur", function(){
-    let parts = this.value.split("/");
+    // 2. INTERACTIVE: Dynamic Card Icon Detection
+    const cardInput = document.getElementById('cardNumInput');
+    const cardIcon = document.getElementById('cardIcon');
 
-    if(parts.length === 2){
-        const month = parseInt(parts[0]);
-        const year = parseInt(parts[1]);
+    cardInput.addEventListener('input', function (e) {
+        let value = e.target.value;
+        
+        // Auto-spacing (every 4 digits)
+        e.target.value = value.replace(/[^\d]/g, '').replace(/(.{4})/g, '$1 ').trim();
+        
+        // Identify Card Type based on first digit
+        if (value.startsWith('4')) { // Visa
+            cardIcon.className = 'fab fa-cc-visa card-brand-icon visible';
+            cardIcon.style.color = '#1A1F71';
+        } else if (value.startsWith('5')) { // Mastercard
+            cardIcon.className = 'fab fa-cc-mastercard card-brand-icon visible';
+            cardIcon.style.color = '#EB001B';
+        } else if (value.startsWith('3')) { // Amex
+            cardIcon.className = 'fab fa-cc-amex card-brand-icon visible';
+            cardIcon.style.color = '#007CC3';
+        } else { // No match
+            cardIcon.classList.remove('visible');
+        }
+    });
 
-        // Validate month
-        if(month < 1 || month > 12){
-            alert("Invalid expiry month");
-            this.value = "";
-            return false;
+    // 3. INTERACTIVE: Auto-format Expiry Date (MM/YY)
+    const expiryInput = document.getElementById('expiryInput');
+    expiryInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/[^\d]/g, ''); // Remove non-digits
+        if (value.length >= 2) {
+            e.target.value = value.slice(0, 2) + '/' + value.slice(2, 4);
+        } else {
+            e.target.value = value;
+        }
+    });
+
+    // 4. INTERACTIVE: Button Loading State on Click
+    function startLoading(btn) {
+        // Only trigger if form validates (basic check)
+        const form = document.getElementById('paymentForm');
+        if(form.checkValidity()){
+            btn.style.opacity = "0.8";
+            btn.innerHTML = "<i class='fa fa-spinner fa-spin'></i> Processing...";
+            btn.style.pointerEvents = "none"; // Prevent double clicks
+        }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('paymentForm');
+    const cardInput = document.getElementById('cardNumInput');
+    const expiryInput = document.getElementById('expiryInput');
+    const cvcInput = document.querySelector('input[name="txtccv"]');
+
+    // 1. LUHN ALGORITHM CHECK (The Industry Standard)
+    function validateLuhn(number) {
+        let sum = 0;
+        let shouldDouble = false;
+        for (let i = number.length - 1; i >= 0; i--) {
+            let digit = parseInt(number.charAt(i));
+            if (shouldDouble) {
+                if ((digit *= 2) > 9) digit -= 9;
+            }
+            sum += digit;
+            shouldDouble = !shouldDouble;
+        }
+        return (sum % 10) === 0;
+    }
+
+    // 2. CARD INPUT INTERACTION
+    cardInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+        
+        // Validation Visual Feedback
+        if (value.length >= 16) {
+            const isValid = validateLuhn(value);
+            cardInput.style.borderColor = isValid ? "#22c55e" : "#ef4444";
+        } else {
+            cardInput.style.borderColor = "#e2e8f0"; // Reset to default
+        }
+    });
+
+    // 3. EXPIRY DATE INTERACTION & VALIDATION
+    expiryInput.addEventListener('blur', () => {
+        const val = expiryInput.value;
+        if (!/^\d{2}\/\d{2}$/.test(val)) return;
+
+        const [month, year] = val.split('/').map(n => parseInt(n));
+        const now = new Date();
+        const currentYear = now.getFullYear() % 100;
+        const currentMonth = now.getMonth() + 1;
+
+        let error = "";
+        if (month < 1 || month > 12) error = "Invalid Month (01-12)";
+        else if (year < currentYear || (year === currentYear && month < currentMonth)) {
+            error = "Card has expired";
         }
 
-        // Validate year and month against current date
-        const today = new Date();
-        const currentYear = today.getFullYear() % 100; // last two digits
-        const currentMonth = today.getMonth() + 1;
-
-        if(year < currentYear || (year === currentYear && month < currentMonth)){
-            alert("Card has expired!");
-            this.value = "";
-            return false;
+        if (error) {
+            alert(error);
+            expiryInput.value = "";
+            expiryInput.style.borderColor = "#ef4444";
+        } else {
+            expiryInput.style.borderColor = "#22c55e";
         }
+    });
 
-        alert("Expiry date is valid!");
-        return true;
-    }
+    // 4. PREVENT NON-NUMERIC TYPING
+    [cardInput, expiryInput, cvcInput].forEach(el => {
+        el.addEventListener('keypress', (e) => {
+            if (!/[0-9]/.test(e.key)) e.preventDefault();
+        });
+    });
 });
 
-
-
+// 5. FINAL FORM CHECK (Before Submit)
+function startLoading(btn) {
+    const form = document.getElementById('paymentForm');
+    if (!form.checkValidity()) {
+        alert("Please fill all fields correctly.");
+        return false;
+    }
+    
+    // Add a nice "Processing" state
+    btn.innerHTML = `<i class="fa fa-spinner fa-spin"></i> Securing Payment...`;
+    btn.style.background = "#4b5563"; // Neutral gray during processing
+    btn.style.pointerEvents = "none";
+}
 </script>
 
 </body>

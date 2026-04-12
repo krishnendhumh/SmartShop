@@ -19,7 +19,8 @@ urlpatterns = [
     path('delgallery/<int:did>',views.delgallery,name="delgallery"),
     path('delproduct/<int:pid>',views.delproduct,name="delproduct"),
     path('ViewBooking/',views.ViewBooking,name="ViewBooking"),
-    path('BookingAction/<int:cid>/<int:status>',views.BookingAction,name="BookingAction"),
+    # urls.py
+    path('BookingAction/<int:cid>/<int:status>/', views.BookingAction, name="BookingAction"),
     path('SalesReport/',views.SalesReport,name="SalesReport"),
     path('view-requests/', views.ViewRequests, name="ViewRequests"),
     path("requests/", views.ViewRequests, name="ViewRequests"),
