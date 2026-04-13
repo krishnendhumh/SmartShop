@@ -320,35 +320,33 @@
                 </div>
             </div>
             
-            <div class="col-xl-4 col-md-6">
-                <div class="card shadow h-100">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-danger">
-                            <i class="fas fa-exclamation-triangle me-2"></i>Low Stock Alert
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        {% if low_stock_products %}
-                            {% for product in low_stock_products %}
-                            <div class="mb-2">
-                                <div class="d-flex justify-content-between">
-                                    <span>{{ product.product__product_name|truncatechars:25 }}</span>
-                                    <span class="badge bg-danger">Stock: {{ product.stock_quantity }}</span>
-                                </div>
-                                <div class="progress progress-sm">
-                                    <div class="progress-bar bg-danger" style="width: {{ product.stock_quantity }}%"></div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        {% else %}
-                            <p class="text-success mb-0">
-                                <i class="fas fa-check-circle me-1"></i>All products have sufficient stock
-                            </p>
-                        {% endif %}
-                    </div>
+            <div class="card shadow h-100">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-danger">
+            <i class="fas fa-exclamation-triangle me-2"></i>Low Stock Alert
+        </h6>
+    </div>
+    <div class="card-body">
+        {% if low_stock_products %}
+            {% for product in low_stock_products %}
+            <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="small font-weight-bold">{{ product.product__product_name|truncatechars:25 }}</span>
+                    <span class="badge bg-danger">Stock: {{ product.available_qty }}</span>
+                </div>
+                <div class="progress progress-sm mt-1">
+                    <div class="progress-bar bg-danger" role="progressbar" 
+                         style="width: {{ product.available_qty }}0%"></div>
                 </div>
             </div>
-        </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-success mb-0">
+                <i class="fas fa-check-circle me-1"></i>All products have sufficient stock
+            </p>
+        {% endif %}
+    </div>
+</div>
 
         <!-- Sales Forecast Row -->
         <div class="row mb-4">

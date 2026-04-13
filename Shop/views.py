@@ -8,17 +8,14 @@ from django.contrib import messages
 # ML views
 from django.utils import timezone
 from datetime import timedelta, datetime, date
-from django.db.models import Sum, Count, Q, F, FloatField, IntegerField
-from django.db.models.functions import Cast, ExtractMonth, ExtractYear, ExtractWeekDay
-from django.db.models.expressions import ExpressionWrapper
+from django.db.models import Sum, Count, Q, F, FloatField, IntegerField, ExpressionWrapper, OuterRef, Subquery
+from django.db.models.functions import Cast, ExtractMonth, ExtractYear, ExtractWeekDay, Coalesce
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 import json
 import calendar
-
-from Shop.models import *
 
 def shop_sales_dashboard(request):
     shop_id = request.session['sid']
@@ -235,37 +232,61 @@ def shop_sales_dashboard(request):
     # -------------------------
     # STOCK MANAGEMENT
     # -------------------------
-    
-    # Get low stock products from tbl_stock
+
+    # 1. Subquery for sold items remains the same
+    sold_items = tbl_cart.objects.filter(
+        product=OuterRef('product__id'),
+        cart_status__gt=1
+    ).values('product').annotate(
+        total_sold=Sum('cart_qty')
+    ).values('total_sold')
+
+    # 2. Updated Low Stock Alert logic with ExpressionWrapper
     low_stock_products = tbl_stock.objects.filter(
-        product__shop=shop_id,
-        stock_quantity__lte=10
-    ).select_related('product').values(
-        'product__product_name',
-        'product__id',
-        'stock_quantity'
-    ).order_by('stock_quantity')[:10]
-    
-    # Get out of stock products
-    out_of_stock = tbl_stock.objects.filter(
-        product__shop=shop_id,
-        stock_quantity=0
-    ).select_related('product').values(
-        'product__product_name',
-        'product__id'
-    ).count()
-    
-    # Total stock value
-    total_stock_value = tbl_stock.objects.filter(
         product__shop=shop_id
-    ).aggregate(
-        total=Sum(
-            ExpressionWrapper(
-                F('stock_quantity') * Cast('product__product_price', output_field=FloatField()),
-                output_field=FloatField()
-            )
+    ).values(
+        'product__id', 
+        'product__product_name'
+    ).annotate(
+        total_added=Sum('stock_quantity'),
+        total_sold=Coalesce(Subquery(sold_items), 0),
+        # Use ExpressionWrapper to explicitly define the output as an Integer
+        available_qty=ExpressionWrapper(
+            F('total_added') - F('total_sold'),
+            output_field=IntegerField()
         )
-    )['total'] or 0
+    ).filter(
+        available_qty__lte=10, 
+        available_qty__gt=0
+    ).order_by('available_qty')[:10]
+
+    # 3. Updated Out of Stock logic with ExpressionWrapper
+    out_of_stock = tbl_stock.objects.filter(
+        product__shop=shop_id
+    ).values('product').annotate(
+        available=ExpressionWrapper(
+            Sum('stock_quantity') - Coalesce(Subquery(sold_items), 0),
+            output_field=IntegerField()
+        )
+    ).filter(available__lte=0).count()
+
+    # 4. FIXED: Total Stock Value
+    total_stock_value = tbl_stock.objects.filter(
+    product__shop=shop_id
+).annotate(
+    # First, calculate the available stock per entry
+    available_amount=ExpressionWrapper(
+        F('stock_quantity') - Coalesce(Subquery(sold_items), 0),
+        output_field=FloatField() # Use Float to allow decimal multiplication
+    )
+).aggregate(
+    total=Sum(
+        ExpressionWrapper(
+            F('available_amount') * Cast('product__product_price', output_field=FloatField()),
+            output_field=FloatField()
+        )
+    )
+)['total'] or 0
     
     # -------------------------
     # CUSTOMER ANALYTICS
@@ -827,37 +848,56 @@ def AddStaff(request):
     else:
         return render(request,"Shop/AddStaff.html",{'staffdata':staffdata})
     
+
 def Product(request):
     shopdata = tbl_shop.objects.get(id=request.session['sid'])
-    categorydata =  tbl_category.objects.all()
-    branddata=tbl_brand.objects.all()
-    productdata=tbl_product.objects.filter(shop=shopdata)
-   
+    categorydata = tbl_category.objects.all()
+    branddata = tbl_brand.objects.all()
+    productdata = tbl_product.objects.filter(shop=shopdata)
+    
     for product in productdata:
+        # 1. Total Stock added to the inventory
         total_stock = tbl_stock.objects.filter(
             product=product
         ).aggregate(total=Sum('stock_quantity'))['total'] or 0
 
+        # 2. Total items actually SOLD (Status > 1 means checked out/paid)
+        # If you use status=1, you are deducting items that are just sitting in users' carts!
         total_cart = tbl_cart.objects.filter(
             product=product,
-            cart_status=1
+            cart_status__gt=1  # Changed from =1 to __gt=1
         ).aggregate(total=Sum('cart_qty'))['total'] or 0
 
+        # 3. Calculate current available count
         product.total_stock = max(total_stock - total_cart, 0)
-    if request.method == "POST":
-        name=request.POST.get("txt_name")
-        details=request.POST.get("txt_details")
-        photo=request.FILES.get("file_photo")
-        price=request.POST.get("txt_price")
-        subcategory= tbl_subcategory.objects.get(id=request.POST.get("sel_subcategory"))
-        brand= tbl_brand.objects.get(id=request.POST.get("sel_brand"))
-        tbl_product.objects.create(product_name=name, product_details=details,product_photo=photo,product_price=price,shop=shopdata,brand=brand,subcategory=subcategory)
-        
-        
-        return render(request,"Shop/Product.html",{'msg':"Data inserted.."})
-    else:
-        return render(request,"Shop/Product.html",{'categorydata':categorydata,'branddata':branddata,'product':productdata})
 
+    if request.method == "POST":
+        name = request.POST.get("txt_name")
+        details = request.POST.get("txt_details")
+        photo = request.FILES.get("file_photo")
+        price = request.POST.get("txt_price")
+        subcategory = tbl_subcategory.objects.get(id=request.POST.get("sel_subcategory"))
+        brand = tbl_brand.objects.get(id=request.POST.get("sel_brand"))
+        
+        tbl_product.objects.create(
+            product_name=name, 
+            product_details=details,
+            product_photo=photo,
+            product_price=price,
+            shop=shopdata,
+            brand=brand,
+            subcategory=subcategory
+        )
+        
+        # When redirecting, it's better to use redirect() to refresh the data
+        return render(request, "Shop/Product.html", {'msg': "Data inserted.."})
+    else:
+        return render(request, "Shop/Product.html", {
+            'categorydata': categorydata,
+            'branddata': branddata,
+            'product': productdata
+        })
+    
 def Ajaxsubcategory(request):
     subcategory=tbl_subcategory.objects.filter(category=request.GET.get('categoryId'))
     return render(request,"Shop/Ajaxsubcategory.html",{'data':subcategory})
