@@ -14,11 +14,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- Chart.js -->
+     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary-color: #4e73df;
@@ -436,47 +438,62 @@
         </div>
 
         <!-- Additional Analytics Row -->
-        <div class="row">
-            <div class="col-xl-6">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">
-                            <i class="fas fa-clock me-2"></i>Peak Hours
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-dashboard">
-                                <thead>
-                                    <tr>
-                                        <th>Hour</th>
-                                        <th class="text-end">Orders</th>
-                                        <th>Distribution</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for hour in peak_hours %}
-                                    <tr>
-                                        <td>{{ hour.hour }}:00 - {{ hour.hour|add:"1" }}:00</td>
-                                        <td class="text-end">{{ hour.orders }}</td>
-                                        <td style="width: 50%;">
-                                            <div class="progress progress-sm">
-                                                {% widthratio hour.orders total_orders 100 as percentage %}
-                                                <div class="progress-bar bg-info" style="width: {{ percentage }}%"></div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="3" class="text-center text-muted">No data available</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Peak Hours</h6>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Hour</th>
+                    <th>Orders</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in hourly_distribution %}
+                <tr>
+                    <td>{{ item.hour }}</td>
+                    <td>{{ item.count }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center">Not enough data to calculate peaks yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Sales Trend Chart
+        // Use |safe filter so JS recognizes it as an array, not a string
+        const monthlyData = {{ monthly_sales|safe }};
+        
+        if (monthlyData && monthlyData.length > 0) {
+            const ctx1 = document.getElementById('salesTrendChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: monthlyData.map(d => d.month),
+                    datasets: [{
+                        label: 'Sales ({{ currency_symbol }})',
+                        data: monthlyData.map(d => d.sales),
+                        borderColor: '#4e73df',
+                        fill: true,
+                        backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                        tension: 0.3
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+    });
+</script>
             
             <div class="col-xl-6">
                 <div class="card shadow mb-4">
