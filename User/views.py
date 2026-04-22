@@ -395,8 +395,14 @@ def payment(request):
 
     
 def MyBooking(request):
-    bookingdata=tbl_booking.objects.filter(user=request.session['uid'])
-    return render(request,"User/MyBooking.html",{'bookingdata':bookingdata})
+    # Retrieve the user ID from the session
+    user_id = request.session.get('uid')
+    
+    # Filter by user and order by booking_date descending
+    # We also add '-id' as a secondary sort to ensure absolute order for same-day bookings
+    bookingdata = tbl_booking.objects.filter(user=user_id).order_by('-booking_date', '-id')
+    
+    return render(request, "User/MyBooking.html", {'bookingdata': bookingdata})
 
 def rating(request, mid):
     parray = [1, 2, 3, 4, 5] # This array creates the 5 stars

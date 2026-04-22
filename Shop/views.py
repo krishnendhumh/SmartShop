@@ -479,6 +479,7 @@ def shop_sales_dashboard(request):
     df = pd.DataFrame(data)
     forecast = {}
     forecast_accuracy = {}
+    current_date = date.today()
     
     if not df.empty:
         df['date'] = pd.to_datetime(df['date'])
@@ -975,11 +976,30 @@ def delproduct(request, pid):
     product.delete()
     return redirect("Shop:Homepage")
 
+from django.db.models import Q
+
 def ViewBooking(request):
-    # This sorts by Date first (Newest first), then by ID as a backup
-    # select_related('user') helps performance by fetching user details in one query
-    bookingdata = tbl_booking.objects.select_related('user').all().order_by('-booking_date', '-id')
-    return render(request, "Shop/ViewBooking.html", {'bookingdata': bookingdata})
+    # 1. Start with successful payments only (status >= 1)
+    # Using select_related('user') prevents the N+1 query problem in the template
+    bookingdata = tbl_booking.objects.select_related('user').filter(booking_status__gte=1).order_by('-booking_date', '-id')
+
+    # 2. Capture Search input from the frontend form
+    search_query = request.GET.get('search')
+    
+    # 3. Apply search filter if a query exists
+    if search_query:
+        bookingdata = bookingdata.filter(
+            Q(id__icontains=search_query) |            # Search by Order ID
+            Q(user__user_name__icontains=search_query) # Search by Customer Name
+        )
+
+    # 4. Pass the data to the template
+    context = {
+        'bookingdata': bookingdata,
+        'search_value': search_query # Return the search term to keep it in the input field
+    }
+    
+    return render(request, "Shop/ViewBooking.html", context)
 
 def BookingAction(request, cid, status):
     # 1. Fetch the cart item safely
@@ -1078,22 +1098,32 @@ def ViewRequests(request):
     })
 
 
+from django.utils import timezone
+
 def ApproveCancel(request, cid):
     cart = tbl_cart.objects.get(id=cid)
     user = cart.booking.user
 
     cart.cart_status = 8  # Cancel Approved
     cart.save()
-    messages.success(request, "✅ Cancel request approved successfully.")
-
-    send_mail(
-        "Cancel Approved",
-        f"Hello {user.user_name},\n\nYour cancellation request has been approved.",
-        settings.EMAIL_HOST_USER,
-        [user.user_email],
+    
+    # Professional Mail Content
+    subject = f"Update regarding your Cancellation Request: Order #{cart.id}"
+    message = (
+        f"Dear {user.user_name},\n\n"
+        f"We are writing to inform you that your cancellation request for Order #{cart.id} "
+        f"has been approved.\n\n"
+        f"The process for any applicable refund has been initiated. Depending on your "
+        f"bank, it may take 5-7 business days to reflect in your account.\n\n"
+        f"Thank you for shopping with us.\n\n"
+        f"Best regards,\n"
+        f"The Shop Team"
     )
 
+    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.user_email])
+    messages.success(request, "✅ Cancel request approved successfully.")
     return redirect("Shop:ViewRequests")
+
 
 def ApproveReturn(request, cid):
     cart = tbl_cart.objects.get(id=cid)
@@ -1101,35 +1131,49 @@ def ApproveReturn(request, cid):
 
     cart.cart_status = 10  # Return Approved
     cart.save()
-    
 
-    send_mail(
-        "Return Approved",
-        f"Hello {user.user_name},\n\nYour return request has been approved.",
-        settings.EMAIL_HOST_USER,
-        [user.user_email],
+    # Professional Mail Content
+    subject = f"Return Request Approved: Order #{cart.id}"
+    message = (
+        f"Dear {user.user_name},\n\n"
+        f"Your return request for Order #{cart.id} has been successfully approved.\n\n"
+        f"Our logistics partner will contact you shortly to coordinate the pick-up. "
+        f"Please ensure the item is packed in its original condition with all tags intact.\n\n"
+        f"If you have any questions, please feel free to contact our support team.\n\n"
+        f"Best regards,\n"
+        f"The Shop Team"
     )
-    messages.success(request, "✅ Return request approved successfully.")
 
+    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.user_email])
+    messages.success(request, "✅ Return request approved successfully.")
     return redirect("Shop:ViewRequests")
+
 
 def RejectRequest(request, cid):
     cart = tbl_cart.objects.get(id=cid)
     user = cart.booking.user
 
     cart.cart_status = 11  # Rejected
-    cart.reject_reason = "Rejected by shop"
+    cart.reject_reason = "Policy Non-compliance" # Or dynamic reason
     cart.save()
 
-    send_mail(
-        "Request Rejected",
-        f"Hello {user.user_name},\n\nYour request has been rejected by the shop.",
-        settings.EMAIL_HOST_USER,
-        [user.user_email],
+    # Professional Mail Content
+    subject = f"Important Update: Your Request regarding Order #{cart.id}"
+    message = (
+        f"Dear {user.user_name},\n\n"
+        f"We have carefully reviewed your request for Order #{cart.id}. Unfortunately, "
+        f"we are unable to approve it at this time as it does not meet our standard "
+        f"return/cancellation policy requirements.\n\n"
+        f"Reason: {cart.reject_reason}\n\n"
+        f"If you believe this is an error, please reply to this email or visit our "
+        f"Help Center for further assistance.\n\n"
+        f"Best regards,\n"
+        f"The Shop Team"
     )
+
+    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.user_email])
     messages.error(request, "❌ Request rejected.")
     return redirect("Shop:ViewRequests")
-
 
 
 

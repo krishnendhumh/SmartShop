@@ -311,7 +311,7 @@ More Product Images
 
 {% for i in gallery %}
 
-<img src="{{ i.gallery_file.url }}">
+<a href="{{i.gallery_file.url}}"><img src="{{ i.gallery_file.url }}"></a>
 
 {% empty %}
 

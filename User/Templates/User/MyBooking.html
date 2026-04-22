@@ -3,362 +3,183 @@
 {% load mathfilters %}
 
 {% block content %}
-
 <style>
+    :root {
+        --glass-white: rgba(255, 255, 255, 0.95);
+        --brand-dark: #0f172a;
+        --brand-blue: #2563eb;
+        --text-main: #334155;
+        --text-light: #64748b;
+        --success: #10b981;
+    }
 
-body{
-background:linear-gradient(120deg,#f1f4f9,#eef3ff);
-font-family:'Segoe UI',sans-serif;
-}
+    body { background-color: #f8fafc; font-family: 'Inter', sans-serif; }
 
-/* MAIN CONTAINER */
+    .order-container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
 
-.shopix-booking-container{
-max-width:1200px;
-margin:auto;
-padding:20px;
-animation:fadeInUp 0.6s ease;
-}
+    .page-header { margin-bottom: 30px; }
+    .page-header h2 { font-size: 28px; color: var(--brand-dark); font-weight: 800; margin-bottom: 8px; }
+    .page-header p { color: var(--text-light); font-size: 15px; }
 
-/* ORDER CARD */
+    /* The Order Card */
+    .order-card {
+        background: white;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 25px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
 
-.shopix-booking-card{
-background:white;
-padding:25px;
-margin-bottom:35px;
-border-radius:14px;
-box-shadow:0 12px 30px rgba(0,0,0,0.08);
-transition:0.3s;
-}
+    /* Card Top Bar */
+    .order-card-header {
+        background: #f1f5f9;
+        padding: 15px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e2e8f0;
+    }
 
-.shopix-booking-card:hover{
-transform:translateY(-5px);
-box-shadow:0 18px 40px rgba(0,0,0,0.15);
-}
+    .order-meta { display: flex; gap: 30px; }
+    .meta-item span { display: block; font-size: 11px; text-transform: uppercase; color: var(--text-light); font-weight: 700; }
+    .meta-item b { font-size: 14px; color: var(--brand-dark); }
 
-/* ORDER HEADER */
+    .order-id-pill { background: white; padding: 4px 12px; border-radius: 20px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 600; }
 
-.shopix-order-header{
-background:linear-gradient(120deg,#051922,#0b2d3b);
-color:white;
-padding:18px;
-border-radius:10px;
-margin-bottom:20px;
-font-size:15px;
-display:flex;
-justify-content:space-between;
-flex-wrap:wrap;
-}
+    /* Product Row */
+    .product-row {
+        padding: 25px;
+        display: flex;
+        gap: 20px;
+        border-bottom: 1px solid #f1f5f9;
+        transition: background 0.2s;
+    }
+    .product-row:last-child { border-bottom: none; }
 
-.shopix-order-header span{
-font-weight:600;
-opacity:0.9;
-}
+    .product-img-wrapper { width: 100px; height: 100px; flex-shrink: 0; }
+    .product-img-wrapper img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
 
-/* TABLE */
+    .product-details { flex-grow: 1; }
+    .product-details h4 { font-size: 16px; margin: 0 0 5px; color: var(--brand-dark); }
+    .product-price-info { color: var(--text-light); font-size: 14px; }
+    
+    .status-area { text-align: right; min-width: 150px; }
 
-.shopix-table{
-width:100%;
-border-collapse:collapse;
-border-radius:10px;
-overflow:hidden;
-}
+    /* Status PIII */
+    .status-dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+    .dot-success { background: var(--success); }
+    .dot-pending { background: #f59e0b; }
 
-.shopix-table th{
-background:#051922;
-color:white;
-padding:13px;
-font-weight:600;
-font-size:14px;
-}
+    .status-text { font-size: 14px; font-weight: 700; color: var(--brand-dark); }
+    .status-subtext { display: block; font-size: 12px; color: var(--text-light); margin-top: 4px; }
 
-.shopix-table td{
-padding:13px;
-border-bottom:1px solid #eee;
-vertical-align:middle;
-font-size:14px;
-transition:0.2s;
-}
+    /* Action Buttons */
+    .action-row { margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end; }
+    
+    .btn-action {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.2s;
+        border: 1px solid transparent;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .btn-outline { border-color: #cbd5e1; color: var(--text-main); background: white; }
+    .btn-outline:hover { background: #f8fafc; border-color: var(--brand-blue); color: var(--brand-blue); }
+    
+    .btn-primary { background: var(--brand-blue); color: white; }
+    .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
 
-.shopix-table tr:hover{
-background:#f8faff;
-}
-
-/* PRODUCT IMAGE */
-
-.shopix-product-img{
-border-radius:8px;
-transition:0.3s;
-box-shadow:0 4px 10px rgba(0,0,0,0.15);
-}
-
-.shopix-product-img:hover{
-transform:scale(1.08);
-}
-
-/* STATUS BADGES */
-
-.shopix-status{
-font-weight:600;
-padding:5px 10px;
-border-radius:20px;
-font-size:13px;
-display:inline-block;
-}
-
-.status-cart{background:#e9ecef;color:#444;}
-.status-payment{background:#fff3cd;color:#856404;}
-.status-success{background:#d4edda;color:#155724;}
-.status-packed{background:#cce5ff;color:#004085;}
-.status-shipped{background:#e2e3ff;color:#383d7c;}
-.status-delivered{background:#d1f7e6;color:#0f5132;}
-.status-cancel{background:#f8d7da;color:#721c24;}
-.status-return{background:#d1ecf1;color:#055160;}
-
-/* ACTION BUTTONS */
-
-.shopix-action a{
-text-decoration:none;
-padding:7px 14px;
-border-radius:20px;
-font-size:13px;
-margin:3px;
-display:inline-block;
-font-weight:600;
-transition:0.3s;
-}
-
-.shopix-review{
-background:linear-gradient(90deg,#28a745,#20c997);
-color:white;
-}
-
-.shopix-return{
-background:linear-gradient(90deg,#17a2b8,#0dcaf0);
-color:white;
-}
-
-.shopix-bill{
-background:linear-gradient(90deg,#ffc107,#ffda6a);
-color:black;
-}
-
-.shopix-cancel{
-background:linear-gradient(90deg,#dc3545,#ff6b6b);
-color:white;
-}
-
-.shopix-action a:hover{
-transform:translateY(-2px);
-box-shadow:0 6px 12px rgba(0,0,0,0.2);
-}
-/* PAGE TITLE */
-
-.shopix-page-title{
-max-width:1200px;
-margin:0 auto 25px auto;
-text-align:left;
-animation:fadeInUp 0.6s ease;
-}
-
-.shopix-page-title h2{
-font-size:32px;
-font-weight:700;
-margin-bottom:5px;
-background:linear-gradient(90deg,#051922,#2874f0);
--webkit-background-clip:text;
-color:transparent;
-}
-
-.shopix-page-title p{
-color:#6c757d;
-font-size:15px;
-}
-
-/* ANIMATION */
-
-@keyframes fadeInUp{
-from{
-opacity:0;
-transform:translateY(25px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
+    /* Empty State */
+    .empty-orders { text-align: center; padding: 60px; background: white; border-radius: 20px; }
 </style>
 
-<div class="shopix-page-title">
+<div class="order-container">
+    <div class="page-header">
+        <h2>My Orders</h2>
+        <p>Check the status of recent orders, manage returns, and download invoices.</p>
+    </div>
 
-<h2>📦 My Orders</h2>
+    {% for i in bookingdata %}
+    <div class="order-card">
+        <div class="order-card-header">
+            <div class="order-meta">
+                <div class="meta-item">
+                    <span>Order Placed</span>
+                    <b>{{ i.booking_date|date:"d F Y" }}</b>
+                </div>
+                <div class="meta-item">
+                    <span>Total Amount</span>
+                    <b>₹{{ i.booking_amount }}</b>
+                </div>
+                <div class="meta-item">
+                    <span>Payment</span>
+                    <b>{% if i.booking_status >= 2 %}Success{% else %}Pending{% endif %}</b>
+                </div>
+            </div>
+            <div class="order-id-pill">ID: #{{ i.id }}</div>
+        </div>
 
-<p>Track your purchases, view invoices, manage returns and cancellations.</p>
+        {% for j in i.tbl_cart_set.all %}
+        <div class="product-row">
+            <div class="product-img-wrapper">
+                <img src="{{ j.product.product_photo.url }}" alt="{{ j.product.product_name }}">
+            </div>
+            
+            <div class="product-details">
+                <h4>{{ j.product.product_name }}</h4>
+                <div class="product-price-info">
+                    Qty: {{ j.cart_qty }} | Price: ₹{{ j.product.product_price }}
+                </div>
 
+                <div class="action-row">
+                    {% if j.cart_status == 6 %}
+                        <a href="{% url 'User:rating' j.product.id %}" class="btn-action btn-outline">⭐ Rate & Review</a>
+                        <a href="{% url 'User:ReturnProduct' j.id %}" class="btn-action btn-outline">↩ Return</a>
+                        <a href="{% url 'User:Bill' i.id %}" class="btn-action btn-primary">🧾 Download Invoice</a>
+                    {% elif j.cart_status < 4 %}
+                        <a href="{% url 'User:CancelProduct' j.id %}" class="btn-action btn-outline" style="color: #ef4444;" onclick="return confirm('Cancel this item?')">✕ Cancel Item</a>
+                    {% endif %}
+                    
+                    {% if i.booking_status >= 2 and j.cart_status != 6 %}
+                        <a href="{% url 'User:Bill' i.id %}" class="btn-action btn-outline">View Bill</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="status-area">
+                <span class="status-dot {% if j.cart_status == 6 %}dot-success{% else %}dot-pending{% endif %}"></span>
+                <span class="status-text">
+                    {% if j.cart_status == 2 %}Payment Confirmed
+                    {% elif j.cart_status == 3 %}Packed
+                    {% elif j.cart_status == 4 %}Shipped
+                    {% elif j.cart_status == 5 %}Out for Delivery
+                    {% elif j.cart_status == 6 %}Delivered on {{ i.booking_date|date:"M d" }}
+                    {% elif j.cart_status == 7 %}Cancellation Requested
+                    {% elif j.cart_status == 8 %}Cancelled
+                    {% elif j.cart_status == 9 %}Return Requested
+                    {% elif j.cart_status == 10 %}Returned
+                    {% endif %}
+                </span>
+                <span class="status-subtext">
+                    {% if j.cart_status == 6 %}Your item has been delivered{% else %}Processing your order{% endif %}
+                </span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% empty %}
+    <div class="empty-orders">
+        <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" width="80" style="opacity: 0.3;">
+        <h3>No orders yet</h3>
+        <p>Looks like you haven't made your first order yet.</p>
+        <a href="{% url 'User:index' %}" class="btn-action btn-primary" style="margin-top: 20px;">Start Shopping</a>
+    </div>
+    {% endfor %}
 </div>
-
-<div class="shopix-booking-container">
-
-{% for i in bookingdata %}
-
-<div class="shopix-booking-card">
-
-<div class="shopix-order-header">
-
-<span>Order Number :</span> #{{ i.id }} <br>
-<span>Date :</span> {{ i.booking_date }} <br>
-<span>Total Amount :</span> ₹{{ i.booking_amount }} <br>
-
-<span>Status :</span>
-
-{% if i.booking_status == 1 %}
-💳 Payment Pending
-
-{% elif i.booking_status == 2 %}
-✅ Payment Completed
-
-{% elif i.booking_status == 3 %}
-<span style="color:green;font-weight:bold;">
-🎉 Booking Completed
-</span>
-
-{% endif %}
-
-</div>
-
-
-
-<table class="shopix-table">
-
-<tr>
-<th>SNO</th>
-<th>Photo</th>
-<th>Product</th>
-<th>Qty</th>
-<th>Amount</th>
-<th>Status</th>
-<th>Action</th>
-</tr>
-
-
-{% for j in i.tbl_cart_set.all %}
-
-<tr>
-
-<td>{{ forloop.counter }}</td>
-
-<td>
-<img src="{{ j.product.product_photo.url }}" width="90" class="shopix-product-img">
-</td>
-
-<td>
-<strong>{{ j.product.product_name }}</strong><br>
-₹ {{ j.product.product_price }}
-</td>
-
-<td>{{ j.cart_qty }}</td>
-
-<td>₹ {{ j.cart_qty|mul:j.product.product_price }}</td>
-
-
-<td class="shopix-status">
-
-{% if j.cart_status == 0 %} 🛒 In Cart {% endif %}
-{% if j.cart_status == 1 %} 💳 Payment Pending {% endif %}
-{% if j.cart_status == 2 %} ✅ Payment Successful {% endif %}
-{% if j.cart_status == 3 %} 📦 Packed {% endif %}
-{% if j.cart_status == 4 %} 🚚 Shipped {% endif %}
-{% if j.cart_status == 5 %} 📍 Out for Delivery {% endif %}
-
-{% if j.cart_status == 6 %}
-<span style="color:green;font-weight:bold;">
-🎉 Delivered
-</span>
-{% endif %}
-
-{% if j.cart_status == 7 %} ⏳ Cancel Requested {% endif %}
-{% if j.cart_status == 8 %} ✅ Cancel Approved {% endif %}
-{% if j.cart_status == 9 %} ⏳ Return Requested {% endif %}
-{% if j.cart_status == 10 %} ✅ Return Approved {% endif %}
-
-</td>
-
-
-<td class="shopix-action">
-
-{% if j.cart_status == 6 %}
-
-<a href="{% url 'User:rating' j.product.id %}" class="shopix-review">
-⭐ Review
-</a>
-
-<a href="{% url 'User:ReturnProduct' j.id %}" class="shopix-return">
-↩ Return
-</a>
-
-<a href="{% url 'User:Bill' i.id %}" class="shopix-bill">
-🧾 Bill
-</a>
-
-{% elif j.cart_status == 7 %}
-
-Cancel Requested
-
-{% elif j.cart_status == 8 %}
-
-Cancel Approved
-
-{% elif j.cart_status == 9 %}
-
-Return Requested
-
-{% elif j.cart_status == 10 %}
-
-Return Approved
-
-{% elif j.cart_status < 4 %}
-
-<a href="{% url 'User:CancelProduct' j.id %}" class="shopix-cancel">
-❌ Cancel
-</a>
-
-{% elif i.booking_status == 2 %}
-
-<a href="{% url 'User:Bill' i.id %}" class="shopix-bill">
-🧾 View Bill
-</a>
-
-{% else %}
-
-N/A
-
-{% endif %}
-
-</td>
-
-</tr>
-
-{% empty %}
-
-<tr>
-<td colspan="7" align="center">No items found</td>
-</tr>
-
-{% endfor %}
-
-</table>
-
-</div>
-
-{% empty %}
-
-<div class="shopix-booking-card" align="center">
-No bookings found
-</div>
-
-{% endfor %}
-
-</div>
-
 {% endblock %}

@@ -3,177 +3,238 @@
 {% load mathfilters %}
 
 <style>
-/* Wrapper */
-.vb-wrapper {
-    max-width: 1100px;
-    margin: auto;
-    animation: vbFade .6s ease;
-    padding: 20px;
-}
+    :root {
+        --primary: #4e73df;
+        --success: #1cc88a;
+        --warning: #f6c23e;
+        --info: #36b9cc;
+        --dark: #5a5c69;
+    }
 
-/* Booking Card */
-.vb-card {
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
-    margin-bottom: 40px;
-    overflow: hidden;
-}
+    .vb-wrapper {
+        max-width: 1200px;
+        margin: auto;
+        padding: 30px 20px;
+        animation: vbFade .6s ease;
+    }
 
-/* Header */
-.vb-header {
-    background: #ff7b7b;
-    color: white;
-    padding: 15px 25px;
-    font-size: 16px;
-    font-weight: 600;
-}
+    /* Search Bar Section */
+    .vb-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        padding: 20px 25px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
 
-/* User Details */
-.vb-user {
-    padding: 15px 25px;
-    background: #fafafa;
-    font-size: 14px;
-}
+    .search-group {
+        display: flex;
+        gap: 10px;
+    }
 
-/* Table */
-.vb-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+    .search-input {
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        width: 280px;
+        outline: none;
+        transition: border 0.3s;
+    }
 
-.vb-table th {
-    background: #f1f1f1;
-    padding: 12px;
-    font-size: 14px;
-    text-align: center;
-}
+    .search-input:focus { border-color: var(--primary); }
 
-.vb-table td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    text-align: center;
-    font-size: 14px;
-}
+    /* Order Card */
+    .vb-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, .06);
+        margin-bottom: 35px;
+        overflow: hidden;
+        border: 1px solid #edf2f7;
+    }
 
-.vb-table tr:hover {
-    background: #fafafa;
-}
+    .vb-header {
+        background: #fff;
+        padding: 18px 25px;
+        border-bottom: 2px solid #f8f9fc;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-/* Product Image */
-.vb-img {
-    width: 70px;
-    border-radius: 8px;
-}
+    .badge-paid {
+        background: #e1f7ed;
+        color: #0d6832;
+        padding: 5px 12px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        border: 1px solid #b7ebcf;
+    }
 
-/* Action button */
-.vb-btn {
-    background: #ff7b7b;
-    color: white;
-    padding: 5px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-}
+    /* User Grid */
+    .vb-user-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        padding: 20px 25px;
+        background: #fafafa;
+    }
 
-.vb-btn:hover {
-    background: #ff5252;
-}
+    .info-label {
+        color: #999;
+        text-transform: uppercase;
+        font-size: 10px;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 4px;
+    }
 
-/* Delivered badge */
-.vb-delivered {
-    background: #d4f8e8;
-    color: #009e60;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-}
+    /* Table Styles */
+    .vb-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-/* Animation */
-@keyframes vbFade {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+    .vb-table th {
+        background: #f1f5f9;
+        color: #64748b;
+        font-size: 12px;
+        text-transform: uppercase;
+        padding: 12px 20px;
+        text-align: center;
+    }
 
-/* Highlight for New/Unpacked Bookings */
-.vb-card.priority {
-    border-left: 6px solid #ff4757;
-    background: #fffafa;
-}
+    .vb-table td {
+        padding: 15px 20px;
+        border-bottom: 1px solid #f1f5f9;
+        text-align: center;
+        font-size: 14px;
+    }
 
-.vb-badge-new {
-    background: #ff4757;
-    color: white;
-    padding: 2px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    margin-left: 10px;
-    animation: pulse 1.5s infinite;
-}
+    .vb-img {
+        width: 55px;
+        height: 55px;
+        object-fit: cover;
+        border-radius: 6px;
+    }
 
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
+    /* Action Buttons */
+    .vb-btn {
+        padding: 7px 14px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        color: white;
+        display: inline-block;
+        transition: 0.3s;
+    }
+
+    .btn-pack { background: var(--warning); }
+    .btn-ship { background: var(--info); }
+    .btn-transit { background: var(--primary); }
+    .btn-deliver { background: var(--success); }
+
+    .vb-btn:hover { opacity: 0.8; transform: translateY(-1px); }
+
+    .status-text {
+        display: block;
+        font-size: 11px;
+        color: #888;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    @keyframes vbFade {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 </style>
 
 <div class="vb-wrapper">
 
+    <div class="vb-controls">
+        <h2 style="margin:0; font-size: 20px; color: var(--dark);">Order Management</h2>
+        <form method="GET" class="search-group">
+            <input type="text" name="search" class="search-input" placeholder="Search Order ID or Customer..." value="{{ request.GET.search }}">
+            <button type="submit" class="vb-btn" style="background: var(--dark); padding: 10px 20px;">Search</button>
+            {% if request.GET.search %}
+                <a href="{% url 'Shop:ViewRequests' %}" class="vb-btn" style="background: #ccc; padding: 10px 15px;">Reset</a>
+            {% endif %}
+        </form>
+    </div>
+
     {% for i in bookingdata %}
-
-    <div class="vb-card {% if i.booking_status < 2 %}priority{% endif %}">
-
+    <div class="vb-card">
         <div class="vb-header">
-    Booking ID : #{{ i.id }} | 
-    Date : {{ i.booking_date|date:"d M Y" }} | 
-    Total : ₹{{ i.booking_amount }}
-</div>
+            <div>
+                <span style="color: #64748b;">Order</span> <b>#{{ i.id }}</b>
+                <span class="badge-paid" style="margin-left: 12px;">PAID</span>
+            </div>
+            <div style="text-align: right; font-size: 13px;">
+                <span style="color: #94a3b8;">Placed on:</span> <b>{{ i.booking_date|date:"d M Y" }}</b>
+            </div>
+        </div>
 
-        <div class="vb-user">
-            <b>User Details</b><br>
-            Name : {{ i.user.user_name }} | 
-            Email : {{ i.user.user_email }} | 
-            Contact : {{ i.user.user_contact }} | 
-            Address : {{ i.user.user_address }}
+        <div class="vb-user-grid">
+            <div>
+                <span class="info-label">Customer</span>
+                <b>{{ i.user.user_name }}</b>
+            </div>
+            <div>
+                <span class="info-label">Contact</span>
+                <span>{{ i.user.user_contact }}</span>
+            </div>
+            <div>
+                <span class="info-label">Shipping Address</span>
+                <span style="font-size: 12px; line-height: 1.4;">{{ i.user.user_address }}</span>
+            </div>
+            <div style="text-align: right;">
+                <span class="info-label">Order Total</span>
+                <b style="font-size: 20px; color: var(--success);">₹{{ i.booking_amount }}</b>
+            </div>
         </div>
 
         <table class="vb-table">
             <thead>
                 <tr>
-                    <th>Sl No</th>
-                    <th>Product</th>
-                    <th>Photo</th>
+                    <th style="text-align: left;">Product Details</th>
                     <th>Price</th>
                     <th>Qty</th>
-                    <th>Total</th>
-                    <th>Status</th>
+                    <th>Subtotal</th>
+                    <th>Logistics Action</th>
                 </tr>
             </thead>
             <tbody>
-                {% for j in i.tbl_cart_set.all|dictsort:"cart_status" %}
+                {% for j in i.tbl_cart_set.all %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ j.product.product_name }}</td>
-                    <td>
+                    <td style="text-align: left; display: flex; align-items: center; gap: 15px;">
                         <img src="{{ j.product.product_photo.url }}" class="vb-img">
+                        <span style="font-weight: 600; color: #334155;">{{ j.product.product_name }}</span>
                     </td>
                     <td>₹{{ j.product.product_price }}</td>
                     <td>{{ j.cart_qty }}</td>
-                    <td>₹{{ j.cart_qty|mul:j.product.product_price }}</td>
+                    <td style="font-weight: 700;">₹{{ j.cart_qty|mul:j.product.product_price }}</td>
                     <td>
                         {% if j.cart_status == 2 %}
-                            <a href="{% url 'Shop:BookingAction' j.id 3 %}" class="vb-btn">Packed</a>
+                            <span class="status-text">Awaiting Packing</span>
+                            <a href="{% url 'Shop:BookingAction' j.id 3 %}" class="vb-btn btn-pack">Pack Item</a>
                         {% elif j.cart_status == 3 %}
-                            <a href="{% url 'Shop:BookingAction' j.id 4 %}" class="vb-btn">Shipped</a>
+                            <span class="status-text">Ready to Dispatch</span>
+                            <a href="{% url 'Shop:BookingAction' j.id 4 %}" class="vb-btn btn-ship">Ship Now</a>
                         {% elif j.cart_status == 4 %}
-                            <a href="{% url 'Shop:BookingAction' j.id 5 %}" class="vb-btn">Out for Delivery</a>
+                            <span class="status-text">In Transit</span>
+                            <a href="{% url 'Shop:BookingAction' j.id 5 %}" class="vb-btn btn-transit">Out for Delivery</a>
                         {% elif j.cart_status == 5 %}
-                            <a href="{% url 'Shop:BookingAction' j.id 6 %}" class="vb-btn">Delivered</a>
+                            <span class="status-text">Reached Hub</span>
+                            <a href="{% url 'Shop:BookingAction' j.id 6 %}" class="vb-btn btn-deliver">Mark Delivered</a>
                         {% elif j.cart_status == 6 %}
-                            <span class="vb-delivered">Delivered</span>
+                            <span style="color: var(--success); font-weight: 800; font-size: 12px;">✅ COMPLETED</span>
                         {% endif %}
                     </td>
                 </tr>
@@ -181,14 +242,12 @@
             </tbody>
         </table>
     </div>
-
     {% empty %}
-    <div style="text-align: center; padding: 50px; background: white; border-radius: 15px;">
-        <h3 style="color: #666;">No bookings available at the moment.</h3>
+    <div style="text-align: center; padding: 80px; background: white; border-radius: 12px; border: 1px dashed #cbd5e1;">
+        <h3 style="color: #94a3b8;">No matching paid orders found.</h3>
+        <p style="color: #cbd5e1;">Try adjusting your search filters.</p>
     </div>
-
     {% endfor %}
 
 </div>
-
 {% endblock %}
